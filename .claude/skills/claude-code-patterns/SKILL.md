@@ -1,12 +1,14 @@
 ---
 name: claude-code-patterns
 description: Use when deciding whether to create a skill, command, or agent. Provides decision framework and templates for Claude Code abstractions.
-version: "1.0.0"
+version: "1.1.0"
 ---
 
 # Claude Code Abstraction Patterns
 
 Guide for deciding when and how to create skills, commands, and agents.
+
+**Official Documentation:** https://code.claude.com/docs/en/skills
 
 ## The Three Abstractions
 
@@ -34,11 +36,25 @@ Create a skill when you have **reusable domain knowledge** that should influence
 - `gsap` — Animation guidelines
 - `plans` — Project planning context
 
+**File Structure:**
+```
+.claude/skills/
+└── skill-name/
+    └── SKILL.md    # Required: Main skill file
+```
+
+**Frontmatter Schema:**
+| Field | Required | Max Length | Notes |
+|-------|----------|------------|-------|
+| `name` | Yes | 64 chars | Lowercase, hyphens only, must match folder name |
+| `description` | Yes | 1024 chars | Critical for discovery—be specific about when to use |
+| `version` | Recommended | — | Semantic versioning (e.g., "1.0.0") |
+
 **Template:**
 ```markdown
 ---
 name: skill-name
-description: When to use this skill (one line)
+description: Use when [specific context]. Applies [topic] best practices for [focus areas].
 version: "1.0.0"
 ---
 

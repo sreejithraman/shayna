@@ -197,3 +197,13 @@ function closeModal() {
   // hide modal
 }
 ```
+
+## Avoid
+- Forgetting required CSS (causes jittery scroll)
+- Using `syncTouch: true` (native touch is usually better)
+- Multiple Lenis instances on the same page
+- Forgetting to call `lenis.destroy()` on unmount
+- Using both `autoRaf` and GSAP ticker (pick one)
+- Missing `ScrollTrigger.update` sync when using GSAP
+- Animating scroll position directly (use `lenis.scrollTo()`)
+- Setting `duration` too high (>2s feels sluggish)
