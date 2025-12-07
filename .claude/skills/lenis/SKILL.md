@@ -1,7 +1,7 @@
 ---
 name: lenis
 description: Use when implementing Lenis smooth scroll or integrating Lenis with GSAP ScrollTrigger. Applies Lenis best practices for setup and performance.
-version: "1.1.0"
+version: "1.2.0"
 ---
 
 # Lenis Smooth Scroll Best Practices
@@ -86,7 +86,43 @@ const lenis = new Lenis({
 ### Recommended Defaults
 - `duration: 1.2` — Smooth but responsive
 - `smoothWheel: true` — Essential for smooth feel
-- `syncTouch: false` — Native touch usually better
+
+## Mobile & Touch
+
+### syncTouch vs smoothTouch
+
+| Option | Purpose | Default |
+|--------|---------|---------|
+| `smoothTouch` | Apply smooth interpolation to touch | `false` |
+| `syncTouch` | Track native touch scroll position | `false` |
+
+**Key distinction:**
+- `smoothTouch: true` — Hijacks touch, applies lerp (usually unwanted)
+- `syncTouch: true` — Keeps native touch feel, but syncs position for ScrollTrigger
+
+### When Using ScrollTrigger (Required for iOS)
+```javascript
+const lenis = new Lenis({
+  smoothWheel: true,
+  syncTouch: true,        // Required: sync position for ScrollTrigger
+  syncTouchLerp: 0.06,    // Smooth the sync slightly
+});
+```
+
+Without `syncTouch`, iOS momentum scroll happens natively but Lenis doesn't track it — ScrollTrigger animations won't update during flick momentum.
+
+### Touch Event Listeners
+
+Always use `passive: true` for touch listeners to avoid blocking scroll:
+```javascript
+// BAD: Blocks iOS scroll
+element.addEventListener('touchstart', handler, { once: true });
+
+// GOOD: Allows scroll
+element.addEventListener('touchstart', handler, { once: true, passive: true });
+```
+
+Non-passive touch listeners on `body`/`document` block iOS scroll because the browser waits to see if `preventDefault()` will be called.
 
 ## Preventing Scroll on Elements
 
@@ -202,7 +238,9 @@ function closeModal() {
 
 ## Avoid
 - Forgetting required CSS (causes jittery scroll)
-- Using `syncTouch: true` (native touch is usually better)
+- Using `smoothTouch: true` (hijacks native touch feel)
+- Forgetting `syncTouch: true` when using ScrollTrigger (breaks iOS momentum)
+- Non-passive touch listeners (blocks iOS scroll)
 - Multiple Lenis instances on the same page
 - Forgetting to call `lenis.destroy()` on unmount
 - Using both `autoRaf` and GSAP ticker (pick one)

@@ -14,6 +14,8 @@ export function initSmoothScroll(): Lenis {
     duration: 1.2,
     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     smoothWheel: true,
+    syncTouch: true, // Sync with native touch scroll for ScrollTrigger on iOS
+    syncTouchLerp: 0.06, // Smooth the sync slightly
   });
 
   // Integrate Lenis with GSAP ScrollTrigger

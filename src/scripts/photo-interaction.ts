@@ -81,7 +81,7 @@ function initGyroscope(): void {
 
     // Attach to first user interaction
     document.body.addEventListener('click', requestPermission, { once: true });
-    document.body.addEventListener('touchstart', requestPermission, { once: true });
+    document.body.addEventListener('touchstart', requestPermission, { once: true, passive: true });
   } else {
     // Non-iOS or older iOS - enable directly
     enableGyro();
