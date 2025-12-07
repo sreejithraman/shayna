@@ -106,3 +106,15 @@ Apply these principles when writing, reviewing, or refactoring code.
 - Avoid premature optimization
 - Know your data structures and their complexity
 - Be mindful of N+1 queries and loops within loops
+
+## Avoid
+- Copy-pasting code without extracting shared logic
+- Premature abstraction (wait for 3+ occurrences)
+- Commented-out code in version control
+- Deep inheritance hierarchies (prefer composition)
+- Silently swallowing errors
+- Functions doing multiple unrelated things
+- Clever code over clear code
+- Optimizing without measuring first
+- God classes/modules that do everything
+- Tight coupling between unrelated modules
