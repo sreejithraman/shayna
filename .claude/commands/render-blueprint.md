@@ -181,15 +181,26 @@ envVars:
 
 ### Preview Environments
 
+**Free tier — automatic previews:**
 ```yaml
 services:
   - type: web
     name: project-name
-    plan: starter
+    plan: free
     pullRequestPreviewsEnabled: true
     previews:
-      generation: automatic
-      plan: free  # Use smaller plan for previews
+      generation: automatic  # OK for free tier
+```
+
+**Paid plans — manual previews (to control costs):**
+```yaml
+services:
+  - type: web
+    name: project-name
+    plan: starter  # or standard, pro
+    pullRequestPreviewsEnabled: true
+    previews:
+      generation: manual  # Requires manual trigger to avoid surprise costs
 ```
 
 ### Auto-scaling (paid plans)
@@ -223,11 +234,16 @@ services:
 | standard | Production with auto-scaling |
 | pro | High-traffic production |
 
+## Cost Rules
+
+- **Free tier:** Use `generation: automatic` for previews
+- **Paid plans (starter/standard/pro):** Use `generation: manual` to avoid surprise costs
+
 ## Output
 
 After analyzing the project, create `render.yaml` at the project root with:
 1. Appropriate service type and runtime
 2. Correct build/start commands from package.json
 3. Environment variables with NODE_VERSION
-4. Preview environments enabled
+4. Preview environments enabled (manual generation if paid plan)
 5. Comments explaining each section
