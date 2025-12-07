@@ -1,13 +1,13 @@
 ---
 phase: 0
 title: "Foundation & Infrastructure"
-status: in-progress
+status: complete
 priority: P0
 effort: medium
 dependencies: []
 blockers: []
 started: 2025-12-07
-completed: null
+completed: 2025-12-07
 owner: null
 ---
 
