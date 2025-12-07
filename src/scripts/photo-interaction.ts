@@ -5,6 +5,8 @@
  * Mobile: Photo responds to device orientation (gyroscope)
  */
 
+import { gsap } from 'gsap';
+
 // Configuration
 const CONFIG = {
   PHOTO_MOVE: 25, // Max pixels photo moves
@@ -12,6 +14,7 @@ const CONFIG = {
   LERP: 0.08, // Smoothing factor (lower = smoother)
   GYRO_RANGE: 40, // Degrees of tilt for full movement
   GYRO_BETA_OFFSET: 40, // Natural phone holding angle offset
+  IDLE_THRESHOLD: 0.0001, // Stop animating when delta is below this
 };
 
 // State
@@ -19,8 +22,12 @@ let targetX = 0.5;
 let targetY = 0.5;
 let currentX = 0.5;
 let currentY = 0.5;
-let animationId: number | null = null;
+let isAnimating = false;
 let isInitialized = false;
+
+// Cached DOM elements
+let photoWrapper: HTMLElement | null = null;
+let grainEl: HTMLElement | null = null;
 
 // Check for mobile device
 function isMobileDevice(): boolean {
@@ -39,6 +46,7 @@ function initCursor(): void {
     (e) => {
       targetX = e.clientX / window.innerWidth;
       targetY = e.clientY / window.innerHeight;
+      startAnimation(); // Wake up animation on input
     },
     { passive: true }
   );
@@ -91,16 +99,43 @@ function enableGyro(): void {
       // Map tilt to 0-1 range, accounting for natural hold angle
       targetX = clamp(0.5 + gamma / CONFIG.GYRO_RANGE, 0, 1);
       targetY = clamp(0.5 + (beta - CONFIG.GYRO_BETA_OFFSET) / CONFIG.GYRO_RANGE, 0, 1);
+      startAnimation(); // Wake up animation on input
     },
     { passive: true }
   );
 }
 
-// Animation loop
+// Start animation if not already running
+function startAnimation(): void {
+  if (isAnimating) return;
+  isAnimating = true;
+  gsap.ticker.add(animate);
+}
+
+// Stop animation when idle
+function stopAnimation(): void {
+  if (!isAnimating) return;
+  isAnimating = false;
+  gsap.ticker.remove(animate);
+}
+
+// Animation tick (runs on GSAP ticker, synced with other animations)
 function animate(): void {
+  // Calculate deltas
+  const deltaX = targetX - currentX;
+  const deltaY = targetY - currentY;
+
+  // Check if converged (idle detection)
+  if (Math.abs(deltaX) < CONFIG.IDLE_THRESHOLD && Math.abs(deltaY) < CONFIG.IDLE_THRESHOLD) {
+    currentX = targetX;
+    currentY = targetY;
+    stopAnimation();
+    return;
+  }
+
   // Lerp current position towards target
-  currentX += (targetX - currentX) * CONFIG.LERP;
-  currentY += (targetY - currentY) * CONFIG.LERP;
+  currentX += deltaX * CONFIG.LERP;
+  currentY += deltaY * CONFIG.LERP;
 
   // Calculate offsets (centered at 0.5, so subtract 0.5)
   const offsetX = (currentX - 0.5) * CONFIG.PHOTO_MOVE;
@@ -108,20 +143,14 @@ function animate(): void {
   const grainOffsetX = (currentX - 0.5) * CONFIG.GRAIN_MOVE;
   const grainOffsetY = (currentY - 0.5) * CONFIG.GRAIN_MOVE;
 
-  // Apply transforms
-  const photoWrapper = document.getElementById('photo-wrapper');
-  const grain = document.getElementById('grain');
-
+  // Apply transforms using gsap.set for better batching
   if (photoWrapper) {
-    photoWrapper.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+    gsap.set(photoWrapper, { x: offsetX, y: offsetY });
   }
 
-  if (grain) {
-    grain.style.transform = `translate(${grainOffsetX}px, ${grainOffsetY}px)`;
+  if (grainEl) {
+    gsap.set(grainEl, { x: grainOffsetX, y: grainOffsetY });
   }
-
-  // Continue animation loop
-  animationId = requestAnimationFrame(animate);
 }
 
 // Public: Initialize photo interaction
@@ -129,33 +158,39 @@ export function initPhotoInteraction(): void {
   if (isInitialized) return;
   isInitialized = true;
 
+  // Cache DOM elements once
+  photoWrapper = document.getElementById('photo-wrapper');
+  grainEl = document.getElementById('grain');
+
   if (isMobileDevice()) {
     initGyroscope();
   } else {
     initCursor();
   }
 
-  // Start animation loop
-  animate();
+  // Animation starts on-demand when input is received (not immediately)
 }
 
 // Public: Cleanup
 export function destroyPhotoInteraction(): void {
-  if (animationId !== null) {
-    cancelAnimationFrame(animationId);
-    animationId = null;
-  }
+  stopAnimation();
 
-  // Reset positions
-  const photoWrapper = document.getElementById('photo-wrapper');
-  const grain = document.getElementById('grain');
-
+  // Reset positions using cached elements
   if (photoWrapper) {
-    photoWrapper.style.transform = '';
+    gsap.set(photoWrapper, { clearProps: 'x,y' });
   }
-  if (grain) {
-    grain.style.transform = '';
+  if (grainEl) {
+    gsap.set(grainEl, { clearProps: 'x,y' });
   }
 
+  // Clear cached references
+  photoWrapper = null;
+  grainEl = null;
+
+  // Reset state
+  targetX = 0.5;
+  targetY = 0.5;
+  currentX = 0.5;
+  currentY = 0.5;
   isInitialized = false;
 }
