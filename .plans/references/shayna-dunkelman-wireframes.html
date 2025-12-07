@@ -1,0 +1,1436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shayna Dunkelman — Wireframes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f8f8f8;
+            --bg-dark: #1a1a1a;
+            --wire-stroke: #333;
+            --wire-fill: #e5e5e5;
+            --wire-accent: #8b5cf6;
+            --wire-text: #666;
+            --wire-placeholder: #ccc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg);
+            color: var(--wire-stroke);
+            line-height: 1.5;
+        }
+
+        .doc-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-bottom: 1px solid #ddd;
+            padding: 16px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 1000;
+        }
+
+        .doc-title {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .doc-tabs {
+            display: flex;
+            gap: 8px;
+        }
+
+        .doc-tab {
+            padding: 8px 16px;
+            font-size: 13px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .doc-tab:hover {
+            border-color: var(--wire-accent);
+        }
+
+        .doc-tab.active {
+            background: var(--wire-accent);
+            border-color: var(--wire-accent);
+            color: white;
+        }
+
+        .doc-meta {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            color: var(--wire-text);
+        }
+
+        .doc-content {
+            padding-top: 80px;
+        }
+
+        .page-section {
+            display: none;
+            padding: 40px;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        .wireframe-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .wireframe-header {
+            margin-bottom: 40px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .wireframe-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--wire-accent);
+            margin-bottom: 8px;
+        }
+
+        .wireframe-title {
+            font-size: 32px;
+            font-weight: 400;
+            margin-bottom: 12px;
+        }
+
+        .wireframe-description {
+            font-size: 15px;
+            color: var(--wire-text);
+            max-width: 600px;
+        }
+
+        .device-frame {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .device-browser {
+            background: #f5f5f5;
+            padding: 12px 16px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .browser-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .browser-dots span {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ddd;
+        }
+
+        .browser-url {
+            flex: 1;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 6px 12px;
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            color: var(--wire-text);
+        }
+
+        .device-screen {
+            background: var(--bg-dark);
+            min-height: 600px;
+            position: relative;
+        }
+
+        .wire-nav {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 24px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .wire-logo {
+            width: 120px;
+            height: 16px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 2px;
+        }
+
+        .wire-nav-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .wire-nav-link {
+            width: 48px;
+            height: 12px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 2px;
+        }
+
+        .scroll-sequence {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .scroll-section {
+            min-height: 600px;
+            padding: 40px;
+            position: relative;
+            border-bottom: 1px dashed rgba(255,255,255,0.1);
+        }
+
+        .section-marker {
+            position: absolute;
+            left: -120px;
+            top: 40px;
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            color: var(--wire-accent);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+        }
+
+        .section-height {
+            position: absolute;
+            right: -80px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            color: var(--wire-text);
+        }
+
+        .threshold-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 700px;
+            position: relative;
+        }
+
+        .threshold-photo {
+            width: 300px;
+            height: 400px;
+            border: 2px dashed rgba(255,255,255,0.3);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .threshold-photo::before {
+            content: 'PHOTO';
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            color: rgba(255,255,255,0.3);
+            letter-spacing: 0.2em;
+        }
+
+        .threshold-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(59, 130, 246, 0.1) 100%);
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding-bottom: 60px;
+        }
+
+        .threshold-cta {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            color: rgba(255,255,255,0.4);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .threshold-arrow {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.4), transparent);
+        }
+
+        .bio-section {
+            padding: 100px 80px;
+        }
+
+        .bio-content {
+            max-width: 700px;
+        }
+
+        .wire-headline {
+            height: 48px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 2px;
+            margin-bottom: 24px;
+            max-width: 400px;
+        }
+
+        .wire-text-block {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .wire-text-line {
+            height: 14px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 2px;
+        }
+
+        .wire-text-line:nth-child(1) { width: 100%; }
+        .wire-text-line:nth-child(2) { width: 95%; }
+        .wire-text-line:nth-child(3) { width: 88%; }
+        .wire-text-line:nth-child(4) { width: 92%; }
+        .wire-text-line:nth-child(5) { width: 60%; }
+
+        .latest-section {
+            padding: 80px;
+        }
+
+        .latest-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            color: var(--wire-accent);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .latest-card {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 32px;
+            padding: 32px;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 4px;
+            max-width: 700px;
+        }
+
+        .latest-image {
+            aspect-ratio: 1;
+            background: rgba(255,255,255,0.05);
+            border: 1px dashed rgba(255,255,255,0.2);
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            color: rgba(255,255,255,0.2);
+        }
+
+        .latest-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .latest-title {
+            height: 24px;
+            width: 200px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 2px;
+        }
+
+        .latest-meta {
+            height: 12px;
+            width: 120px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 2px;
+        }
+
+        .latest-button {
+            height: 36px;
+            width: 100px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            color: rgba(255,255,255,0.3);
+        }
+
+        .instagram-section {
+            padding: 80px;
+        }
+
+        .instagram-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            max-width: 800px;
+        }
+
+        .instagram-item {
+            aspect-ratio: 1;
+            background: rgba(255,255,255,0.03);
+            border: 1px dashed rgba(255,255,255,0.15);
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Mono', monospace;
+            font-size: 9px;
+            color: rgba(255,255,255,0.15);
+        }
+
+        .wire-footer {
+            padding: 60px 80px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+        }
+
+        .footer-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .form-field {
+            height: 44px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            padding-left: 16px;
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            color: rgba(255,255,255,0.2);
+        }
+
+        .form-textarea {
+            height: 100px;
+        }
+
+        .form-submit {
+            height: 44px;
+            width: 120px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            color: rgba(255,255,255,0.4);
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: flex-end;
+        }
+
+        .footer-link {
+            height: 12px;
+            width: 80px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 2px;
+        }
+
+        .donate-link {
+            margin-top: 24px;
+            height: 12px;
+            width: 60px;
+            background: rgba(139, 92, 246, 0.3);
+            border-radius: 2px;
+        }
+
+        .work-intro {
+            padding: 120px 80px 60px;
+        }
+
+        .work-projects {
+            padding: 0 80px 80px;
+        }
+
+        .project-item {
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 4px;
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+
+        .project-header {
+            display: grid;
+            grid-template-columns: 280px 1fr auto;
+            gap: 32px;
+            padding: 32px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .project-header:hover {
+            background: rgba(255,255,255,0.02);
+        }
+
+        .project-thumb {
+            aspect-ratio: 16/9;
+            background: rgba(255,255,255,0.05);
+            border: 1px dashed rgba(255,255,255,0.15);
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Mono', monospace;
+            font-size: 9px;
+            color: rgba(255,255,255,0.15);
+        }
+
+        .project-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .project-title {
+            height: 24px;
+            width: 240px;
+            background: rgba(255,255,255,0.12);
+            border-radius: 2px;
+        }
+
+        .project-meta {
+            height: 12px;
+            width: 160px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 2px;
+        }
+
+        .project-expand {
+            display: flex;
+            align-items: center;
+            font-family: 'Space Mono', monospace;
+            font-size: 20px;
+            color: rgba(255,255,255,0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .project-expanded {
+            display: none;
+            padding: 0 32px 32px;
+            border-top: 1px dashed rgba(255,255,255,0.1);
+            margin-top: -1px;
+        }
+
+        .project-item.open .project-expanded {
+            display: block;
+        }
+
+        .project-item.open .project-expand {
+            transform: rotate(45deg);
+        }
+
+        .expanded-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            padding-top: 32px;
+        }
+
+        .expanded-description .wire-text-line {
+            margin-bottom: 8px;
+        }
+
+        .expanded-media {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .media-embed {
+            aspect-ratio: 16/9;
+            background: rgba(255,255,255,0.03);
+            border: 1px dashed rgba(255,255,255,0.1);
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            color: rgba(255,255,255,0.15);
+        }
+
+        .archive-divider {
+            padding: 60px 80px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .divider-line {
+            flex: 1;
+            height: 1px;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .divider-text {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            color: rgba(255,255,255,0.3);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .archive-projects .project-header {
+            padding: 24px 32px;
+        }
+
+        .archive-projects .project-thumb {
+            width: 160px;
+            aspect-ratio: 16/9;
+        }
+
+        .about-hero {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 500px;
+        }
+
+        .about-photo {
+            background: rgba(255,255,255,0.03);
+            border-right: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            color: rgba(255,255,255,0.15);
+        }
+
+        .about-intro {
+            padding: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .about-body {
+            padding: 80px;
+            max-width: 800px;
+        }
+
+        .about-section-title {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            color: var(--wire-accent);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+            margin-top: 60px;
+        }
+
+        .about-section-title:first-child {
+            margin-top: 0;
+        }
+
+        .press-grid {
+            padding: 120px 80px 80px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+        }
+
+        .press-item {
+            padding: 32px;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 4px;
+        }
+
+        .press-logo {
+            height: 24px;
+            width: 100px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 2px;
+            margin-bottom: 24px;
+        }
+
+        .press-quote {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .press-quote .wire-text-line {
+            background: rgba(255,255,255,0.06);
+        }
+
+        .press-link {
+            height: 12px;
+            width: 80px;
+            background: rgba(139, 92, 246, 0.2);
+            border-radius: 2px;
+        }
+
+        .side-panel {
+            position: fixed;
+            right: 0;
+            top: 80px;
+            bottom: 0;
+            width: 320px;
+            background: white;
+            border-left: 1px solid #ddd;
+            padding: 32px;
+            overflow-y: auto;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .side-panel.open {
+            transform: translateX(0);
+        }
+
+        .panel-title {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .panel-section {
+            margin-bottom: 32px;
+        }
+
+        .panel-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            color: var(--wire-accent);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .panel-content {
+            font-size: 13px;
+            color: var(--wire-text);
+            line-height: 1.7;
+        }
+
+        .panel-list {
+            list-style: none;
+            font-size: 13px;
+            color: var(--wire-text);
+        }
+
+        .panel-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .panel-list li:last-child {
+            border-bottom: none;
+        }
+
+        .panel-toggle {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            width: 48px;
+            height: 48px;
+            background: var(--wire-accent);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+            z-index: 1001;
+        }
+
+        @media (max-width: 1200px) {
+            .section-marker, .section-height {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .doc-nav {
+                padding: 12px 20px;
+            }
+
+            .doc-tabs {
+                gap: 4px;
+            }
+
+            .doc-tab {
+                padding: 6px 12px;
+                font-size: 11px;
+            }
+
+            .doc-meta {
+                display: none;
+            }
+
+            .page-section {
+                padding: 20px;
+            }
+
+            .scroll-section {
+                padding: 24px;
+            }
+
+            .bio-section, .latest-section, .instagram-section {
+                padding: 40px 24px;
+            }
+
+            .instagram-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .wire-footer {
+                grid-template-columns: 1fr;
+                padding: 40px 24px;
+            }
+
+            .project-header {
+                grid-template-columns: 1fr;
+            }
+
+            .project-thumb {
+                width: 100%;
+            }
+
+            .about-hero {
+                grid-template-columns: 1fr;
+            }
+
+            .expanded-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="doc-nav">
+        <div class="doc-title">Shayna Dunkelman — Wireframes</div>
+        <div class="doc-tabs">
+            <button class="doc-tab active" data-page="home">Home</button>
+            <button class="doc-tab" data-page="work">Work</button>
+            <button class="doc-tab" data-page="about">About</button>
+            <button class="doc-tab" data-page="press">Press</button>
+        </div>
+        <div class="doc-meta">v1.0 — Dec 2025</div>
+    </nav>
+
+    <main class="doc-content">
+        <!-- HOME PAGE -->
+        <section id="home" class="page-section active">
+            <div class="wireframe-container">
+                <div class="wireframe-header">
+                    <div class="wireframe-label">Page 01</div>
+                    <h1 class="wireframe-title">Home</h1>
+                    <p class="wireframe-description">The primary entry point. Scroll-triggered threshold leads into bio, latest release, Instagram feed, and footer contact form.</p>
+                </div>
+
+                <div class="device-frame">
+                    <div class="device-browser">
+                        <div class="browser-dots">
+                            <span></span><span></span><span></span>
+                        </div>
+                        <div class="browser-url">shaynadunkelman.com</div>
+                    </div>
+                    <div class="device-screen">
+                        <nav class="wire-nav">
+                            <div class="wire-logo"></div>
+                            <div class="wire-nav-links">
+                                <div class="wire-nav-link"></div>
+                                <div class="wire-nav-link"></div>
+                                <div class="wire-nav-link"></div>
+                                <div class="wire-nav-link"></div>
+                            </div>
+                        </nav>
+
+                        <div class="scroll-sequence">
+                            <!-- Threshold -->
+                            <div class="scroll-section threshold-section">
+                                <span class="section-marker">01 — Threshold</span>
+                                <span class="section-height">100vh</span>
+                                <div class="threshold-photo">
+                                    <div class="threshold-overlay">
+                                        <div class="threshold-cta">
+                                            <span>Scroll to Enter</span>
+                                            <div class="threshold-arrow"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Bio -->
+                            <div class="scroll-section bio-section">
+                                <span class="section-marker">02 — Bio</span>
+                                <span class="section-height">auto</span>
+                                <div class="bio-content">
+                                    <div class="wire-headline"></div>
+                                    <div class="wire-text-block">
+                                        <div class="wire-text-line"></div>
+                                        <div class="wire-text-line"></div>
+                                        <div class="wire-text-line"></div>
+                                        <div class="wire-text-line"></div>
+                                        <div class="wire-text-line"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Latest -->
+                            <div class="scroll-section latest-section">
+                                <span class="section-marker">03 — Latest</span>
+                                <span class="section-height">auto</span>
+                                <div class="latest-label">Latest</div>
+                                <div class="latest-card">
+                                    <div class="latest-image">ARTWORK</div>
+                                    <div class="latest-info">
+                                        <div class="latest-title"></div>
+                                        <div class="latest-meta"></div>
+                                        <div class="latest-button">Listen →</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Instagram -->
+                            <div class="scroll-section instagram-section">
+                                <span class="section-marker">04 — Updates</span>
+                                <span class="section-height">auto</span>
+                                <div class="latest-label">Updates</div>
+                                <div class="instagram-grid">
+                                    <div class="instagram-item">IG</div>
+                                    <div class="instagram-item">IG</div>
+                                    <div class="instagram-item">IG</div>
+                                    <div class="instagram-item">IG</div>
+                                    <div class="instagram-item">IG</div>
+                                    <div class="instagram-item">IG</div>
+                                    <div class="instagram-item">IG</div>
+                                    <div class="instagram-item">IG</div>
+                                </div>
+                            </div>
+
+                            <!-- Footer -->
+                            <div class="wire-footer">
+                                <div class="footer-form">
+                                    <div class="latest-label">Contact</div>
+                                    <div class="form-field">Name</div>
+                                    <div class="form-field">Email</div>
+                                    <div class="form-field form-textarea">Message</div>
+                                    <div class="form-submit">Send →</div>
+                                </div>
+                                <div class="footer-links">
+                                    <div class="footer-link"></div>
+                                    <div class="footer-link"></div>
+                                    <div class="footer-link"></div>
+                                    <div class="donate-link"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- WORK PAGE -->
+        <section id="work" class="page-section">
+            <div class="wireframe-container">
+                <div class="wireframe-header">
+                    <div class="wireframe-label">Page 02</div>
+                    <h1 class="wireframe-title">Work</h1>
+                    <p class="wireframe-description">5-7 curated projects with in-page expansion, followed by a full archive section. Click project headers to see expanded state.</p>
+                </div>
+
+                <div class="device-frame">
+                    <div class="device-browser">
+                        <div class="browser-dots">
+                            <span></span><span></span><span></span>
+                        </div>
+                        <div class="browser-url">shaynadunkelman.com/work</div>
+                    </div>
+                    <div class="device-screen">
+                        <nav class="wire-nav">
+                            <div class="wire-logo"></div>
+                            <div class="wire-nav-links">
+                                <div class="wire-nav-link"></div>
+                                <div class="wire-nav-link"></div>
+                                <div class="wire-nav-link"></div>
+                                <div class="wire-nav-link"></div>
+                            </div>
+                        </nav>
+
+                        <div class="work-intro">
+                            <div class="wire-headline" style="max-width: 300px;"></div>
+                            <div class="wire-text-block" style="margin-top: 24px; max-width: 500px;">
+                                <div class="wire-text-line"></div>
+                                <div class="wire-text-line"></div>
+                                <div class="wire-text-line" style="width: 70%;"></div>
+                            </div>
+                        </div>
+
+                        <div class="work-projects">
+                            <div class="latest-label">Featured Work</div>
+                            
+                            <!-- Project 1 - Expanded -->
+                            <div class="project-item open">
+                                <div class="project-header">
+                                    <div class="project-thumb">THUMBNAIL</div>
+                                    <div class="project-info">
+                                        <div class="project-title"></div>
+                                        <div class="project-meta"></div>
+                                    </div>
+                                    <div class="project-expand">+</div>
+                                </div>
+                                <div class="project-expanded">
+                                    <div class="expanded-content">
+                                        <div class="expanded-description">
+                                            <div class="wire-text-line" style="width: 100%;"></div>
+                                            <div class="wire-text-line" style="width: 95%;"></div>
+                                            <div class="wire-text-line" style="width: 88%;"></div>
+                                            <div class="wire-text-line" style="width: 92%;"></div>
+                                            <div class="wire-text-line" style="width: 75%;"></div>
+                                        </div>
+                                        <div class="expanded-media">
+                                            <div class="media-embed">AUDIO / VIDEO EMBED</div>
+                                            <div class="project-meta" style="width: 200px;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Project 2 -->
+                            <div class="project-item">
+                                <div class="project-header">
+                                    <div class="project-thumb">THUMBNAIL</div>
+                                    <div class="project-info">
+                                        <div class="project-title"></div>
+                                        <div class="project-meta"></div>
+                                    </div>
+                                    <div class="project-expand">+</div>
+                                </div>
+                                <div class="project-expanded">
+                                    <div class="expanded-content">
+                                        <div class="expanded-description">
+                                            <div class="wire-text-line" style="width: 100%;"></div>
+                                            <div class="wire-text-line" style="width: 95%;"></div>
+                                            <div class="wire-text-line" style="width: 88%;"></div>
+                                        </div>
+                                        <div class="expanded-media">
+                                            <div class="media-embed">AUDIO / VIDEO EMBED</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Project 3 -->
+                            <div class="project-item">
+                                <div class="project-header">
+                                    <div class="project-thumb">THUMBNAIL</div>
+                                    <div class="project-info">
+                                        <div class="project-title"></div>
+                                        <div class="project-meta"></div>
+                                    </div>
+                                    <div class="project-expand">+</div>
+                                </div>
+                                <div class="project-expanded">
+                                    <div class="expanded-content">
+                                        <div class="expanded-description">
+                                            <div class="wire-text-line" style="width: 100%;"></div>
+                                            <div class="wire-text-line" style="width: 95%;"></div>
+                                        </div>
+                                        <div class="expanded-media">
+                                            <div class="media-embed">AUDIO / VIDEO EMBED</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Archive Divider -->
+                        <div class="archive-divider">
+                            <div class="divider-line"></div>
+                            <div class="divider-text">Full Archive</div>
+                            <div class="divider-line"></div>
+                        </div>
+
+                        <div class="work-projects archive-projects">
+                            <div class="project-item">
+                                <div class="project-header">
+                                    <div class="project-thumb">THUMB</div>
+                                    <div class="project-info">
+                                        <div class="project-title" style="width: 180px;"></div>
+                                        <div class="project-meta" style="width: 120px;"></div>
+                                    </div>
+                                    <div class="project-expand">+</div>
+                                </div>
+                            </div>
+                            <div class="project-item">
+                                <div class="project-header">
+                                    <div class="project-thumb">THUMB</div>
+                                    <div class="project-info">
+                                        <div class="project-title" style="width: 200px;"></div>
+                                        <div class="project-meta" style="width: 100px;"></div>
+                                    </div>
+                                    <div class="project-expand">+</div>
+                                </div>
+                            </div>
+                            <div class="project-item">
+                                <div class="project-header">
+                                    <div class="project-thumb">THUMB</div>
+                                    <div class="project-info">
+                                        <div class="project-title" style="width: 160px;"></div>
+                                        <div class="project-meta" style="width: 140px;"></div>
+                                    </div>
+                                    <div class="project-expand">+</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT PAGE -->
+        <section id="about" class="page-section">
+            <div class="wireframe-container">
+                <div class="wireframe-header">
+                    <div class="wireframe-label">Page 03</div>
+                    <h1 class="wireframe-title">About</h1>
+                    <p class="wireframe-description">Extended biography with secondary photo. Artist statement, influences, and background context.</p>
+                </div>
+
+                <div class="device-frame">
+                    <div class="device-browser">
+                        <div class="browser-dots">
+                            <span></span><span></span><span></span>
+                        </div>
+                        <div class="browser-url">shaynadunkelman.com/about</div>
+                    </div>
+                    <div class="device-screen">
+                        <nav class="wire-nav">
+                            <div class="wire-logo"></div>
+                            <div class="wire-nav-links">
+                                <div class="wire-nav-link"></div>
+                                <div class="wire-nav-link"></div>
+                                <div class="wire-nav-link"></div>
+                                <div class="wire-nav-link"></div>
+                            </div>
+                        </nav>
+
+                        <div class="about-hero">
+                            <div class="about-photo">SECONDARY PHOTO</div>
+                            <div class="about-intro">
+                                <div class="wire-headline" style="max-width: 350px; margin-bottom: 32px;"></div>
+                                <div class="wire-text-block">
+                                    <div class="wire-text-line"></div>
+                                    <div class="wire-text-line"></div>
+                                    <div class="wire-text-line"></div>
+                                    <div class="wire-text-line" style="width: 70%;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="about-body">
+                            <div class="about-section-title">Artist Statement</div>
+                            <div class="wire-text-block">
+                                <div class="wire-text-line"></div>
+                                <div class="wire-text-line"></div>
+                                <div class="wire-text-line"></div>
+                                <div class="wire-text-line"></div>
+                                <div class="wire-text-line" style="width: 80%;"></div>
+                            </div>
+
+                            <div class="about-section-title">Background</div>
+                            <div class="wire-text-block">
+                                <div class="wire-text-line"></div>
+                                <div class="wire-text-line"></div>
+                                <div class="wire-text-line"></div>
+                                <div class="wire-text-line"></div>
+                                <div class="wire-text-line"></div>
+                                <div class="wire-text-line" style="width: 65%;"></div>
+                            </div>
+
+                            <div class="about-section-title">Influences</div>
+                            <div class="wire-text-block">
+                                <div class="wire-text-line"></div>
+                                <div class="wire-text-line"></div>
+                                <div class="wire-text-line" style="width: 75%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PRESS PAGE -->
+        <section id="press" class="page-section">
+            <div class="wireframe-container">
+                <div class="wireframe-header">
+                    <div class="wireframe-label">Page 04</div>
+                    <h1 class="wireframe-title">Press</h1>
+                    <p class="wireframe-description">Pull quotes, publication logos, and linked features. Social proof for curators, bookers, and industry contacts.</p>
+                </div>
+
+                <div class="device-frame">
+                    <div class="device-browser">
+                        <div class="browser-dots">
+                            <span></span><span></span><span></span>
+                        </div>
+                        <div class="browser-url">shaynadunkelman.com/press</div>
+                    </div>
+                    <div class="device-screen">
+                        <nav class="wire-nav">
+                            <div class="wire-logo"></div>
+                            <div class="wire-nav-links">
+                                <div class="wire-nav-link"></div>
+                                <div class="wire-nav-link"></div>
+                                <div class="wire-nav-link"></div>
+                                <div class="wire-nav-link"></div>
+                            </div>
+                        </nav>
+
+                        <div class="press-grid">
+                            <div class="press-item">
+                                <div class="press-logo"></div>
+                                <div class="press-quote">
+                                    <div class="wire-text-line"></div>
+                                    <div class="wire-text-line"></div>
+                                    <div class="wire-text-line" style="width: 80%;"></div>
+                                </div>
+                                <div class="press-link"></div>
+                            </div>
+
+                            <div class="press-item">
+                                <div class="press-logo" style="width: 80px;"></div>
+                                <div class="press-quote">
+                                    <div class="wire-text-line"></div>
+                                    <div class="wire-text-line"></div>
+                                    <div class="wire-text-line" style="width: 60%;"></div>
+                                </div>
+                                <div class="press-link"></div>
+                            </div>
+
+                            <div class="press-item">
+                                <div class="press-logo" style="width: 120px;"></div>
+                                <div class="press-quote">
+                                    <div class="wire-text-line"></div>
+                                    <div class="wire-text-line" style="width: 70%;"></div>
+                                </div>
+                                <div class="press-link"></div>
+                            </div>
+
+                            <div class="press-item">
+                                <div class="press-logo" style="width: 90px;"></div>
+                                <div class="press-quote">
+                                    <div class="wire-text-line"></div>
+                                    <div class="wire-text-line"></div>
+                                    <div class="wire-text-line"></div>
+                                    <div class="wire-text-line" style="width: 50%;"></div>
+                                </div>
+                                <div class="press-link"></div>
+                            </div>
+
+                            <div class="press-item">
+                                <div class="press-logo" style="width: 110px;"></div>
+                                <div class="press-quote">
+                                    <div class="wire-text-line"></div>
+                                    <div class="wire-text-line" style="width: 85%;"></div>
+                                </div>
+                                <div class="press-link"></div>
+                            </div>
+
+                            <div class="press-item">
+                                <div class="press-logo" style="width: 70px;"></div>
+                                <div class="press-quote">
+                                    <div class="wire-text-line"></div>
+                                    <div class="wire-text-line"></div>
+                                    <div class="wire-text-line" style="width: 75%;"></div>
+                                </div>
+                                <div class="press-link"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Side Panel -->
+    <aside class="side-panel" id="sidePanel">
+        <div class="panel-title">Specifications</div>
+        <div class="panel-section" id="panelContent"></div>
+    </aside>
+
+    <button class="panel-toggle" id="panelToggle">i</button>
+
+    <script>
+        const tabs = document.querySelectorAll('.doc-tab');
+        const sections = document.querySelectorAll('.page-section');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const page = tab.dataset.page;
+                tabs.forEach(t => t.classList.remove('active'));
+                sections.forEach(s => s.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById(page).classList.add('active');
+                updatePanel(page);
+            });
+        });
+
+        const projectItems = document.querySelectorAll('.project-item');
+        projectItems.forEach(item => {
+            const header = item.querySelector('.project-header');
+            header.addEventListener('click', () => {
+                item.classList.toggle('open');
+            });
+        });
+
+        const panel = document.getElementById('sidePanel');
+        const panelToggle = document.getElementById('panelToggle');
+        const panelContent = document.getElementById('panelContent');
+
+        panelToggle.addEventListener('click', () => {
+            panel.classList.toggle('open');
+        });
+
+        const specs = {
+            home: `
+                <div class="panel-section">
+                    <div class="panel-label">Scroll Sequence</div>
+                    <ul class="panel-list">
+                        <li><strong>01 Threshold</strong><br>100vh, scroll-triggered exit</li>
+                        <li><strong>02 Bio</strong><br>Auto height, headline + paragraph</li>
+                        <li><strong>03 Latest</strong><br>Single featured item module</li>
+                        <li><strong>04 Updates</strong><br>Instagram feed, 8 items (2x4 grid)</li>
+                        <li><strong>05 Footer</strong><br>Contact form + links + donate</li>
+                    </ul>
+                </div>
+                <div class="panel-section">
+                    <div class="panel-label">Navigation</div>
+                    <div class="panel-content">Persistent, minimal. Fixed position. Logo left, links right: Work, About, Press, Connect.</div>
+                </div>
+                <div class="panel-section">
+                    <div class="panel-label">Threshold Behavior</div>
+                    <div class="panel-content">Site holds on first viewport. Scroll action triggers fade transition and reveals content. Photo dissolves into texture.</div>
+                </div>
+            `,
+            work: `
+                <div class="panel-section">
+                    <div class="panel-label">Structure</div>
+                    <ul class="panel-list">
+                        <li><strong>Featured Work</strong><br>5-7 curated projects, stacked</li>
+                        <li><strong>Archive</strong><br>Remaining projects, denser layout</li>
+                    </ul>
+                </div>
+                <div class="panel-section">
+                    <div class="panel-label">Project Expansion</div>
+                    <div class="panel-content">Click header to expand in-place. Reveals: description, embedded audio/video, credits. No page transition.</div>
+                </div>
+                <div class="panel-section">
+                    <div class="panel-label">Content Per Project</div>
+                    <ul class="panel-list">
+                        <li>Thumbnail image</li>
+                        <li>Title</li>
+                        <li>Year / Category</li>
+                        <li>Description (expanded)</li>
+                        <li>Media embed (expanded)</li>
+                        <li>Credits (expanded)</li>
+                    </ul>
+                </div>
+            `,
+            about: `
+                <div class="panel-section">
+                    <div class="panel-label">Layout</div>
+                    <div class="panel-content">Split hero: photo left, intro right. Body content below with sectioned typography.</div>
+                </div>
+                <div class="panel-section">
+                    <div class="panel-label">Sections</div>
+                    <ul class="panel-list">
+                        <li><strong>Hero</strong><br>Secondary photo + short intro</li>
+                        <li><strong>Artist Statement</strong><br>Her voice, philosophy</li>
+                        <li><strong>Background</strong><br>Tokyo, Mills College, NYC</li>
+                        <li><strong>Influences</strong><br>Musical and artistic lineage</li>
+                    </ul>
+                </div>
+                <div class="panel-section">
+                    <div class="panel-label">Photo Placement</div>
+                    <div class="panel-content">This is the secondary photo—rewards users who explore deeper. Threshold has the primary image.</div>
+                </div>
+            `,
+            press: `
+                <div class="panel-section">
+                    <div class="panel-label">Purpose</div>
+                    <div class="panel-content">Social proof for industry contacts. Scannable, credibility-focused. Links to original features.</div>
+                </div>
+                <div class="panel-section">
+                    <div class="panel-label">Content Per Item</div>
+                    <ul class="panel-list">
+                        <li>Publication logo</li>
+                        <li>Pull quote (2-4 lines)</li>
+                        <li>Link to full article</li>
+                    </ul>
+                </div>
+                <div class="panel-section">
+                    <div class="panel-label">Grid</div>
+                    <div class="panel-content">Responsive grid, 2-3 columns. Cards have subtle border, consistent padding. Warmer accent color (red/purple range).</div>
+                </div>
+            `
+        };
+
+        function updatePanel(page) {
+            panelContent.innerHTML = specs[page] || '';
+        }
+
+        updatePanel('home');
+    </script>
+</body>
+</html>

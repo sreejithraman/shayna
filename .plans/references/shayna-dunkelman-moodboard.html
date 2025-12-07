@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shayna Dunkelman — Moodboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --bg-card: #161616;
+            --text-primary: #f5f5f5;
+            --text-secondary: #888888;
+            --text-muted: #555555;
+            --accent-violet: #8b5cf6;
+            --accent-blue: #3b82f6;
+            --accent-red: #dc2626;
+            --accent-purple: #a855f7;
+            --grain-opacity: 0.03;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Film grain overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: var(--grain-opacity);
+        }
+
+        /* Breathing animation */
+        @keyframes breathe {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes drift {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            25% { transform: translateY(-5px) translateX(3px); }
+            50% { transform: translateY(-2px) translateX(-2px); }
+            75% { transform: translateY(3px) translateX(5px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(30px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        .header {
+            padding: 80px 60px 60px;
+            border-bottom: 1px solid #222;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 200px;
+            background: linear-gradient(to top, var(--bg-primary), transparent);
+            pointer-events: none;
+        }
+
+        .header-meta {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        .header h1 {
+            font-size: clamp(48px, 8vw, 96px);
+            font-weight: 300;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            animation: slideUp 0.8s ease-out 0.1s both;
+        }
+
+        .header h1 span {
+            display: block;
+            background: linear-gradient(135deg, var(--accent-violet), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            animation: slideUp 0.8s ease-out 0.2s both;
+        }
+
+        .concept-summary {
+            padding: 60px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            border-bottom: 1px solid #222;
+        }
+
+        .concept-block {
+            animation: slideUp 0.8s ease-out 0.3s both;
+        }
+
+        .concept-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent-violet);
+            margin-bottom: 12px;
+        }
+
+        .concept-value {
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .concept-description {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .section {
+            padding: 80px 60px;
+            border-bottom: 1px solid #222;
+            position: relative;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: baseline;
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+
+        .section-number {
+            font-family: 'Space Mono', monospace;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        /* Reference Cards */
+        .reference-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .reference-card {
+            background: var(--bg-card);
+            border-radius: 4px;
+            overflow: hidden;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            position: relative;
+        }
+
+        .reference-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .reference-visual {
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .reference-content {
+            padding: 24px;
+        }
+
+        .reference-category {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .reference-name {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 12px;
+        }
+
+        .reference-description {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .reference-link {
+            display: inline-block;
+            margin-top: 16px;
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            color: var(--accent-violet);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .reference-link:hover {
+            color: var(--accent-blue);
+        }
+
+        /* Visual Treatments for Reference Cards */
+        .visual-raster {
+            background: linear-gradient(135deg, #000 0%, #1a1a1a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .visual-raster::before {
+            content: '';
+            width: 80%;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                var(--text-primary) 20%, 
+                var(--text-primary) 21%,
+                transparent 21%,
+                transparent 40%,
+                var(--text-primary) 40%,
+                var(--text-primary) 42%,
+                transparent 42%,
+                transparent 60%,
+                var(--text-primary) 60%,
+                var(--text-primary) 61%,
+                transparent 61%,
+                transparent 80%,
+                var(--text-primary) 80%,
+                var(--text-primary) 82%,
+                transparent 82%
+            );
+            animation: breathe 4s ease-in-out infinite;
+        }
+
+        .visual-ikeda {
+            background: #000;
+            display: grid;
+            grid-template-columns: repeat(40, 1fr);
+            grid-template-rows: repeat(10, 1fr);
+            gap: 1px;
+            padding: 20px;
+        }
+
+        .visual-ikeda span {
+            background: var(--text-primary);
+            opacity: 0;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .visual-ikeda span:nth-child(odd) {
+            animation-delay: 0.1s;
+        }
+
+        .visual-ikeda span:nth-child(3n) {
+            animation-delay: 0.3s;
+        }
+
+        .visual-ikeda span:nth-child(7n) {
+            animation-delay: 0.5s;
+        }
+
+        .visual-grain {
+            background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
+            position: relative;
+        }
+
+        .visual-grain::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.15;
+        }
+
+        .visual-grain::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.3) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            animation: drift 8s ease-in-out infinite;
+        }
+
+        .visual-waveform {
+            background: #0a0a0a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            padding: 40px;
+        }
+
+        .visual-waveform span {
+            width: 3px;
+            background: linear-gradient(180deg, var(--accent-violet), var(--accent-blue));
+            border-radius: 2px;
+            animation: waveform 1.5s ease-in-out infinite;
+        }
+
+        @keyframes waveform {
+            0%, 100% { height: 20px; opacity: 0.5; }
+            50% { height: 80px; opacity: 1; }
+        }
+
+        .visual-waveform span:nth-child(1) { animation-delay: 0s; }
+        .visual-waveform span:nth-child(2) { animation-delay: 0.1s; }
+        .visual-waveform span:nth-child(3) { animation-delay: 0.2s; }
+        .visual-waveform span:nth-child(4) { animation-delay: 0.3s; }
+        .visual-waveform span:nth-child(5) { animation-delay: 0.4s; }
+        .visual-waveform span:nth-child(6) { animation-delay: 0.5s; }
+        .visual-waveform span:nth-child(7) { animation-delay: 0.6s; }
+        .visual-waveform span:nth-child(8) { animation-delay: 0.7s; }
+        .visual-waveform span:nth-child(9) { animation-delay: 0.6s; }
+        .visual-waveform span:nth-child(10) { animation-delay: 0.5s; }
+        .visual-waveform span:nth-child(11) { animation-delay: 0.4s; }
+        .visual-waveform span:nth-child(12) { animation-delay: 0.3s; }
+        .visual-waveform span:nth-child(13) { animation-delay: 0.2s; }
+        .visual-waveform span:nth-child(14) { animation-delay: 0.1s; }
+        .visual-waveform span:nth-child(15) { animation-delay: 0s; }
+
+        .visual-spectrogram {
+            background: #000;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .visual-spectrogram::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(0deg, 
+                rgba(220, 38, 38, 0.6) 0%,
+                rgba(168, 85, 247, 0.4) 30%,
+                rgba(59, 130, 246, 0.3) 60%,
+                rgba(0, 0, 0, 0.8) 100%
+            );
+            animation: drift 6s ease-in-out infinite reverse;
+        }
+
+        .visual-spectrogram::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent 0px,
+                transparent 3px,
+                rgba(255,255,255,0.03) 3px,
+                rgba(255,255,255,0.03) 4px
+            );
+        }
+
+        .visual-arca {
+            background: linear-gradient(135deg, #0d0d0d 0%, #1a0a1a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .visual-arca::before {
+            content: '';
+            width: 120px;
+            height: 120px;
+            border: 1px solid var(--accent-purple);
+            border-radius: 50%;
+            animation: drift 10s ease-in-out infinite;
+            opacity: 0.5;
+        }
+
+        .visual-arca::after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: drift 8s ease-in-out infinite reverse;
+        }
+
+        /* Color Palette Section */
+        .palette-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .palette-swatch {
+            height: 160px;
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .palette-swatch:hover {
+            transform: scale(1.02);
+        }
+
+        .palette-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 16px;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+        }
+
+        .palette-name {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .palette-hex {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .swatch-void { background: #0a0a0a; border: 1px solid #222; }
+        .swatch-obsidian { background: #161616; }
+        .swatch-smoke { background: #2a2a2a; }
+        .swatch-violet { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+        .swatch-blue { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .swatch-red { background: linear-gradient(135deg, #dc2626, #b91c1c); }
+        .swatch-purple { background: linear-gradient(135deg, #a855f7, #9333ea); }
+        .swatch-bone { background: #f5f5f5; }
+        .swatch-bone .palette-name, .swatch-bone .palette-hex { color: #0a0a0a; }
+
+        /* Typography Section */
+        .type-specimen {
+            margin-bottom: 60px;
+        }
+
+        .type-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .type-grotesk {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .type-grotesk-display {
+            font-size: clamp(48px, 10vw, 120px);
+            font-weight: 300;
+            letter-spacing: -0.03em;
+            line-height: 1;
+            margin-bottom: 20px;
+        }
+
+        .type-grotesk-body {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 600px;
+        }
+
+        .type-mono {
+            font-family: 'Space Mono', monospace;
+        }
+
+        .type-mono-display {
+            font-size: clamp(24px, 4vw, 48px);
+            letter-spacing: 0.05em;
+            margin-bottom: 20px;
+        }
+
+        .type-mono-meta {
+            font-size: 12px;
+            color: var(--text-secondary);
+            letter-spacing: 0.1em;
+        }
+
+        /* Motion Section */
+        .motion-demos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .motion-demo {
+            background: var(--bg-card);
+            border-radius: 4px;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .motion-visual {
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .motion-name {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .motion-description {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .demo-breathing {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--accent-violet) 0%, transparent 70%);
+            animation: breathe 4s ease-in-out infinite;
+        }
+
+        .demo-drift {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--accent-blue);
+            animation: drift 6s ease-in-out infinite;
+        }
+
+        .demo-reactive {
+            width: 50px;
+            height: 50px;
+            background: var(--accent-purple);
+            border-radius: 4px;
+            transition: transform 0.3s ease, background 0.3s ease;
+            cursor: pointer;
+        }
+
+        .demo-reactive:hover {
+            transform: scale(1.2) rotate(45deg);
+            background: var(--accent-red);
+        }
+
+        /* Footer */
+        .footer {
+            padding: 60px;
+            text-align: center;
+        }
+
+        .footer-meta {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            color: var(--text-muted);
+            letter-spacing: 0.1em;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header, .section, .concept-summary, .footer {
+                padding: 40px 24px;
+            }
+
+            .section-header {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-meta">Creative Direction / Moodboard</div>
+        <h1>Shayna Dunkelman<br><span>Minimalist Noir</span></h1>
+        <p class="header-subtitle">Visual reference document for portfolio website redesign. Analog warmth wrapping digital phenomena.</p>
+    </header>
+
+    <section class="concept-summary">
+        <div class="concept-block">
+            <div class="concept-label">Texture Layer</div>
+            <div class="concept-value">Grain & Decay</div>
+            <div class="concept-description">Analog film grain, subtle noise, warm imperfection. The lens through which everything is seen.</div>
+        </div>
+        <div class="concept-block">
+            <div class="concept-label">Content Layer</div>
+            <div class="concept-value">Digital / Waveform</div>
+            <div class="concept-description">Spectrograms, generative noise patterns, visualized audio. Translations of sound into image.</div>
+        </div>
+        <div class="concept-block">
+            <div class="concept-label">Motion System</div>
+            <div class="concept-value">Autonomous + Reactive</div>
+            <div class="concept-description">Baseline breathing with soft user responses. The site notices without performing.</div>
+        </div>
+        <div class="concept-block">
+            <div class="concept-label">Color Temperature</div>
+            <div class="concept-value">Atmospheric Shifting</div>
+            <div class="concept-description">Cooler violet/blue on Home. Warmer red/purple on Work. Darkness dominates.</div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="section-header">
+            <span class="section-number">01</span>
+            <h2 class="section-title">Visual References</h2>
+        </div>
+        <div class="reference-grid">
+            <div class="reference-card">
+                <div class="reference-visual visual-raster"></div>
+                <div class="reference-content">
+                    <div class="reference-category">Label / Identity</div>
+                    <div class="reference-name">Raster-Noton / Raster Media</div>
+                    <div class="reference-description">German electronic music label known for reductionism and minimalist visual aesthetic. Intersection of pop, art, and science. Geometric precision, high-contrast black and white, systematic visual language.</div>
+                    <a href="https://rfrequency" class="reference-link" target="_blank">rfrequency.com →</a>
+                </div>
+            </div>
+
+            <div class="reference-card">
+                <div class="reference-visual visual-ikeda">
+                    <span></span><span></span><span></span><span></span><span></span>
+                    <span></span><span></span><span></span><span></span><span></span>
+                    <span></span><span></span><span></span><span></span><span></span>
+                    <span></span><span></span><span></span><span></span><span></span>
+                    <span></span><span></span><span></span><span></span><span></span>
+                    <span></span><span></span><span></span><span></span><span></span>
+                    <span></span><span></span><span></span><span></span><span></span>
+                    <span></span><span></span><span></span><span></span><span></span>
+                </div>
+                <div class="reference-content">
+                    <div class="reference-category">Artist / Installation</div>
+                    <div class="reference-name">Ryoji Ikeda — Datamatics</div>
+                    <div class="reference-description">Data visualization as art. Flickering black-and-white barcode patterns, immersive audiovisual installations, extreme scale. "Monumental minimalism" — minimal elements, overwhelming presentation.</div>
+                    <a href="https://www.ryojiikeda.com/project/datamatics/" class="reference-link" target="_blank">ryojiikeda.com →</a>
+                </div>
+            </div>
+
+            <div class="reference-card">
+                <div class="reference-visual visual-grain"></div>
+                <div class="reference-content">
+                    <div class="reference-category">Texture / Treatment</div>
+                    <div class="reference-name">Analog Film Grain</div>
+                    <div class="reference-description">35mm and 16mm film grain overlays. Subtle noise, dust particles, light leaks. Evokes warmth within darkness, physical media, vintage equipment. The human imperfection layer.</div>
+                </div>
+            </div>
+
+            <div class="reference-card">
+                <div class="reference-visual visual-waveform">
+                    <span></span><span></span><span></span><span></span><span></span>
+                    <span></span><span></span><span></span><span></span><span></span>
+                    <span></span><span></span><span></span><span></span><span></span>
+                </div>
+                <div class="reference-content">
+                    <div class="reference-category">Visualization / UI</div>
+                    <div class="reference-name">Audio Waveforms</div>
+                    <div class="reference-description">Real-time visualizations of sound frequency and amplitude. Minimal, functional, yet inherently beautiful. Direct translation of Shayna's sonic work into visual form.</div>
+                </div>
+            </div>
+
+            <div class="reference-card">
+                <div class="reference-visual visual-spectrogram"></div>
+                <div class="reference-content">
+                    <div class="reference-category">Visualization / Content</div>
+                    <div class="reference-name">Spectrograms</div>
+                    <div class="reference-description">Three-dimensional audio visualization: time, frequency, amplitude as color. Scientific yet atmospheric. The visual signature of percussion and electronic texture.</div>
+                </div>
+            </div>
+
+            <div class="reference-card">
+                <div class="reference-visual visual-arca"></div>
+                <div class="reference-content">
+                    <div class="reference-category">Artist / Aesthetic</div>
+                    <div class="reference-name">Arca / Frederik Heyman</div>
+                    <div class="reference-description">Cyberpunk motifs, biomechanical elements, organic decay meeting technological intervention. Shape-shifting forms, boundary-pushing spatial designs. Post-human narrative.</div>
+                    <a href="https://www.creativereview.co.uk/arca-kick-album-art-video-frederik-heyman/" class="reference-link" target="_blank">creativereview.co.uk →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="section-header">
+            <span class="section-number">02</span>
+            <h2 class="section-title">Color Palette</h2>
+        </div>
+        <div class="palette-grid">
+            <div class="palette-swatch swatch-void">
+                <div class="palette-info">
+                    <div class="palette-name">Void</div>
+                    <div class="palette-hex">#0A0A0A</div>
+                </div>
+            </div>
+            <div class="palette-swatch swatch-obsidian">
+                <div class="palette-info">
+                    <div class="palette-name">Obsidian</div>
+                    <div class="palette-hex">#161616</div>
+                </div>
+            </div>
+            <div class="palette-swatch swatch-smoke">
+                <div class="palette-info">
+                    <div class="palette-name">Smoke</div>
+                    <div class="palette-hex">#2A2A2A</div>
+                </div>
+            </div>
+            <div class="palette-swatch swatch-violet">
+                <div class="palette-info">
+                    <div class="palette-name">Violet (Cool)</div>
+                    <div class="palette-hex">#8B5CF6</div>
+                </div>
+            </div>
+            <div class="palette-swatch swatch-blue">
+                <div class="palette-info">
+                    <div class="palette-name">Cobalt (Cool)</div>
+                    <div class="palette-hex">#3B82F6</div>
+                </div>
+            </div>
+            <div class="palette-swatch swatch-purple">
+                <div class="palette-info">
+                    <div class="palette-name">Amethyst (Warm)</div>
+                    <div class="palette-hex">#A855F7</div>
+                </div>
+            </div>
+            <div class="palette-swatch swatch-red">
+                <div class="palette-info">
+                    <div class="palette-name">Ember (Warm)</div>
+                    <div class="palette-hex">#DC2626</div>
+                </div>
+            </div>
+            <div class="palette-swatch swatch-bone">
+                <div class="palette-info">
+                    <div class="palette-name">Bone</div>
+                    <div class="palette-hex">#F5F5F5</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="section-header">
+            <span class="section-number">03</span>
+            <h2 class="section-title">Typography</h2>
+        </div>
+        
+        <div class="type-specimen type-grotesk">
+            <div class="type-label">Headlines / Primary UI</div>
+            <div class="type-grotesk-display">Space Grotesk</div>
+            <div class="type-grotesk-body">Geometric sans-serif with technical DNA. Warm enough to avoid coldness, precise enough to feel intentional. Used for headlines, navigation, and primary interface elements.</div>
+        </div>
+
+        <div class="type-specimen type-mono">
+            <div class="type-label">Metadata / Labels / Accents</div>
+            <div class="type-mono-display">Space Mono</div>
+            <div class="type-mono-meta">Timestamps • Categories • Technical Details • Secondary Information</div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="section-header">
+            <span class="section-number">04</span>
+            <h2 class="section-title">Motion Principles</h2>
+        </div>
+        <div class="motion-demos">
+            <div class="motion-demo">
+                <div class="motion-visual">
+                    <div class="demo-breathing"></div>
+                </div>
+                <div class="motion-name">Breathing</div>
+                <div class="motion-description">Autonomous, slow pulse. The site is alive independent of user interaction. Subtle opacity shifts, gentle texture movements.</div>
+            </div>
+            <div class="motion-demo">
+                <div class="motion-visual">
+                    <div class="demo-drift"></div>
+                </div>
+                <div class="motion-name">Drifting</div>
+                <div class="motion-description">Slow, continuous movement. Elements float gently, never static. Creates atmosphere without demanding attention.</div>
+            </div>
+            <div class="motion-demo">
+                <div class="motion-visual">
+                    <div class="demo-reactive"></div>
+                </div>
+                <div class="motion-name">Reactive</div>
+                <div class="motion-description">Responds to user presence. Hover states, cursor proximity, scroll velocity. The site notices without performing.</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="section-header">
+            <span class="section-number">05</span>
+            <h2 class="section-title">The Threshold Concept</h2>
+        </div>
+        <div class="reference-grid" style="grid-template-columns: 1fr;">
+            <div class="reference-card" style="display: grid; grid-template-columns: 1fr 1fr; min-height: 400px;">
+                <div class="reference-visual" style="height: auto; background: linear-gradient(135deg, #0a0a0a 0%, #1a0a1a 50%, #0a0a1a 100%); position: relative; overflow: hidden;">
+                    <div style="position: absolute; inset: 0; background-image: url('data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.8\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\'/%3E%3C/svg%3E'); opacity: 0.1;"></div>
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, rgba(139, 92, 246, 0.4) 0%, rgba(59, 130, 246, 0.2) 40%, transparent 70%); animation: breathe 6s ease-in-out infinite;"></div>
+                    <div style="position: absolute; inset: 0; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 40px;">
+                        <div style="font-family: 'Space Mono', monospace; font-size: 11px; color: rgba(255,255,255,0.3); letter-spacing: 0.2em;">SCROLL TO ENTER</div>
+                    </div>
+                </div>
+                <div class="reference-content" style="display: flex; flex-direction: column; justify-content: center;">
+                    <div class="reference-category">Entry Experience</div>
+                    <div class="reference-name" style="font-size: 28px; margin-bottom: 20px;">The Threshold</div>
+                    <div class="reference-description" style="font-size: 15px; line-height: 1.8;">
+                        Full-viewport image of Shayna dissolving into digital waveform textures, viewed through analog grain. The site holds until the user scrolls.<br><br>
+                        <strong>Behavior:</strong> Scroll triggers fade and entry into the main content. The user chooses when to cross the boundary.<br><br>
+                        <strong>Feeling:</strong> A decompression chamber. Cinematic. The artist appears, then recedes into abstraction.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-meta">Shayna Dunkelman — Portfolio Website Moodboard — December 2025</div>
+    </footer>
+</body>
+</html>
