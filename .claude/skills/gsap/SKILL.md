@@ -1,7 +1,7 @@
 ---
 name: gsap
 description: Use when implementing GSAP animations, ScrollTrigger, or scroll-linked animations. Applies GSAP best practices for performance and cleanup.
-version: "1.1.0"
+version: "1.2.0"
 ---
 
 # GSAP & ScrollTrigger Best Practices
@@ -133,6 +133,64 @@ gsap.to('.element', {
   will-change: transform, opacity;
 }
 ```
+
+### Custom Animation Loops
+
+When building custom loops (cursor follow, parallax, gyroscope):
+
+#### Use GSAP Ticker (Not Separate rAF)
+```javascript
+// BAD: Competing animation loops cause frame contention
+function animate() {
+  // ...
+  requestAnimationFrame(animate);
+}
+
+// GOOD: Single unified loop with GSAP
+gsap.ticker.add(animate);
+// Cleanup:
+gsap.ticker.remove(animate);
+```
+
+#### Cache DOM References
+```javascript
+// BAD: DOM query every frame (~60/sec)
+function animate() {
+  document.getElementById('el').style.transform = ...
+}
+
+// GOOD: Cache once at init
+const el = document.getElementById('el');
+function animate() {
+  gsap.set(el, { x, y });
+}
+```
+
+#### Idle Detection
+```javascript
+const IDLE_THRESHOLD = 0.0001;
+
+function animate() {
+  const delta = target - current;
+
+  // Pause when converged
+  if (Math.abs(delta) < IDLE_THRESHOLD) {
+    gsap.ticker.remove(animate);
+    return;
+  }
+
+  current += delta * LERP;
+  gsap.set(el, { x: current });
+}
+
+// Wake on input
+element.addEventListener('mousemove', () => {
+  gsap.ticker.add(animate);
+}, { passive: true });
+```
+
+#### Use gsap.set() for Batching
+Prefer `gsap.set()` over direct `style.transform` assignment—GSAP batches these with other animations for fewer reflows.
 
 ## Debugging
 
