@@ -1,0 +1,19 @@
+# Render.com Blueprint for Shayna Dunkelman Portfolio
+# Static Astro site deployment
+
+services:
+  - type: web
+    name: shayna-portfolio
+    runtime: static
+
+    # Build configuration
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+
+    # Preview environments for PR testing
+    pullRequestPreviewsEnabled: true
+
+    # Environment variables
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
