@@ -30,6 +30,8 @@ The Press page showcases reviews, features, and mentions from publications. Each
 - Link to full article
 - Optional date
 
+**Color Temperature:** Press page uses warmer accents (amethyst, ember range). See moodboard for color guidance.
+
 ## Tasks
 
 ### 1. Press Data Structure

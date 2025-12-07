@@ -32,6 +32,8 @@ The Work page has two distinct sections:
 
 Both use the same expand-in-place interaction.
 
+**Color Temperature:** Work page uses warmer accents (amethyst, ember). See moodboard for color shift guidance.
+
 ## Tasks
 
 ### 1. Project Data Structure

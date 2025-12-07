@@ -58,11 +58,14 @@ export default {
         void: '#0a0a0a',
         subtle: '#0f0f0f',
         elevated: '#161616',
+        smoke: '#2a2a2a',       // borders, dividers
         primary: '#f5f5f5',
         secondary: '#999999',
         muted: '#555555',
-        violet: '#8b5cf6',
-        blue: '#3b82f6',
+        violet: '#8b5cf6',      // cool accent (Home)
+        blue: '#3b82f6',        // secondary cool
+        amethyst: '#a855f7',    // warm accent
+        ember: '#dc2626',       // warm accent (Work/Press)
       },
       fontFamily: {
         sans: ['Space Grotesk', 'system-ui', 'sans-serif'],
@@ -93,10 +96,14 @@ Create `src/styles/global.css`:
   --bg-void: #0a0a0a;
   --bg-subtle: #0f0f0f;
   --bg-elevated: #161616;
+  --bg-smoke: #2a2a2a;
   --text-primary: #f5f5f5;
   --text-secondary: #999999;
   --text-muted: #555555;
   --accent-violet: #8b5cf6;
+  --accent-blue: #3b82f6;
+  --accent-amethyst: #a855f7;
+  --accent-ember: #dc2626;
 }
 
 html {
@@ -148,7 +155,7 @@ const { title, description = 'Shayna Dunkelman — Avant-garde musician and perc
 Create `src/components/BackgroundTexture.astro`:
 
 **Requirements:**
-- SVG noise pattern at 6% opacity
+- SVG noise pattern at 3% opacity (per moodboard reference)
 - Fixed position, covers viewport
 - Subtle radial violet wash
 - Responds to cursor/gyro (0.3x movement)
@@ -159,8 +166,8 @@ Create `src/components/BackgroundTexture.astro`:
 ---
 
 <div class="fixed inset-0 pointer-events-none z-0" id="bg-texture">
-  <!-- Grain layer -->
-  <div class="absolute inset-0 opacity-[0.06]" id="grain"></div>
+  <!-- Grain layer (3% opacity) -->
+  <div class="absolute inset-0 opacity-[0.03]" id="grain"></div>
 
   <!-- Color wash -->
   <div

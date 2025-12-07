@@ -28,8 +28,10 @@ Content sections that follow the threshold hero.
 After the threshold hero (200vh), the home page continues with:
 1. **Bio** — Short 2-3 paragraph introduction
 2. **Latest** — Single featured item (album, show, press mention)
-3. **Instagram Feed** — Grid of recent posts (Phase 7)
+3. **Updates** — Instagram feed grid (2×4 layout per wireframes)
 4. **Footer** — Contact form + social links
+
+**Color Temperature:** Home uses cooler accents (violet, blue). See moodboard for details.
 
 ## Tasks
 
@@ -45,6 +47,7 @@ import Threshold from '@/components/Threshold.astro';
 import Navigation from '@/components/Navigation.astro';
 import Bio from '@/components/Bio.astro';
 import Latest from '@/components/Latest.astro';
+import Updates from '@/components/Updates.astro';
 import Footer from '@/components/Footer.astro';
 ---
 
@@ -56,7 +59,7 @@ import Footer from '@/components/Footer.astro';
   <main id="main-content" class="relative z-30 bg-void">
     <Bio />
     <Latest />
-    <!-- Instagram feed added in Phase 7 -->
+    <Updates />
     <Footer />
   </main>
 </BaseLayout>
@@ -392,5 +395,5 @@ export function initSectionAnimations() {
 ## Notes
 
 - Contact form backend TBD (options: Formspree, Netlify Forms, custom API)
-- Instagram feed will be added in Phase 7
+- Updates section displays Instagram feed in 2×4 grid (8 items)
 - Consider adding a "Donate" or "Support" link if needed
