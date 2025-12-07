@@ -1,7 +1,7 @@
 ---
 name: gsap
 description: Use when implementing GSAP animations, ScrollTrigger, or scroll-linked animations. Applies GSAP best practices for performance and cleanup.
-version: "1.2.0"
+version: "1.3.0"
 ---
 
 # GSAP & ScrollTrigger Best Practices
@@ -69,6 +69,8 @@ gsap.to('.element', {
 | `0.5` | 0.5s catch-up delay (smooth) |
 | `1` | 1s catch-up delay (very smooth) |
 | `2` | 2s catch-up (cinematic) |
+
+**Mobile:** Avoid `scrub: true` — iOS momentum scroll fires rapid events, causing jitter. Use `scrub: 0.5` or higher for smooth animations on touch devices.
 
 ### Timeline with ScrollTrigger
 ```javascript

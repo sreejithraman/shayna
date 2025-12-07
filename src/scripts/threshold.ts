@@ -85,7 +85,7 @@ export function initThreshold(): void {
       trigger: threshold,
       start: 'top top',
       end: `${viewportHeight * 1.2}px top`,
-      scrub: true,
+      scrub: 0.5, // Smooth catch-up (prevents jitter on iOS momentum scroll)
     },
     y: viewportHeight * -0.4, // Parallax up at 0.4x rate
     opacity: 0,
@@ -99,7 +99,7 @@ export function initThreshold(): void {
         trigger: threshold,
         start: '5% top',
         end: '15% top',
-        scrub: true,
+        scrub: 0.5,
       },
       opacity: 0,
       y: -20,
