@@ -1,12 +1,12 @@
 ---
 phase: 1
 title: "Threshold + Hero"
-status: draft
+status: in-progress
 priority: P0
 effort: large
 dependencies: [0]
 blockers: []
-started: null
+started: 2025-12-07
 completed: null
 owner: null
 ---
