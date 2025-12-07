@@ -70,3 +70,43 @@ Use the Claude Code commands to interact with plans:
 - `/plan-complete [phase]` — Mark a phase complete
 
 Or use the `plans` skill for context when working on implementation.
+
+## Design References
+
+The `.plans/references/` folder contains HTML design references. **Do not copy code from these files** — use them as visual and behavioral reference only.
+
+| File | Purpose |
+|------|---------|
+| `shayna-dunkelman-moodboard.html` | Visual direction: color palette, typography, motion principles, artistic references |
+| `shayna-threshold-v5.html` | Threshold interaction reference: scroll phases, name animation, parallax behavior |
+| `shayna-dunkelman-wireframes.html` | Page structure wireframes for Home, Work, About, and Press pages |
+
+### Key Design Decisions from References
+
+**Color Palette (from moodboard):**
+- Void: `#0A0A0A` — primary background
+- Obsidian: `#161616` — elevated surfaces
+- Smoke: `#2A2A2A` — borders, dividers
+- Violet: `#8B5CF6` — cool accent (Home, nav)
+- Cobalt: `#3B82F6` — secondary cool accent
+- Amethyst: `#A855F7` — warm accent
+- Ember: `#DC2626` — warm accent (Work page)
+- Bone: `#F5F5F5` — primary text
+
+**Motion Principles:**
+- **Breathing** — Autonomous, slow opacity pulse (4-6s cycles)
+- **Drifting** — Gentle continuous movement, elements float
+- **Reactive** — Responds to cursor/hover, subtle not performative
+
+**Threshold Animation Phases (from threshold v5):**
+- Phase 1 (0–85vh): Name centered, large, photo parallax active
+- Phase 2 (85vh–140vh): Name shrinks/moves to nav position
+- Phase 3 (140vh+): Name locked as nav logo, content visible
+
+**Page Structure (from wireframes):**
+- Home: Threshold → Bio → Latest → Updates → Footer
+- Work: Header → Featured (expandable) → Archive divider → Archive
+- About: Split hero (photo|intro) → Artist Statement → Background → Influences
+- Press: Header → Grid of press cards → Press kit download
+
+View these files in a browser to see the visual direction and interactions.

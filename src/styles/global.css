@@ -8,10 +8,14 @@
   --bg-void: #0a0a0a;
   --bg-subtle: #0f0f0f;
   --bg-elevated: #161616;
+  --bg-smoke: #2a2a2a;
   --text-primary: #f5f5f5;
   --text-secondary: #999999;
   --text-muted: #555555;
   --accent-violet: #8b5cf6;
+  --accent-blue: #3b82f6;
+  --accent-amethyst: #a855f7;
+  --accent-ember: #dc2626;
 }
 
 html {
