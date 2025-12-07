@@ -1,12 +1,14 @@
 ---
 name: css
 description: Use when writing CSS styles. Applies layout patterns, responsive design, custom properties, and performance best practices.
-version: "1.0.0"
+version: "1.1.0"
 ---
 
 # CSS Best Practices
 
 Apply when writing CSS. Complements Tailwind skill with vanilla CSS patterns.
+
+**Documentation:** https://developer.mozilla.org/en-US/docs/Web/CSS
 
 ## Layout Decision Framework
 

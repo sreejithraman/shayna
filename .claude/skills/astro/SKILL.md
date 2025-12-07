@@ -1,12 +1,14 @@
 ---
 name: astro
 description: Use when working with Astro framework projects, .astro files, or Astro configuration. Applies Astro best practices for components, islands architecture, and performance.
-version: "1.0.0"
+version: "1.1.0"
 ---
 
 # Astro Framework Best Practices
 
 Apply when working with Astro projects.
+
+**Documentation:** https://docs.astro.build
 
 ## Core Philosophy
 - **Zero JS by default** — Ship HTML/CSS unless interactivity is needed

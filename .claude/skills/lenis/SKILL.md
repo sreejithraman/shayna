@@ -1,12 +1,14 @@
 ---
 name: lenis
 description: Use when implementing Lenis smooth scroll or integrating Lenis with GSAP ScrollTrigger. Applies Lenis best practices for setup and performance.
-version: "1.0.0"
+version: "1.1.0"
 ---
 
 # Lenis Smooth Scroll Best Practices
 
 Apply when implementing Lenis smooth scrolling.
+
+**Documentation:** https://lenis.darkroom.engineering/
 
 ## Required CSS
 

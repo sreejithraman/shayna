@@ -1,12 +1,14 @@
 ---
 name: javascript
 description: Use when writing JavaScript code. Applies modern ES6+ patterns, async handling, functional methods, and common anti-patterns to avoid.
-version: "1.0.0"
+version: "1.1.0"
 ---
 
 # JavaScript Best Practices
 
 Apply when writing JavaScript code. Complements TypeScript skill with runtime patterns.
+
+**Documentation:** https://developer.mozilla.org/en-US/docs/Web/JavaScript
 
 ## Modern Syntax
 

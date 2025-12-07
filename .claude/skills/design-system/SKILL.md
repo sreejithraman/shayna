@@ -1,7 +1,7 @@
 ---
 name: design-system
 description: Use when implementing designs, building component libraries, or working with design tokens. Applies design system architecture and design-to-code translation patterns.
-version: "1.0.0"
+version: "1.1.0"
 ---
 
 # Design System Best Practices

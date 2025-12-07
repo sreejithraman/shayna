@@ -1,12 +1,14 @@
 ---
 name: gsap
 description: Use when implementing GSAP animations, ScrollTrigger, or scroll-linked animations. Applies GSAP best practices for performance and cleanup.
-version: "1.0.0"
+version: "1.1.0"
 ---
 
 # GSAP & ScrollTrigger Best Practices
 
 Apply when implementing GSAP animations.
+
+**Documentation:** https://gsap.com/docs/v3/
 
 ## Setup
 

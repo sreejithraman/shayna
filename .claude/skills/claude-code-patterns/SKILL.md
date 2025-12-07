@@ -1,14 +1,18 @@
 ---
 name: claude-code-patterns
-description: Use when deciding whether to create a skill, command, or agent. Provides decision framework and templates for Claude Code abstractions.
-version: "1.1.0"
+description: Use when deciding whether to create a skill, command, or agent. Provides decision framework, templates, and best practices for Claude Code abstractions.
+version: "2.0.0"
 ---
 
 # Claude Code Abstraction Patterns
 
 Guide for deciding when and how to create skills, commands, and agents.
 
-**Official Documentation:** https://code.claude.com/docs/en/skills
+## Official Documentation
+
+- **Skills Overview**: https://docs.claude.com/en/docs/claude-code/skills
+- **Skills Repository**: https://github.com/anthropics/skills
+- **Best Practices**: https://www.anthropic.com/engineering/claude-code-best-practices
 
 ## The Three Abstractions
 
@@ -36,11 +40,17 @@ Create a skill when you have **reusable domain knowledge** that should influence
 - `gsap` — Animation guidelines
 - `plans` — Project planning context
 
-**File Structure:**
+**File Structure (Recommended):**
 ```
 .claude/skills/
 └── skill-name/
-    └── SKILL.md    # Required: Main skill file
+    ├── SKILL.md          # Required: Main skill file
+    ├── reference.md      # Optional: Extended documentation
+    ├── examples.md       # Optional: Additional examples
+    ├── scripts/          # Optional: Helper scripts
+    │   └── helper.py
+    └── templates/        # Optional: Template files
+        └── template.txt
 ```
 
 **Frontmatter Schema:**
@@ -49,6 +59,11 @@ Create a skill when you have **reusable domain knowledge** that should influence
 | `name` | Yes | 64 chars | Lowercase, hyphens only, must match folder name |
 | `description` | Yes | 1024 chars | Critical for discovery—be specific about when to use |
 | `version` | Recommended | — | Semantic versioning (e.g., "1.0.0") |
+
+**Description Pattern:**
+```
+Use when [specific context/trigger]. Applies [topic] best practices for [focus areas].
+```
 
 **Template:**
 ```markdown
@@ -74,11 +89,22 @@ Brief overview of what this skill covers.
 example
 \`\`\`
 
+## Common Patterns
+
+Document recurring patterns with examples.
+
 ## Avoid
 
-- Anti-pattern 1
-- Anti-pattern 2
+- Anti-pattern 1 (explain why)
+- Anti-pattern 2 (explain why)
 ```
+
+**Skill Content Guidelines:**
+- Keep instructions clear and actionable
+- Provide concrete code examples
+- Include "Avoid" section with anti-patterns
+- Link to official documentation where applicable
+- Focus on domain-specific knowledge, not general programming
 
 ### When to Create a COMMAND
 
@@ -95,6 +121,20 @@ Create a command when you have a **specific workflow** that users will invoke ex
 - `/plan-status` — Show phase statuses
 - `/idea` — Capture to backlog
 - `/review` — Code review
+
+**File Structure:**
+```
+.claude/commands/
+└── command-name.md    # Single markdown file
+```
+
+**Frontmatter Schema:**
+| Field | Required | Notes |
+|-------|----------|-------|
+| `description` | Yes | One-line description of what command does |
+| `allowed-tools` | Recommended | Comma-separated list of tools |
+| `argument-hint` | Optional | Show argument placeholders |
+| `aliases` | Optional | Alternative command names |
 
 **Template:**
 ```markdown
@@ -124,6 +164,12 @@ What this command accomplishes.
 Expected output structure.
 ```
 
+**Command Content Guidelines:**
+- Be explicit about steps and expected behavior
+- Define clear output format
+- Handle both with-arguments and no-arguments cases
+- Include examples of typical usage
+
 ### When to Create an AGENT
 
 Create an agent when you need **autonomous execution** of complex, multi-step tasks.
@@ -141,11 +187,25 @@ Create an agent when you need **autonomous execution** of complex, multi-step ta
 - `test-writer` — Generate test suites
 - `doc-writer` — Create documentation
 
+**File Structure:**
+```
+.claude/agents/
+└── agent-name.md    # Single markdown file
+```
+
+**Frontmatter Schema:**
+| Field | Required | Notes |
+|-------|----------|-------|
+| `name` | Yes | Lowercase, hyphenated identifier |
+| `description` | Yes | What agent does and when to use it |
+| `tools` | Yes | Comma-separated list of allowed tools |
+| `model` | Optional | Model to use (sonnet, opus, haiku) |
+
 **Template:**
 ```markdown
 ---
 name: agent-name
-description: What this agent does (one line)
+description: What this agent does (one line). Use for [use cases].
 tools: Tool1, Tool2, Tool3
 model: sonnet
 ---
@@ -173,6 +233,13 @@ You are an agent that [purpose].
 
 What you return when done.
 ```
+
+**Agent Content Guidelines:**
+- Write in second person ("You are an agent that...")
+- Define clear process steps
+- Specify expected output format
+- Include what NOT to do
+- Provide example invocations
 
 ## Decision Tree
 
