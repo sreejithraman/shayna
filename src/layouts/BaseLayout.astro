@@ -24,8 +24,12 @@ const { title, description = 'Shayna Dunkelman — Avant-garde musician and perc
     <script>
       import { initSmoothScroll } from '@/scripts/smooth-scroll';
 
-      // Initialize smooth scroll
-      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      // Initialize smooth scroll only on non-touch devices
+      // Touch devices get native scroll with momentum; Lenis is for smoothing mouse wheel
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
+
+      if (!prefersReducedMotion && !isTouchDevice) {
         initSmoothScroll();
       }
     </script>

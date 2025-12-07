@@ -1,7 +1,7 @@
 ---
 name: lenis
 description: Use when implementing Lenis smooth scroll or integrating Lenis with GSAP ScrollTrigger. Applies Lenis best practices for setup and performance.
-version: "1.2.0"
+version: "1.3.0"
 ---
 
 # Lenis Smooth Scroll Best Practices
@@ -89,27 +89,27 @@ const lenis = new Lenis({
 
 ## Mobile & Touch
 
-### syncTouch vs smoothTouch
+### Don't Use Lenis on Touch Devices
 
-| Option | Purpose | Default |
-|--------|---------|---------|
-| `smoothTouch` | Apply smooth interpolation to touch | `false` |
-| `syncTouch` | Track native touch scroll position | `false` |
+Lenis is for smoothing mouse wheel scroll (which is chunky by nature). Touch devices already have native momentum scrolling — don't interfere with it.
 
-**Key distinction:**
-- `smoothTouch: true` — Hijacks touch, applies lerp (usually unwanted)
-- `syncTouch: true` — Keeps native touch feel, but syncs position for ScrollTrigger
-
-### When Using ScrollTrigger (Required for iOS)
 ```javascript
-const lenis = new Lenis({
-  smoothWheel: true,
-  syncTouch: true,        // Required: sync position for ScrollTrigger
-  syncTouchLerp: 0.06,    // Smooth the sync slightly
-});
+const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
+
+if (!isTouchDevice) {
+  initSmoothScroll();
+}
 ```
 
-Without `syncTouch`, iOS momentum scroll happens natively but Lenis doesn't track it — ScrollTrigger animations won't update during flick momentum.
+**Why this works:**
+- Touch devices get native scroll with perfect momentum
+- ScrollTrigger works fine with native scroll (has its own listener)
+- Desktop gets smooth wheel scrolling via Lenis
+- No `syncTouch` complexity or iOS quirks
+
+### syncTouch — Avoid
+
+The `syncTouch` option tries to sync Lenis with native touch scroll, but it interferes with iOS momentum. Don't use it — just disable Lenis on touch devices entirely.
 
 ### Touch Event Listeners
 
@@ -238,8 +238,8 @@ function closeModal() {
 
 ## Avoid
 - Forgetting required CSS (causes jittery scroll)
-- Using `smoothTouch: true` (hijacks native touch feel)
-- Forgetting `syncTouch: true` when using ScrollTrigger (breaks iOS momentum)
+- Using Lenis on touch devices (kills native momentum)
+- Using `smoothTouch` or `syncTouch` (just disable Lenis on mobile)
 - Non-passive touch listeners (blocks iOS scroll)
 - Multiple Lenis instances on the same page
 - Forgetting to call `lenis.destroy()` on unmount
