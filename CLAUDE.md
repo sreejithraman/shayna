@@ -65,6 +65,16 @@ Work page has project cards that expand in-place to show details.
 
 See `TECHNICAL-HANDOFF.md` for detailed specs on animations, layout, and implementation.
 
+### Design References
+
+The `.plans/references/` folder contains visual design references (HTML files). Open in browser to preview:
+
+- **Moodboard** — Color palette, typography, motion principles, visual inspiration
+- **Threshold v5** — Interactive reference for the hero scroll animation
+- **Wireframes** — Page structure for Home, Work, About, Press
+
+**Important:** These are reference materials only. Do not copy code from them — implement fresh using Astro/Tailwind/GSAP following the design intent.
+
 ## Do Not
 
 - Autoplay any audio/video
