@@ -1,12 +1,14 @@
 ---
 name: tailwind
 description: Use when writing Tailwind CSS classes or styling with Tailwind. Applies Tailwind best practices for utility classes, responsive design, and maintainable styling.
-version: "1.0.0"
+version: "1.1.0"
 ---
 
 # Tailwind CSS Best Practices
 
 Apply when styling with Tailwind CSS.
+
+**Documentation:** https://tailwindcss.com/docs
 
 ## Core Philosophy
 - **Utility-first**: Compose styles from utility classes

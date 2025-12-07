@@ -1,7 +1,7 @@
 ---
 name: plans
 description: Use when working on implementation phases, checking phase status, or planning work. Provides context for the structured planning system in .plans/ folder.
-version: "1.0.0"
+version: "1.1.0"
 ---
 
 # Structured Planning System

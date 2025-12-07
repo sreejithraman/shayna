@@ -1,7 +1,7 @@
 ---
 name: software-engineering
 description: Use when writing, reviewing, or refactoring any code. Applies software engineering best practices including DRY, SOLID, YAGNI, KISS, and clean code principles.
-version: "1.0.0"
+version: "1.1.0"
 ---
 
 # Software Engineering Best Practices

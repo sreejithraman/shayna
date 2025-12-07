@@ -1,12 +1,14 @@
 ---
 name: typescript
 description: Use when writing TypeScript code. Applies TypeScript best practices for type safety, generics, and maintainable typed code.
-version: "1.0.0"
+version: "1.1.0"
 ---
 
 # TypeScript Best Practices
 
 Apply when writing TypeScript code.
+
+**Documentation:** https://www.typescriptlang.org/docs/
 
 ## Type Safety
 
