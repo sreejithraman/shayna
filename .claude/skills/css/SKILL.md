@@ -1,7 +1,7 @@
 ---
 name: css
 description: Use when writing CSS styles. Applies layout patterns, responsive design, custom properties, and performance best practices.
-version: "1.1.0"
+version: "1.2.0"
 ---
 
 # CSS Best Practices
@@ -103,21 +103,21 @@ Apply when writing CSS. Complements Tailwind skill with vanilla CSS patterns.
 ### Define at Root
 ```css
 :root {
-  /* Colors */
-  --color-primary: #8b5cf6;
-  --color-bg: #0a0a0a;
-  --color-text: #f5f5f5;
+  /* Colors - semantic names */
+  --color-primary: #3b82f6;
+  --color-bg: #ffffff;
+  --color-text: #1f2937;
 
-  /* Spacing scale */
-  --space-xs: 0.25rem;
-  --space-sm: 0.5rem;
-  --space-md: 1rem;
-  --space-lg: 2rem;
-  --space-xl: 4rem;
+  /* Spacing scale (4px base) */
+  --space-xs: 0.25rem;   /* 4px */
+  --space-sm: 0.5rem;    /* 8px */
+  --space-md: 1rem;      /* 16px */
+  --space-lg: 2rem;      /* 32px */
+  --space-xl: 4rem;      /* 64px */
 
   /* Typography */
-  --font-sans: 'Space Grotesk', sans-serif;
-  --font-mono: 'Space Mono', monospace;
+  --font-sans: system-ui, sans-serif;
+  --font-mono: ui-monospace, monospace;
 }
 ```
 
