@@ -1,7 +1,7 @@
 ---
 name: claude-code-patterns
 description: Use when deciding whether to create a skill, command, or agent. Provides decision framework, templates, and best practices for Claude Code abstractions.
-version: "2.0.0"
+version: "2.1.0"
 ---
 
 # Claude Code Abstraction Patterns
@@ -105,6 +105,20 @@ Document recurring patterns with examples.
 - Include "Avoid" section with anti-patterns
 - Link to official documentation where applicable
 - Focus on domain-specific knowledge, not general programming
+- Make skills standalone and reusable across projects
+
+**For Language/Framework Skills, Also Include:**
+- **File Organization** — Directory structure patterns, where to put what
+- **Naming Conventions** — Files, functions, classes, variables
+- **Import Organization** — Ordering and grouping of imports
+- **Module Patterns** — When to split, how to structure exports
+
+Not all skills need these sections. Only include when:
+- The technology has established conventions (TypeScript, Astro, React)
+- File structure decisions impact maintainability
+- There are common organizational anti-patterns to avoid
+
+Skills like `gsap` (animation library) or `lenis` (smooth scroll) don't need file structure guidance—they're used within existing structures, not defining them.
 
 ### When to Create a COMMAND
 
