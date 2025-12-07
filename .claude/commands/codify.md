@@ -2,18 +2,21 @@
 description: Analyze if something should become a skill, command, or agent
 allowed-tools: Read, Write, Glob, Grep
 argument-hint: [description of the pattern/workflow]
+aliases: [formalize]
 ---
 
-# Analyze Abstraction
+# Codify Pattern
 
-Evaluate whether a pattern, workflow, or behavior should be abstracted into a skill, command, or agent.
+Evaluate whether a pattern, workflow, or behavior should be codified into a skill, command, or agent.
+
+**Aliases:** `/formalize`
 
 ## Usage
 
 ```
-/abstract "explaining TypeScript best practices repeatedly"
-/abstract "running build, test, then commit workflow"
-/abstract "reviewing PRs for security issues"
+/codify "explaining TypeScript best practices repeatedly"
+/codify "running build, test, then commit workflow"
+/codify "reviewing PRs for security issues"
 ```
 
 ## Instructions
@@ -56,12 +59,12 @@ Analyze against these signals:
 Score each type and recommend:
 
 ```
-# Abstraction Analysis
+# Pattern Analysis
 
 ## Input
 "[user's description]"
 
-## Pattern Analysis
+## Signal Matching
 
 | Signal | Skill | Command | Agent |
 |--------|-------|---------|-------|
@@ -109,7 +112,7 @@ description: ...
 
 ---
 
-Create this skill? [y/n]
+Create this? [y/n]
 ```
 
 ### 4. If Confirmed, Create
@@ -149,7 +152,7 @@ Options:
 3. No action needed
 ```
 
-### Not Worth Abstracting
+### Not Worth Codifying
 
 ```
 ## Recommendation: None

@@ -238,3 +238,8 @@ Before creating an abstraction, ask:
 4. [ ] Is it clear which type it should be?
 5. [ ] Does a similar abstraction already exist?
 6. [ ] Is it named clearly and consistently?
+
+## Related Commands
+
+- `/codify` (alias: `/formalize`) — Analyze if a pattern should be codified
+- `/patterns` — List all skills, commands, and agents in the project

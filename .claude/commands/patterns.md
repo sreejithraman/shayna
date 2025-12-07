@@ -40,7 +40,7 @@ Display all Claude Code abstractions in this project.
 
 | Command | Description |
 |---------|-------------|
-| /abstract | Analyze if something should be abstracted |
+| /codify | Analyze if pattern should be codified (alias: /formalize) |
 | /cleanup | Review for best practices violations |
 | /commit | Create conventional commit |
 | /idea | Capture idea to backlog |
@@ -67,7 +67,7 @@ Display all Claude Code abstractions in this project.
 
 ---
 
-Use `/abstract` to analyze new patterns.
+Use `/codify` (or `/formalize`) to analyze new patterns.
 Use the `claude-code-patterns` skill for creation guidelines.
 ```
 
@@ -91,5 +91,5 @@ Optionally group by category:
 - /review, /cleanup
 
 ### Meta
-- /abstract, /patterns, /project-init
+- /codify, /formalize, /patterns, /project-init
 ```
