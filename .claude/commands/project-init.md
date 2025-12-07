@@ -64,17 +64,24 @@ Create `CLAUDE.md` in the project root with:
 - `npm run build` — Production build
 - `npm run test` — Run tests (if applicable)
 
+## Skills
+
+Invoke these skills when entering their domains:
+
+| Context | Skill |
+|---------|-------|
+| [Language] code | `[language]` |
+| [Framework] files | `[framework]` |
+| [Styling] classes | `[styling]` |
+| All code changes | `software-engineering` |
+
+Only include skills that exist in `.claude/skills/` and are relevant to this project.
+
 ## Project Structure
 [Key directories and their purpose]
 
 ## Key Files
 [Important configuration or entry points]
-
-## Skills
-This project uses: [list detected skills]
-- software-engineering (always)
-- [framework skill if applicable]
-- [other relevant skills]
 
 ## Do Not
 - [Any project-specific warnings]
@@ -84,6 +91,6 @@ This project uses: [list detected skills]
 
 Summarize:
 - Detected stack
-- Skills that will auto-activate
+- Skills added to the table (check `.claude/skills/` for available skills)
 - CLAUDE.md location and contents
 - Any manual configuration needed

@@ -1,7 +1,7 @@
 ---
 name: tailwind
 description: Use when writing Tailwind CSS classes or styling with Tailwind. Applies Tailwind best practices for utility classes, responsive design, and maintainable styling.
-version: "1.1.0"
+version: "1.2.0"
 ---
 
 # Tailwind CSS Best Practices
@@ -69,12 +69,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: '#8b5cf6',
-        'bg-void': '#0a0a0a',
+        primary: '#3b82f6',
+        surface: '#f8fafc',
       },
       fontFamily: {
-        sans: ['Space Grotesk', 'sans-serif'],
-        mono: ['Space Mono', 'monospace'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        mono: ['Fira Code', 'ui-monospace', 'monospace'],
       },
     },
   },
