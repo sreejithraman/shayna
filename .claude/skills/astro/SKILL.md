@@ -1,7 +1,7 @@
 ---
 name: astro
 description: Use when working with Astro framework projects, .astro files, or Astro configuration. Applies Astro best practices for components, islands architecture, and performance.
-version: "1.1.0"
+version: "1.2.0"
 ---
 
 # Astro Framework Best Practices
@@ -69,13 +69,59 @@ Choose the right directive for the use case:
 
 ```
 src/
-├── pages/        # File-based routing
-├── layouts/      # Reusable page layouts
-├── components/   # UI components
-├── content/      # Content Collections (type-safe)
-└── styles/       # Global styles
-public/           # Static assets (unprocessed)
+├── pages/          # File-based routing (each file = route)
+├── layouts/        # Reusable page layouts
+├── components/     # UI components
+│   ├── ui/         # Generic reusable (Button, Card, Modal)
+│   ├── sections/   # Page sections (Hero, Footer, Nav)
+│   └── [feature]/  # Feature-specific (ProjectCard, AudioPlayer)
+├── content/        # Content Collections (type-safe markdown/data)
+├── styles/         # Global styles
+├── lib/            # Utilities, helpers, constants
+└── types/          # Shared TypeScript types
+public/             # Static assets (unprocessed, copied as-is)
 ```
+
+### Component Organization
+
+**By type (smaller projects):**
+```
+components/
+├── Button.astro
+├── Card.astro
+├── Hero.astro
+└── Nav.astro
+```
+
+**By category (larger projects):**
+```
+components/
+├── ui/           # Primitive, reusable
+│   ├── Button.astro
+│   └── Card.astro
+├── sections/     # Page-level sections
+│   ├── Hero.astro
+│   └── Footer.astro
+└── features/     # Domain-specific
+    └── ProjectCard.astro
+```
+
+### Naming Conventions
+- **Components:** PascalCase (`ProjectCard.astro`, `HeroSection.astro`)
+- **Pages:** kebab-case (`about.astro`, `work/[slug].astro`)
+- **Layouts:** PascalCase with "Layout" suffix (`BaseLayout.astro`)
+- **Utilities:** camelCase (`formatDate.ts`, `getProjects.ts`)
+
+### When to Use Each Directory
+
+| Directory | Use For |
+|-----------|---------|
+| `pages/` | Route endpoints, minimal logic, imports layout |
+| `layouts/` | Shared page wrappers (head, nav, footer) |
+| `components/` | Reusable UI pieces |
+| `content/` | Markdown/MDX with frontmatter, type-safe collections |
+| `lib/` | Utilities, API clients, shared logic |
+| `public/` | Favicons, robots.txt, files needing exact paths |
 
 ## Content Collections
 

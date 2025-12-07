@@ -1,7 +1,7 @@
 ---
 name: typescript
 description: Use when writing TypeScript code. Applies TypeScript best practices for type safety, generics, and maintainable typed code.
-version: "1.1.0"
+version: "1.2.0"
 ---
 
 # TypeScript Best Practices
@@ -229,6 +229,91 @@ const count = value ?? 10;    // 0 stays 0
     "exactOptionalPropertyTypes": true
   }
 }
+```
+
+## File Organization
+
+### Type File Patterns
+```
+src/
+├── types/              # Shared types across the project
+│   ├── index.ts        # Barrel file for public types
+│   ├── api.ts          # API response/request types
+│   └── models.ts       # Domain models
+├── components/
+│   └── Button/
+│       ├── Button.tsx
+│       └── Button.types.ts   # Component-specific types
+└── utils/
+    └── format.ts       # Co-located types for small modules
+```
+
+### Organizing Types
+
+**Co-locate when types are used by one module:**
+```typescript
+// utils/format.ts
+interface FormatOptions {
+  locale?: string;
+  currency?: string;
+}
+
+export function formatCurrency(amount: number, options?: FormatOptions) { }
+```
+
+**Separate when types are shared across modules:**
+```typescript
+// types/user.ts
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
+// types/index.ts (barrel file)
+export type { User } from './user';
+export type { ApiResponse, ApiError } from './api';
+```
+
+### Naming Conventions
+```typescript
+// Interfaces: PascalCase, noun describing the shape
+interface UserProfile { }
+interface ApiResponse { }
+
+// Types: PascalCase, describe the union/alias
+type Status = 'pending' | 'active';
+type UserId = string;
+
+// Type files: kebab-case or feature.types.ts
+// user-profile.ts OR user.types.ts
+
+// Generics: T-prefixed descriptive names
+interface Repository<TEntity> { }
+function fetch<TResponse>(url: string): Promise<TResponse>;
+```
+
+### Import Organization
+```typescript
+// 1. External packages
+import { z } from 'zod';
+
+// 2. Internal absolute imports (types first)
+import type { User, ApiResponse } from '@/types';
+import { formatDate } from '@/utils/format';
+
+// 3. Relative imports (types first)
+import type { ButtonProps } from './Button.types';
+import { useButtonState } from './useButtonState';
+```
+
+### Type-Only Imports
+```typescript
+// Prefer type-only imports for types (better tree-shaking)
+import type { User } from './types';
+
+// Mixed imports when needed
+import { validateUser, type UserInput } from './user';
 ```
 
 ## Avoid
