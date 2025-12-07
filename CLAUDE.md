@@ -18,6 +18,21 @@ Portfolio website for Shayna Dunkelman, avant-garde musician and percussionist b
 - `npm run dev` — Start development server
 - `npm run build` — Production build
 
+## Skills
+
+Invoke these skills when entering their domains:
+
+| Context | Skill |
+|---------|-------|
+| TypeScript code | `typescript` |
+| .astro files, components | `astro` |
+| Tailwind classes | `tailwind` |
+| CSS, layout, animations | `css` |
+| GSAP, ScrollTrigger | `gsap` |
+| Lenis smooth scroll | `lenis` |
+| Design specs, tokens | `design-system` |
+| All code changes | `software-engineering` |
+
 ## Key Features
 
 ### Threshold Animation (Critical)
