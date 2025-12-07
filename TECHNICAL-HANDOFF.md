@@ -1018,7 +1018,7 @@ interface Project {
 - "Islands" architecture — JS only where needed
 - Perfect for content/portfolio sites
 - Fast builds, great DX
-- Deploy anywhere (Vercel, Netlify, Cloudflare)
+- Deploy anywhere (Render, Vercel, Netlify, Cloudflare)
 
 **Tailwind CSS**
 
@@ -1148,28 +1148,36 @@ src/
 ## Questions for Build
 
 - Domain: Keep `shaynadunkelmanmusic.com` or shorten to `shaynadunkelman.com`?
-- Hosting: Vercel, Netlify, or Cloudflare Pages? (all work great with Astro)
-- Contact form: Formspree, Netlify Forms, or custom?
+- Hosting: Render (static site)
+- Contact form: Formspree or custom?
 - Analytics: Plausible, Fathom, or none?
 
 -----
 
 ## Deployment
 
-### Vercel (Recommended)
+### Render (Recommended)
 
-```bash
-npm install -g vercel
-vercel
-```
+1. Push code to GitHub
+2. Create a new **Static Site** on Render
+3. Configure build settings:
+   - **Build Command:** `npm run build`
+   - **Publish Directory:** `dist`
+4. Deploy
 
-### Netlify
+Render will automatically redeploy on every push to the connected branch.
 
-```bash
-npm run build
-# Deploy dist/ folder
-```
+### Environment Variables (if needed)
+
+Set in Render dashboard under Environment → Environment Variables.
+
+### Custom Domain
+
+1. Add domain in Render dashboard → Settings → Custom Domains
+2. Configure DNS:
+   - For apex domain: Add `A` record pointing to Render's IP
+   - For subdomain: Add `CNAME` record pointing to your Render URL
 
 ### Build Output
 
-Astro outputs static HTML/CSS/JS to `dist/`. No server required. Can be hosted anywhere that serves static files.
+Astro outputs static HTML/CSS/JS to `dist/`. No server required.
