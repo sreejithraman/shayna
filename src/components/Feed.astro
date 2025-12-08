@@ -68,8 +68,13 @@ const { items = placeholderItems } = Astro.props;
     display: none;
   }
 
-  .feed-container:active {
+  .feed-container:active,
+  .feed-container.dragging {
     cursor: grabbing;
+  }
+
+  .feed-container.dragging .feed-card {
+    pointer-events: none;
   }
 
   .feed-track {

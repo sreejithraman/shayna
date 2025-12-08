@@ -82,11 +82,21 @@ const { photoSrc = '/images/hero-placeholder.svg' } = Astro.props;
     letter-spacing: -0.02em;
     display: flex;
     flex-direction: column;
+    /* Glow effect - configurable via CSS custom properties */
+    text-shadow: 0 0 calc(var(--glow-intensity) * 60px) var(--glow-color),
+                 0 0 calc(var(--glow-intensity) * 120px) color-mix(in srgb, var(--glow-color) 50%, transparent);
+    transition: text-shadow 0.4s ease-out;
   }
 
   .name-first,
   .name-last {
     display: block;
+  }
+
+  /* Subtle hover enhancement */
+  .name-text:hover {
+    text-shadow: 0 0 calc(var(--glow-intensity) * 80px) var(--glow-color),
+                 0 0 calc(var(--glow-intensity) * 160px) color-mix(in srgb, var(--glow-color) 60%, transparent);
   }
 
   /* Desktop: side by side */

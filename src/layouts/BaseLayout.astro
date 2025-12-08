@@ -32,11 +32,27 @@ const styleString = Object.entries(configStyles)
     </main>
     <script>
       import { initSmoothScroll } from '@/scripts/smooth-scroll';
+      import { initHorizontalScroll } from '@/scripts/horizontal-scroll';
+      import { initParallax } from '@/scripts/parallax';
+      import { initGrainEffect } from '@/scripts/grain-effect';
+
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
       // Initialize smooth scroll
-      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      if (!prefersReducedMotion) {
         initSmoothScroll();
       }
+
+      // Initialize horizontal drag scroll
+      initHorizontalScroll();
+
+      // Initialize parallax effects
+      if (!prefersReducedMotion) {
+        initParallax();
+      }
+
+      // Initialize grain effect on name
+      initGrainEffect();
     </script>
   </body>
 </html>
