@@ -2,15 +2,16 @@
 
 ## Overview
 
-Portfolio website for Shayna Dunkelman, avant-garde musician and percussionist based in Brooklyn. Dark, atmospheric, sophisticated aesthetic.
+Single-page portfolio for Shayna Dunkelman, percussionist with electronic influence. Dark, atmospheric, indigo/purple palette. Subtle interactive accents.
 
 ## Stack
 
 - **Astro** — Static site generator
-- **Tailwind CSS** — Utility-first styling
-- **GSAP + ScrollTrigger** — Scroll-linked animations
+- **Tailwind CSS** — Utility-first styling, design tokens via config
+- **GSAP + ScrollTrigger** — Parallax, horizontal scroll
 - **Lenis** — Smooth scroll
-- **TypeScript** — Type safety
+- **TypeScript** — Type safety, config types
+- **Canvas** — Grain effect rendering
 
 ## Commands
 
@@ -31,53 +32,79 @@ Invoke these skills when entering their domains:
 | GSAP, ScrollTrigger | `gsap` |
 | Lenis smooth scroll | `lenis` |
 | Design specs, tokens | `design-system` |
+| Canvas grain, noise, particles | `canvas-effects` |
+| Cursor proximity, touch reactivity | `cursor-reactivity` |
 | All code changes | `software-engineering` |
 
-## Key Features
+## Structure
 
-### Threshold Animation (Critical)
-The homepage hero where the name transitions from large centered text to small nav logo on scroll. This is the signature interaction.
+```
+Hero (viewport 1)
+├── Photo (left on desktop, top on mobile)
+└── Name: SHAYNA DUNKELMAN (grain + vibration effect)
 
-### Photo Parallax
-Hero photo responds to cursor (desktop) or gyroscope (mobile).
+Feed (viewport 2)
+└── Horizontal scrolling Instagram feed
 
-### Expandable Projects
-Work page has project cards that expand in-place to show details.
+Bio (viewport 3)
+└── Text section (clean, no effects)
+```
 
 ## Design Tokens
 
 ```css
---bg-void: #0a0a0a       /* Near-black background */
+/* Colors */
+--bg-void: #0a0a0a
 --bg-subtle: #0f0f0f
---bg-elevated: #161616
+--accent-indigo: #6366f1
+--accent-purple: #8b5cf6
+--glow-color: var(--accent-purple)
 --text-primary: #f5f5f5
 --text-secondary: #999999
---text-muted: #555555
---accent-violet: #8b5cf6
+
+/* Effects (configurable in src/config/site.ts) */
+--grain-density: 0.5
+--vibration-intensity: 1
+--glow-intensity: 0.3
+--parallax-rate: 0.1
+--hero-ratio: 40
 ```
 
 ## Typography
 
-- Headlines: Space Grotesk (300, 400, 500)
-- Labels: Space Mono (monospace)
+- **Name**: Unbounded (bold, large)
+- **Body**: Space Grotesk
+
+## Key Interactions
+
+### Name Grain Effect
+- Canvas-rendered grain texture inside letterforms
+- Ambient motion: slow drift always active
+- Cursor proximity (desktop): intensifies grain
+- Touch (mobile): tap triggers intensity burst
+
+### Parallax
+- Photo and name scroll at different rates
+- Subtle depth, configurable via config
+
+### Horizontal Feed
+- Instagram feed scrolls horizontally
+- Touch/swipe on mobile, drag/scroll on desktop
+
+## Configuration
+
+All effects are configurable via `src/config/site.ts`. Build structure first, tune visuals later.
 
 ## Reference
 
-See `TECHNICAL-HANDOFF.md` for detailed specs on animations, layout, and implementation.
+The `.plans/references/` folder contains:
+- **Moodboard** — Color palette, typography, motion principles
 
-### Design References
-
-The `.plans/references/` folder contains visual design references (HTML files). Open in browser to preview:
-
-- **Moodboard** — Color palette, typography, motion principles, visual inspiration
-- **Threshold v5** — Interactive reference for the hero scroll animation
-- **Wireframes** — Page structure for Home, Work, About, Press
-
-**Important:** These are reference materials only. Do not copy code from them — implement fresh using Astro/Tailwind/GSAP following the design intent.
+See `.plans/implementation-plan.md` for phased build plan.
 
 ## Do Not
 
 - Autoplay any audio/video
-- Add decorative waveforms (reserved for actual audio playback)
 - Skip accessibility (semantic HTML, alt text, focus states, reduced motion)
-- Use heavy JS when Astro static rendering suffices
+- Make cursor the visual subject (elements react to cursor, cursor stays clean)
+- Over-animate (effects are accents, not the show)
