@@ -1,14 +1,24 @@
 ---
+import { siteConfig, getConfigCSSProperties } from '@/config/site';
+
 interface Props {
-  title: string;
+  title?: string;
   description?: string;
 }
 
-const { title, description = 'Shayna Dunkelman — Avant-garde musician and percussionist' } = Astro.props;
+const {
+  title = `${siteConfig.name} — Percussionist`,
+  description = siteConfig.description,
+} = Astro.props;
+
+const configStyles = getConfigCSSProperties();
+const styleString = Object.entries(configStyles)
+  .map(([key, value]) => `${key}: ${value}`)
+  .join('; ');
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" style={styleString}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -17,7 +27,6 @@ const { title, description = 'Shayna Dunkelman — Avant-garde musician and perc
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
   <body class="bg-void text-primary font-sans antialiased">
-    <slot name="background" />
     <main>
       <slot />
     </main>

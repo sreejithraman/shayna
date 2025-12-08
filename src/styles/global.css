@@ -1,21 +1,31 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500&family=Space+Mono&display=swap');
+/* Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500&family=Unbounded:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
+  /* Colors */
   --bg-void: #0a0a0a;
   --bg-subtle: #0f0f0f;
   --bg-elevated: #161616;
-  --bg-smoke: #2a2a2a;
   --text-primary: #f5f5f5;
   --text-secondary: #999999;
   --text-muted: #555555;
-  --accent-violet: #8b5cf6;
-  --accent-blue: #3b82f6;
-  --accent-amethyst: #a855f7;
-  --accent-ember: #dc2626;
+  --accent-indigo: #6366f1;
+  --accent-purple: #8b5cf6;
+  --glow-color: var(--accent-purple);
+
+  /* Effect defaults (overridden by config) */
+  --hero-ratio: 40%;
+  --grain-density: 0.5;
+  --grain-color: var(--accent-indigo);
+  --vibration-radius: 150px;
+  --vibration-intensity: 1;
+  --glow-intensity: 0.3;
+  --parallax-photo-rate: 0.05;
+  --parallax-name-rate: 0.1;
 }
 
 html {
@@ -51,4 +61,26 @@ html.lenis body {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* Display font for name */
+.font-display {
+  font-family: 'Unbounded', system-ui, sans-serif;
+}
+
+/* Utility for glow effect */
+.glow {
+  text-shadow: 0 0 calc(var(--glow-intensity) * 40px) var(--glow-color);
+}
+
+/* Horizontal scroll section */
+.horizontal-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.horizontal-scroll::-webkit-scrollbar {
+  display: none;
 }

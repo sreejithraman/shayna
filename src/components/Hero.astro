@@ -1,0 +1,124 @@
+---
+import { siteConfig } from '@/config/site';
+
+interface Props {
+  photoSrc?: string;
+}
+
+const { photoSrc = '/images/hero-placeholder.svg' } = Astro.props;
+---
+
+<section class="hero" data-parallax-container>
+  <div class="hero-content">
+    <!-- Photo side -->
+    <div class="hero-photo" data-parallax="photo">
+      <div class="photo-frame">
+        <img
+          src={photoSrc}
+          alt={`Portrait of ${siteConfig.name}`}
+          class="photo-image"
+          loading="eager"
+        />
+      </div>
+    </div>
+
+    <!-- Name side -->
+    <div class="hero-name" data-parallax="name">
+      <h1 class="name-text" data-grain-target>
+        <span class="name-first">{siteConfig.firstName}</span>
+        <span class="name-last">{siteConfig.lastName}</span>
+      </h1>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+    width: 100%;
+    max-width: 1400px;
+  }
+
+  /* Photo */
+  .hero-photo {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .photo-frame {
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background-color: var(--bg-elevated);
+  }
+
+  .photo-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Name */
+  .hero-name {
+    text-align: center;
+  }
+
+  .name-text {
+    font-family: 'Unbounded', system-ui, sans-serif;
+    font-weight: 600;
+    font-size: clamp(2.5rem, 10vw, 6rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .name-first,
+  .name-last {
+    display: block;
+  }
+
+  /* Desktop: side by side */
+  @media (min-width: 768px) {
+    .hero-content {
+      flex-direction: row;
+      align-items: center;
+      gap: 4rem;
+    }
+
+    .hero-photo {
+      flex: 0 0 var(--hero-ratio);
+      max-width: none;
+    }
+
+    .hero-name {
+      flex: 1;
+      text-align: left;
+    }
+
+    .name-text {
+      font-size: clamp(3rem, 8vw, 8rem);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .hero-content {
+      gap: 6rem;
+    }
+
+    .name-text {
+      font-size: clamp(4rem, 7vw, 10rem);
+    }
+  }
+</style>

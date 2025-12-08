@@ -1,31 +1,12 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import BackgroundTexture from '@/components/BackgroundTexture.astro';
-import Threshold from '@/components/Threshold.astro';
+import Hero from '@/components/Hero.astro';
+import Feed from '@/components/Feed.astro';
+import Bio from '@/components/Bio.astro';
 ---
 
-<BaseLayout title="Shayna Dunkelman — Musician & Percussionist">
-  <BackgroundTexture slot="background" />
-
-  <Threshold>
-    <!-- Content below the threshold hero -->
-    <section class="min-h-screen flex items-center justify-center py-32">
-      <p class="text-secondary text-xl max-w-2xl text-center px-6">
-        Avant-garde musician and percussionist based in Brooklyn.
-      </p>
-    </section>
-
-    <section class="min-h-screen flex items-center justify-center py-32">
-      <div class="text-center px-6">
-        <p class="font-mono text-[10px] uppercase tracking-wider text-muted mb-4">
-          Explore
-        </p>
-        <nav class="flex flex-col gap-4 text-2xl font-light">
-          <a href="/work" class="text-primary hover:text-violet transition-colors">Work</a>
-          <a href="/about" class="text-primary hover:text-violet transition-colors">About</a>
-          <a href="/press" class="text-primary hover:text-violet transition-colors">Press</a>
-        </nav>
-      </div>
-    </section>
-  </Threshold>
+<BaseLayout>
+  <Hero />
+  <Feed />
+  <Bio />
 </BaseLayout>
