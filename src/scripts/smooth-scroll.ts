@@ -2,7 +2,7 @@ import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-// Register GSAP plugins
+// Register GSAP plugins (centralized here, used by parallax.ts too)
 gsap.registerPlugin(ScrollTrigger);
 
 let lenisInstance: Lenis | null = null;
@@ -28,6 +28,7 @@ export function initSmoothScroll(): Lenis {
   return lenisInstance;
 }
 
+// getLenis available for future use if needed
 export function getLenis(): Lenis | null {
   return lenisInstance;
 }

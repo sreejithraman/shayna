@@ -144,8 +144,6 @@ function animate(state: GrainState): void {
 
   const loop = (timestamp: number) => {
     renderGrain(state, timestamp);
-
-    // Throttle to ~30fps for grain effect
     state.animationId = requestAnimationFrame(loop);
   };
 

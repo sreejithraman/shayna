@@ -63,24 +63,3 @@ html.lenis body {
   }
 }
 
-/* Display font for name */
-.font-display {
-  font-family: 'Unbounded', system-ui, sans-serif;
-}
-
-/* Utility for glow effect */
-.glow {
-  text-shadow: 0 0 calc(var(--glow-intensity) * 40px) var(--glow-color);
-}
-
-/* Horizontal scroll section */
-.horizontal-scroll {
-  overflow-x: auto;
-  overflow-y: hidden;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.horizontal-scroll::-webkit-scrollbar {
-  display: none;
-}

@@ -8,7 +8,7 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-gsap.registerPlugin(ScrollTrigger);
+// Note: ScrollTrigger is registered in smooth-scroll.ts which loads first
 
 export function initParallax(): void {
   const container = document.querySelector('[data-parallax-container]');
