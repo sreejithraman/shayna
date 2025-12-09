@@ -8,7 +8,7 @@
  */
 
 /* Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500&family=Unbounded:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -25,6 +25,9 @@
   --accent-indigo: #6366f1;
   --accent-purple: #8b5cf6;
   --glow-color: var(--accent-purple);
+
+  /* Typography */
+  --font-body: 'Space Grotesk', system-ui, sans-serif;
 
   /* Z-index scale */
   --z-base: 0;
