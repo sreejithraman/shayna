@@ -1,16 +1,102 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import BackgroundTexture from '@/components/BackgroundTexture.astro';
+import Coverflow from '@/components/Coverflow.astro';
+import VideoGallery from '@/components/VideoGallery.astro';
+import discography from '@/config/discography.json';
+
+// Video content
+const videos = [
+  {
+    title: 'Solo Percussion + Electronics',
+    description: 'Live performance at Arete Gallery, Brooklyn (2019)',
+    embedUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', // TODO: Replace with actual video
+  },
+  {
+    title: 'Balún @ KEXP',
+    description: 'Live studio session (2018)',
+    embedUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', // TODO: Replace with actual video
+  },
+  {
+    title: 'Balún @ Audiotree Live',
+    description: 'Full performance',
+    embedUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', // TODO: Replace with actual video
+  },
+  {
+    title: 'Peptalk - Nilbog',
+    description: 'Official music video',
+    embedUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', // TODO: Replace with actual video
+  },
+];
 ---
 
 <BaseLayout title="Work — Shayna Dunkelman">
-  <BackgroundTexture slot="background" />
+  <section class="page-section">
+    <header class="page-header">
+      <h1 class="page-title">Work</h1>
+      <p class="page-subtitle">Discography & Videos</p>
+    </header>
 
-  <section class="min-h-screen pt-32 px-6">
-    <h1 class="text-4xl md:text-6xl font-light mb-16">Work</h1>
+    <div class="section-block section-block--full-width">
+      <h2 class="section-title">Discography</h2>
+      <Coverflow albums={discography} />
+    </div>
 
-    <p class="text-secondary">
-      Projects and collaborations coming soon.
-    </p>
+    <div class="section-block">
+      <h2 class="section-title">Videos</h2>
+      <VideoGallery videos={videos} />
+    </div>
   </section>
 </BaseLayout>
+
+<style>
+  .page-section {
+    min-height: 100vh;
+    padding: 8rem 0 4rem;
+  }
+
+  .page-header {
+    max-width: 1200px;
+    margin: 0 auto 4rem;
+    padding: 0 2rem;
+  }
+
+  .page-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .page-subtitle {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--text-secondary);
+  }
+
+  .section-block {
+    max-width: 1200px;
+    margin: 0 auto 6rem;
+    padding: 0 2rem;
+  }
+
+  /* Full-width for coverflow to enable horizontal scroll */
+  .section-block--full-width {
+    max-width: none;
+    padding: 0;
+  }
+
+  .section-block--full-width .section-title {
+    max-width: 1200px;
+    margin: 0 auto 1rem;
+    padding: 0 2rem;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 2rem;
+  }
+</style>

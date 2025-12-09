@@ -1,0 +1,159 @@
+---
+import { siteConfig } from '@/config/site';
+
+interface Props {
+  photoSrc?: string;
+}
+
+const { photoSrc = '/images/shayna-hero.jpg' } = Astro.props;
+---
+
+<section class="hero">
+  <div class="hero-content">
+    <!-- Photo -->
+    <div class="hero-photo">
+      <div class="photo-frame">
+        <img
+          src={photoSrc}
+          alt={`Portrait of ${siteConfig.name}`}
+          class="photo-image"
+          loading="eager"
+          data-ken-burns
+        />
+      </div>
+    </div>
+
+    <!-- Name -->
+    <div class="hero-name">
+      <h1 class="name-text" data-text-reveal>
+        <span class="name-first">{siteConfig.firstName}</span>
+        <span class="name-last">{siteConfig.lastName}</span>
+      </h1>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    height: 100vh;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    overflow: visible; /* allow name to extend if needed on mobile */
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Photo */
+  .hero-photo {
+    flex: 1;
+    min-height: 0; /* allow shrinking */
+    width: 100%;
+  }
+
+  .photo-frame {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+  }
+
+  .photo-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Fade only at bottom edge on mobile */
+    mask-image: linear-gradient(to bottom, black 0%, black 85%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 0%, black 85%, transparent 100%);
+  }
+
+  /* Name */
+  .hero-name {
+    flex-shrink: 0; /* don't shrink the name */
+    text-align: center;
+    padding: 1rem 0 2rem; /* no horizontal padding - edge to edge */
+  }
+
+  .name-text {
+    font-family: 'Unbounded', system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(3rem, 11vw, 8rem); /* larger now that we have full width */
+    line-height: 1;
+    letter-spacing: -0.03em;
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .name-first,
+  .name-last {
+    display: block;
+    white-space: nowrap;
+  }
+
+  /* Desktop: side by side */
+  @media (min-width: 768px) {
+    .hero {
+      flex-direction: row;
+      overflow: hidden; /* contain photo on desktop */
+    }
+
+    .hero-content {
+      flex-direction: row;
+      align-items: center;
+    }
+
+    .hero-photo {
+      flex: 0 0 45%;
+      height: 100%;
+    }
+
+    .photo-frame {
+      height: 100%;
+    }
+
+    .photo-image {
+      /* Fade only at right edge on desktop (toward name) */
+      mask-image: linear-gradient(to right, black 0%, black 80%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to right, black 0%, black 80%, transparent 100%);
+    }
+
+    .hero-name {
+      flex: 1;
+      flex-shrink: 1;
+      text-align: left;
+      padding: 0 0 10vh 4rem;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      height: 100%;
+    }
+
+    .name-text {
+      /* Scale based on container width (55% of viewport) */
+      font-size: clamp(3.5rem, 7vw, 8rem);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .name-text {
+      font-size: clamp(4rem, 7vw, 9rem);
+    }
+  }
+
+  @media (min-width: 1400px) {
+    .name-text {
+      font-size: clamp(5rem, 6.5vw, 10rem);
+    }
+  }
+</style>

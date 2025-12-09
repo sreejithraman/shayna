@@ -1,0 +1,159 @@
+---
+interface Album {
+  artist: string;
+  album: string;
+  url: string;
+  date: string;
+  cover_image_url: string | null;
+}
+
+interface Props {
+  albums: Album[];
+}
+
+const { albums } = Astro.props;
+const PLACEHOLDER = '/images/feed-placeholder-1.svg';
+---
+
+<div class="coverflow-wrapper">
+  <div class="swiper coverflow-swiper">
+    <div class="swiper-wrapper">
+      {
+        albums.map((album, i) => (
+          <div class="swiper-slide coverflow-item">
+            <div class="coverflow-item__image">
+              <img
+                src={album.cover_image_url || PLACEHOLDER}
+                alt={`${album.album} by ${album.artist}`}
+                loading={i < 5 ? 'eager' : 'lazy'}
+              />
+            </div>
+            <a
+              href={album.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="coverflow-item__info"
+            >
+              <h4 class="coverflow-item__title">{album.album}</h4>
+              <p class="coverflow-item__artist">{album.artist}</p>
+            </a>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</div>
+
+<style>
+  .coverflow-wrapper {
+    padding: 2rem 0 4rem;
+  }
+
+  .coverflow-swiper {
+    width: 100%;
+    padding: 2rem 0 4rem;
+    overflow: visible;
+  }
+
+  .coverflow-item {
+    width: 280px;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease;
+  }
+
+  .coverflow-item__image {
+    width: 100%;
+  }
+
+  .coverflow-item__image img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    /* Reflection effect */
+    -webkit-box-reflect: below 0.5em linear-gradient(transparent 60%, rgba(0, 0, 0, 0.3));
+  }
+
+  /* Info below the image */
+  .coverflow-item__info {
+    display: block;
+    padding-top: 3rem; /* Space for the reflection */
+    text-align: center;
+    text-decoration: none;
+    opacity: 0;
+    transform: translateY(10px);
+    transition:
+      opacity 0.3s ease,
+      transform 0.3s ease;
+  }
+
+  /* Only show info on active/centered slide */
+  .swiper-slide-active .coverflow-item__info {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .coverflow-item__title {
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 0.25rem;
+    line-height: 1.3;
+    transition: color 0.2s ease;
+  }
+
+  .coverflow-item__artist {
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    margin: 0;
+    transition: color 0.2s ease;
+  }
+
+  /* Hover state for the link */
+  .coverflow-item__info:hover .coverflow-item__title {
+    color: var(--accent-indigo);
+  }
+
+  .coverflow-item__info:hover .coverflow-item__artist {
+    color: var(--text-primary);
+  }
+
+  .coverflow-item__info:focus-visible {
+    outline: 2px solid var(--accent-indigo);
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .coverflow-item {
+      width: 70vw;
+      max-width: 280px;
+    }
+
+    .coverflow-item__info {
+      padding-top: 2.5rem;
+    }
+
+    .coverflow-item__title {
+      font-size: 0.875rem;
+    }
+
+    .coverflow-item__artist {
+      font-size: 0.8125rem;
+    }
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .coverflow-item,
+    .coverflow-item__info,
+    .coverflow-item__title,
+    .coverflow-item__artist {
+      transition: none;
+    }
+  }
+</style>

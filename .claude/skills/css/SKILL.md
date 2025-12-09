@@ -1,7 +1,7 @@
 ---
 name: css
-description: Use when writing CSS styles. Applies layout patterns, responsive design, custom properties, and performance best practices.
-version: "1.2.0"
+description: Use when writing CSS styles. Applies layout patterns, ITCSS architecture, BEM naming, responsive design, and modern CSS features.
+version: "1.3.0"
 ---
 
 # CSS Best Practices
@@ -180,6 +180,157 @@ Apply when writing CSS. Complements Tailwind skill with vanilla CSS patterns.
 
 @layer utilities {
   .hidden { display: none; }
+}
+```
+
+## Architecture
+
+### ITCSS (Inverted Triangle CSS)
+
+Organize styles from generic to specific. Lower layers have higher specificity:
+
+```css
+/* Layer order (import in this sequence) */
+@layer settings,    /* @property, CSS variables, config */
+       generic,     /* Resets, normalize, base elements */
+       components,  /* UI components, feature-specific */
+       utilities;   /* Atomic helpers, overrides */
+```
+
+```
+settings.css     → :root variables, @property
+generic.css      → *, html, body, a, p, h1-h6
+components.css   → .card, .button, .modal
+utilities.css    → .hidden, .sr-only, .flex
+```
+
+### BEM (Block Element Modifier)
+
+Naming convention for component CSS:
+
+```css
+/* Block: Standalone component */
+.card { }
+
+/* Element: Part of block (double underscore) */
+.card__header { }
+.card__body { }
+.card__footer { }
+
+/* Modifier: Variation (double hyphen) */
+.card--featured { }
+.card--compact { }
+
+/* Element + Modifier */
+.card__header--sticky { }
+```
+
+**State classes** use `is-*` / `has-*` (controlled by JS):
+
+```css
+/* State classes (not BEM modifiers) */
+.menu.is-open { }
+.input.is-invalid { }
+.card.has-image { }
+```
+
+### Transparent Colors with Tokens
+
+Use `color-mix()` to create transparent variants from tokens:
+
+```css
+/* BAD: Hardcoded rgba (breaks theming) */
+.overlay {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+/* GOOD: Derive from token */
+.overlay {
+  background: color-mix(in srgb, var(--color-black) 60%, transparent);
+}
+
+/* Works with any color token */
+.glow {
+  box-shadow: 0 0 20px color-mix(in srgb, var(--color-accent) 40%, transparent);
+}
+```
+
+## Mobile & Accessibility
+
+### Safe Area (Notched Devices)
+
+Handle iPhone notch, Dynamic Island, etc:
+
+```html
+<!-- Required in HTML -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+```
+
+```css
+/* Use env() with fallback */
+.footer {
+  padding-bottom: max(var(--space-md), env(safe-area-inset-bottom));
+  padding-left: max(var(--space-md), env(safe-area-inset-left));
+  padding-right: max(var(--space-md), env(safe-area-inset-right));
+}
+```
+
+### Touch vs Hover
+
+Only apply hover effects on devices that support it:
+
+```css
+/* Hover only on devices with hover capability */
+@media (hover: hover) {
+  .button:hover {
+    background: var(--color-accent-hover);
+  }
+}
+
+/* Coarse pointer (touch) - no hover, larger targets */
+@media (pointer: coarse) {
+  .button {
+    cursor: default;
+    min-height: 44px;  /* Apple HIG minimum */
+  }
+}
+```
+
+### Touch Targets
+
+Minimum 44x44px for interactive elements (Apple HIG):
+
+```css
+.button, .link, .icon-button {
+  min-width: 2.75rem;   /* 44px */
+  min-height: 2.75rem;
+}
+```
+
+### Prevent iOS Zoom on Inputs
+
+Inputs below 16px trigger auto-zoom on iOS:
+
+```css
+input, select, textarea {
+  font-size: 1rem;  /* 16px prevents zoom */
+}
+```
+
+### Focus Indicators
+
+Keyboard-visible focus with `:focus-visible`:
+
+```css
+/* Visible focus ring for keyboard users */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Remove default ring (replaced above) */
+:focus:not(:focus-visible) {
+  outline: none;
 }
 ```
 

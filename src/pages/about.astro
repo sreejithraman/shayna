@@ -1,16 +1,158 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import BackgroundTexture from '@/components/BackgroundTexture.astro';
+import PressQuotes from '@/components/PressQuotes.astro';
+
+const pressQuotes = [
+  {
+    text: 'A dynamic percussionist, drove episodes of the piece with pummeling drum bursts one moment, tingling effects the next.',
+    source: 'The New York Times',
+    year: '2019',
+  },
+  {
+    text: 'Percussionist Shayna Dunkelman a particular delight.',
+    source: 'The Washington Post',
+    year: '2014',
+  },
+  {
+    text: 'Transcends boundaries and infuses music with an awesome spark.',
+    source: 'Tom Tom Magazine',
+    year: '2014',
+  },
+  {
+    text: 'Creates a multi-layered, sonic landscape utilizing the digital and the acoustic.',
+    source: 'For Folks Sake',
+  },
+];
 ---
 
 <BaseLayout title="About — Shayna Dunkelman">
-  <BackgroundTexture slot="background" />
+  <section class="page-section">
+    <header class="page-header">
+      <h1 class="page-title">About</h1>
+    </header>
 
-  <section class="min-h-screen pt-32 px-6">
-    <h1 class="text-4xl md:text-6xl font-light mb-16">About</h1>
+    <div class="bio-section">
+      <div class="bio-content">
+        <p class="bio-lead">
+          Shayna Dunkelman is a Brooklyn-based musician and percussionist known for her versatile
+          techniques and electronic integration with acoustic percussion.
+        </p>
 
-    <p class="text-secondary max-w-2xl">
-      Biography coming soon.
-    </p>
+        <p>
+          Born and raised in Tokyo to an Indonesian mother and American father, Shayna graduated
+          with honors in music and mathematics from Mills College, Oakland, CA (2007), studying
+          percussion under William Winant.
+        </p>
+
+        <p>
+          She collaborates with multiple acts including <strong>Balún</strong>, <strong
+            >Emily Wells</strong
+          >, <strong>Peptalk</strong>, <strong>Ali Sethi</strong>, and her percussion duo <strong
+            >Nomon</strong
+          > with sister Nava Dunkelman.
+        </p>
+
+        <h2>Xiu Xiu (2011-2017)</h2>
+        <p>
+          During her six-year tenure with Xiu Xiu, Shayna premiered multimedia performance art at
+          International Summer Festival Hamburg (2013), created the album "Xiu Xiu Plays the Music
+          of Twin Peaks" (2016), and performed with Angelo Badalamenti at Festival Disruption
+          curated by David Lynch. She collaborated with conceptual artist Danh Vo at the Kitchen,
+          NYC (2014), and shared stages with Genesis P-Orridge, Blonde Redhead, Sun Ra Arkestra, St.
+          Vincent, and Deerhoof.
+        </p>
+
+        <h2>Major Works</h2>
+        <p>
+          In 2019, Shayna performed in "Where We Lost Our Shadows," an orchestral piece by Pulitzer
+          Award-winning composer Du Yun, premiered at Ultima Festival (Oslo), Carnegie Hall, Kennedy
+          Center, and Southbank Centre (London).
+        </p>
+
+        <p>
+          She has recorded and performed with Yuka C. Honda, John Zorn, Yoko Ono, Thurston Moore,
+          and Zeena Parkins.
+        </p>
+
+        <h2>Current Projects</h2>
+        <p>
+          Shayna is currently developing "Answer to (XX)" — a performance and documentary film
+          exploring band dynamics, supported by Franklin Furnace.
+        </p>
+      </div>
+    </div>
+
+    <div class="press-section">
+      <h2 class="section-title">Press</h2>
+      <PressQuotes quotes={pressQuotes} />
+    </div>
   </section>
 </BaseLayout>
+
+<style>
+  .page-section {
+    min-height: 100vh;
+    padding: 8rem 2rem 4rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .page-header {
+    margin-bottom: 3rem;
+  }
+
+  .page-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .bio-section {
+    margin-bottom: 6rem;
+  }
+
+  .bio-content {
+    font-family: var(--font-body);
+    font-size: 1.0625rem;
+    color: var(--text-secondary);
+    line-height: 1.8;
+  }
+
+  .bio-content p {
+    margin-bottom: 1.5rem;
+  }
+
+  .bio-lead {
+    font-size: 1.25rem;
+    color: var(--text-primary);
+    margin-bottom: 2rem;
+  }
+
+  .bio-content h2 {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .bio-content strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .press-section {
+    padding-top: 2rem;
+    border-top: 1px solid var(--bg-elevated);
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 2rem;
+  }
+</style>

@@ -1,0 +1,96 @@
+---
+interface Video {
+  title: string;
+  description?: string;
+  embedUrl: string; // YouTube/Vimeo embed URL
+  thumbnailUrl?: string;
+}
+
+interface Props {
+  videos: Video[];
+  class?: string;
+}
+
+const { videos, class: className } = Astro.props;
+---
+
+<div class:list={['video-gallery', className]}>
+  <div class="video-gallery__grid">
+    {
+      videos.map((video) => (
+        <div class="video-card" data-reveal>
+          <div class="video-card__embed">
+            <iframe
+              src={video.embedUrl}
+              title={video.title}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+              loading="lazy"
+            />
+          </div>
+          <div class="video-card__info">
+            <h4 class="video-card__title">{video.title}</h4>
+            {video.description && <p class="video-card__description">{video.description}</p>}
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .video-gallery__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 2rem;
+  }
+
+  .video-card {
+    background: var(--bg-subtle);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .video-card__embed {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+  }
+
+  .video-card__embed iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .video-card__info {
+    padding: 1rem;
+  }
+
+  .video-card__title {
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.3;
+    margin-bottom: 0.25rem;
+  }
+
+  .video-card__description {
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 640px) {
+    .video-gallery__grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  }
+</style>

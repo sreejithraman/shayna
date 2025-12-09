@@ -1,0 +1,81 @@
+---
+interface Quote {
+  text: string;
+  source: string;
+  year?: string;
+}
+
+interface Props {
+  quotes: Quote[];
+  class?: string;
+}
+
+const { quotes, class: className } = Astro.props;
+---
+
+<div class:list={['press-quotes', className]}>
+  {
+    quotes.map((quote) => (
+      <blockquote class="press-quote">
+        <p class="press-quote__text">"{quote.text}"</p>
+        <footer class="press-quote__source">
+          <cite>{quote.source}</cite>
+          {quote.year && <span class="press-quote__year">{quote.year}</span>}
+        </footer>
+      </blockquote>
+    ))
+  }
+</div>
+
+<style>
+  .press-quotes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+
+  .press-quote {
+    padding: 1.5rem;
+    background: var(--bg-subtle);
+    border-radius: 8px;
+    border-left: 3px solid var(--accent-indigo);
+  }
+
+  .press-quote__text {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--text-primary);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .press-quote__source {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .press-quote__source cite {
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  .press-quote__year {
+    color: var(--text-muted);
+  }
+
+  .press-quote__year::before {
+    content: '·';
+    margin-right: 0.5rem;
+  }
+
+  @media (max-width: 640px) {
+    .press-quotes {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

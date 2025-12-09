@@ -1,0 +1,140 @@
+---
+import { siteConfig } from '@/config/site';
+
+interface FeedItem {
+  id: string;
+  src: string;
+  alt: string;
+}
+
+interface Props {
+  items?: FeedItem[];
+}
+
+// For now, use placeholder items
+// Will be replaced with Instagram API data
+const placeholderItems: FeedItem[] = siteConfig.instagram.fallbackImages.map((src, index) => ({
+  id: `placeholder-${index}`,
+  src,
+  alt: `Feed image ${index + 1}`,
+}));
+
+const { items = placeholderItems } = Astro.props;
+---
+
+<section class="feed-section">
+  <header class="feed-header">
+    <h2 class="feed-title">Feed</h2>
+  </header>
+  <div class="feed-container" data-horizontal-scroll>
+    <div class="feed-track">
+      {
+        items.map((item) => (
+          <article class="feed-card">
+            <div class="feed-image-wrapper">
+              <img src={item.src} alt={item.alt} class="feed-image" loading="lazy" />
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .feed-section {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4rem 0;
+  }
+
+  .feed-header {
+    padding: 0 2rem 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .feed-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .feed-container {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    cursor: grab;
+  }
+
+  .feed-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .feed-container:active,
+  .feed-container.dragging {
+    cursor: grabbing;
+  }
+
+  .feed-container.dragging .feed-card {
+    pointer-events: none;
+  }
+
+  .feed-track {
+    display: flex;
+    gap: 1.5rem;
+    padding: 2rem;
+    width: max-content;
+  }
+
+  .feed-card {
+    flex-shrink: 0;
+    width: 280px;
+    transition: transform 0.3s ease;
+  }
+
+  .feed-card:hover {
+    transform: scale(1.02);
+  }
+
+  .feed-image-wrapper {
+    aspect-ratio: 1;
+    overflow: hidden;
+    background-color: var(--bg-elevated);
+  }
+
+  .feed-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Larger cards on bigger screens */
+  @media (min-width: 768px) {
+    .feed-header {
+      padding: 0 3rem 3rem;
+    }
+
+    .feed-track {
+      gap: 2rem;
+      padding: 3rem;
+    }
+
+    .feed-card {
+      width: 350px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .feed-card {
+      width: 400px;
+    }
+  }
+</style>

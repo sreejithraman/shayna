@@ -1,0 +1,135 @@
+---
+import type { Album } from '@/config/site';
+
+interface DiscographySection {
+  title: string;
+  albums: Album[];
+}
+
+interface Props {
+  sections: DiscographySection[];
+  class?: string;
+}
+
+const { sections, class: className } = Astro.props;
+---
+
+<div class:list={['discography', className]}>
+  {
+    sections.map((section) => (
+      <div class="discography__section">
+        <h3 class="discography__section-title">{section.title}</h3>
+        <div class="discography__grid">
+          {section.albums.map((album) => (
+            <a
+              href={album.url || '#'}
+              target={album.url ? '_blank' : undefined}
+              rel={album.url ? 'noopener noreferrer' : undefined}
+              class="discography__album"
+              data-reveal
+            >
+              <div class="discography__album-art">
+                <img
+                  src={album.coverArt}
+                  alt={`${album.title} by ${album.artist}`}
+                  loading="lazy"
+                  data-reveal-blur
+                  data-reveal-parallax
+                />
+              </div>
+              <div class="discography__album-info">
+                <h4 class="discography__album-title">{album.title}</h4>
+                <p class="discography__album-artist">{album.artist}</p>
+                {album.year && <span class="discography__album-year">{album.year}</span>}
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .discography {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+  }
+
+  .discography__section-title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--bg-elevated);
+  }
+
+  .discography__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .discography__album {
+    text-decoration: none;
+    display: block;
+  }
+
+  .discography__album-art {
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 4px;
+    margin-bottom: 0.75rem;
+    background: var(--bg-subtle);
+  }
+
+  .discography__album-art img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition:
+      transform 0.3s ease,
+      opacity 0.3s ease;
+  }
+
+  .discography__album:hover .discography__album-art img {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+
+  .discography__album-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  .discography__album-title {
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.3;
+  }
+
+  .discography__album-artist {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+  }
+
+  .discography__album-year {
+    font-family: var(--font-body);
+    font-size: 0.6875rem;
+    color: var(--text-muted);
+  }
+
+  @media (max-width: 640px) {
+    .discography__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+  }
+</style>

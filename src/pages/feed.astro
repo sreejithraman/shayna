@@ -1,0 +1,43 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Feed — Shayna Dunkelman">
+  <section class="page-section">
+    <h1 class="page-title">Feed</h1>
+    <p class="page-subtitle">@00esdot00</p>
+
+    <div class="content-placeholder">
+      <p>Coming soon: Full Instagram feed</p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-section {
+    min-height: 100vh;
+    padding: 8rem 2rem 4rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .page-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .page-subtitle {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-bottom: 4rem;
+  }
+
+  .content-placeholder {
+    color: var(--text-muted);
+    font-style: italic;
+  }
+</style>
