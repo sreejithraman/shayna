@@ -24,7 +24,7 @@ export function initCoverflow(): void {
     effect: 'coverflow',
     grabCursor: true,
     centeredSlides: true,
-    slidesPerView: 5, // Limit visible slides to prevent extreme rotation
+    slidesPerView: 'auto', // Let CSS control slide width
     slideToClickedSlide: true,
     // Touch handling - detect horizontal vs vertical intent
     touchAngle: 30, // Stricter angle (default 45) - more vertical = page scroll
