@@ -1,0 +1,196 @@
+---
+interface Props {
+  title: string;
+  artist: string;
+  albumArt: string;
+  description?: string;
+  listenUrl?: string;
+  class?: string;
+}
+
+const {
+  title,
+  artist,
+  albumArt,
+  description,
+  listenUrl,
+  class: className,
+} = Astro.props;
+---
+
+<section class:list={['featured-art', className]}>
+  <div class="featured-art__container">
+    <div class="featured-art__image-wrapper" data-reveal>
+      <img
+        src={albumArt}
+        alt={`${title} by ${artist} - Album artwork`}
+        class="featured-art__image"
+        loading="lazy"
+        data-reveal-blur
+        data-reveal-parallax
+      />
+    </div>
+    <div class="featured-art__content" data-reveal>
+      <span class="featured-art__label">Latest Release</span>
+      <h2 class="featured-art__title">{title}</h2>
+      <p class="featured-art__artist">{artist}</p>
+      {description && <p class="featured-art__description">{description}</p>}
+      {listenUrl && (
+        <a
+          href={listenUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="featured-art__cta"
+        >
+          Listen Now
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M7 17L17 7" />
+            <path d="M7 7h10v10" />
+          </svg>
+        </a>
+      )}
+    </div>
+  </div>
+</section>
+
+<style>
+  .featured-art {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 4rem 2rem;
+  }
+
+  .featured-art__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .featured-art__image-wrapper {
+    position: relative;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  }
+
+  .featured-art__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+
+  .featured-art__image-wrapper:hover .featured-art__image {
+    transform: scale(1.02);
+  }
+
+  .featured-art__content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .featured-art__label {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent-indigo);
+  }
+
+  .featured-art__title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.1;
+  }
+
+  .featured-art__artist {
+    font-family: var(--font-body);
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    margin-top: -0.5rem;
+  }
+
+  .featured-art__description {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    max-width: 40ch;
+    margin-top: 1rem;
+  }
+
+  .featured-art__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-decoration: none;
+    margin-top: 1.5rem;
+    padding: 0.75rem 1.5rem;
+    border: 1px solid var(--text-secondary);
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    width: fit-content;
+  }
+
+  .featured-art__cta:hover {
+    background: var(--text-primary);
+    color: var(--bg-void);
+    border-color: var(--text-primary);
+  }
+
+  .featured-art__cta svg {
+    transition: transform 0.2s ease;
+  }
+
+  .featured-art__cta:hover svg {
+    transform: translate(2px, -2px);
+  }
+
+  @media (max-width: 768px) {
+    .featured-art {
+      padding: 2rem 1rem;
+      min-height: auto;
+    }
+
+    .featured-art__container {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .featured-art__image-wrapper {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .featured-art__content {
+      text-align: center;
+      align-items: center;
+    }
+
+    .featured-art__description {
+      text-align: center;
+    }
+  }
+</style>

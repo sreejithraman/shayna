@@ -28,11 +28,6 @@ export function initSmoothScroll(): Lenis {
   return lenisInstance;
 }
 
-// getLenis available for future use if needed
-export function getLenis(): Lenis | null {
-  return lenisInstance;
-}
-
 export function destroySmoothScroll(): void {
   if (lenisInstance) {
     lenisInstance.destroy();

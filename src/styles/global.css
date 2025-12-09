@@ -6,10 +6,10 @@
 @tailwind utilities;
 
 :root {
-  /* Colors */
-  --bg-void: #0a0a0a;
-  --bg-subtle: #0f0f0f;
-  --bg-elevated: #161616;
+  /* Colors (dark blue-black to harmonize with photo) */
+  --bg-void: #0a0c14;
+  --bg-subtle: #0e101a;
+  --bg-elevated: #131520;
   --text-primary: #f5f5f5;
   --text-secondary: #999999;
   --text-muted: #555555;
@@ -19,13 +19,6 @@
 
   /* Effect defaults (overridden by config) */
   --hero-ratio: 40%;
-  --grain-density: 0.5;
-  --grain-color: var(--accent-indigo);
-  --vibration-radius: 150px;
-  --vibration-intensity: 1;
-  --glow-intensity: 0.3;
-  --parallax-photo-rate: 0.05;
-  --parallax-name-rate: 0.1;
 }
 
 html {
@@ -60,6 +53,81 @@ html.lenis body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================
+   Dramatic Reveal - Initial States
+   Prevents flash of styled content before JS
+   ============================================ */
+
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(100px) scale(0.85);
+  will-change: transform, opacity;
+}
+
+[data-reveal-blur] {
+  filter: blur(8px);
+  will-change: filter;
+}
+
+[data-reveal-parallax] {
+  will-change: transform;
+}
+
+/* Reduced motion: show everything immediately */
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+
+  [data-reveal-blur] {
+    filter: none;
+  }
+}
+
+/* View Transitions - Blur Fade Effect */
+@keyframes blur-fade-in {
+  from {
+    opacity: 0;
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+@keyframes blur-fade-out {
+  from {
+    opacity: 1;
+    filter: blur(0);
+  }
+  to {
+    opacity: 0;
+    filter: blur(8px);
+  }
+}
+
+::view-transition-old(root) {
+  animation: blur-fade-out 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+::view-transition-new(root) {
+  animation: blur-fade-in 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Keep nav stable during transitions */
+::view-transition-group(nav) {
+  animation: none;
+}
+
+/* Fallback for browsers without View Transitions */
+@supports not (view-transition-name: none) {
+  main {
+    transition: opacity 0.2s ease;
   }
 }
 

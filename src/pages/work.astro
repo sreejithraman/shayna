@@ -1,0 +1,188 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Discography from '@/components/Discography.astro';
+import VideoGallery from '@/components/VideoGallery.astro';
+
+// Full discography organized by era
+const discographySections = [
+  {
+    title: 'Recent (2018+)',
+    albums: [
+      {
+        title: 'Echoes of Breakage',
+        artist: 'Nomon',
+        coverArt: '/images/NOMON - Cover Artwork by Kris Chau.jpg',
+        year: '2024',
+      },
+      {
+        title: 'You Are Under Our Space Control',
+        artist: 'Object Collection',
+        coverArt: '/images/feed-placeholder-1.svg',
+        year: '2019',
+      },
+      {
+        title: 'This World Is Too__For You',
+        artist: 'Emily Wells',
+        coverArt: '/images/feed-placeholder-2.svg',
+        year: '2019',
+      },
+      {
+        title: 'Prisma Tropical',
+        artist: 'Balún',
+        coverArt: '/images/feed-placeholder-3.svg',
+        year: '2018',
+      },
+    ],
+  },
+  {
+    title: '2016-17',
+    albums: [
+      {
+        title: 'Divergence',
+        artist: 'Shayna Dunkelman',
+        coverArt: '/images/feed-placeholder-4.svg',
+        year: '2016',
+      },
+      {
+        title: 'It\'s All True',
+        artist: 'Object Collection',
+        coverArt: '/images/feed-placeholder-5.svg',
+        year: '2017',
+      },
+      {
+        title: 'Forget',
+        artist: 'Xiu Xiu',
+        coverArt: '/images/feed-placeholder-6.svg',
+        year: '2017',
+      },
+      {
+        title: 'Plays the Music of Twin Peaks',
+        artist: 'Xiu Xiu',
+        coverArt: '/images/feed-placeholder-1.svg',
+        year: '2016',
+      },
+      {
+        title: 'Promise',
+        artist: 'Emily Wells',
+        coverArt: '/images/feed-placeholder-2.svg',
+        year: '2016',
+      },
+    ],
+  },
+  {
+    title: '~2015 & Earlier',
+    albums: [
+      {
+        title: 'Islet',
+        artist: 'Peptalk',
+        coverArt: '/images/feed-placeholder-3.svg',
+        year: '2015',
+      },
+      {
+        title: 'Angel Guts: Red Classroom',
+        artist: 'Xiu Xiu',
+        coverArt: '/images/feed-placeholder-4.svg',
+        year: '2014',
+      },
+      {
+        title: 'For My Parents',
+        artist: 'MONO',
+        coverArt: '/images/feed-placeholder-5.svg',
+        year: '2012',
+      },
+      {
+        title: 'Femina',
+        artist: 'John Zorn',
+        coverArt: '/images/feed-placeholder-6.svg',
+      },
+      {
+        title: 'The Adorables',
+        artist: 'Zeena Parkins',
+        coverArt: '/images/feed-placeholder-1.svg',
+      },
+    ],
+  },
+];
+
+// Video content
+const videos = [
+  {
+    title: 'Solo Percussion + Electronics',
+    description: 'Live performance at Arete Gallery, Brooklyn (2019)',
+    embedUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', // TODO: Replace with actual video
+  },
+  {
+    title: 'Balún @ KEXP',
+    description: 'Live studio session (2018)',
+    embedUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', // TODO: Replace with actual video
+  },
+  {
+    title: 'Balún @ Audiotree Live',
+    description: 'Full performance',
+    embedUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', // TODO: Replace with actual video
+  },
+  {
+    title: 'Peptalk - Nilbog',
+    description: 'Official music video',
+    embedUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', // TODO: Replace with actual video
+  },
+];
+---
+
+<BaseLayout title="Work — Shayna Dunkelman">
+  <section class="page-section">
+    <header class="page-header">
+      <h1 class="page-title">Work</h1>
+      <p class="page-subtitle">Discography & Videos</p>
+    </header>
+
+    <div class="section-block">
+      <h2 class="section-title">Discography</h2>
+      <Discography sections={discographySections} />
+    </div>
+
+    <div class="section-block">
+      <h2 class="section-title">Videos</h2>
+      <VideoGallery videos={videos} />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-section {
+    min-height: 100vh;
+    padding: 8rem 2rem 4rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .page-header {
+    margin-bottom: 4rem;
+  }
+
+  .page-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .page-subtitle {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--text-secondary);
+  }
+
+  .section-block {
+    margin-bottom: 6rem;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 2rem;
+  }
+</style>

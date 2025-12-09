@@ -4,10 +4,10 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Backgrounds
-        void: '#0a0a0a',
-        subtle: '#0f0f0f',
-        elevated: '#161616',
+        // Backgrounds (dark blue-black to harmonize with photo)
+        void: '#0a0c14',
+        subtle: '#0e101a',
+        elevated: '#131520',
 
         // Text
         primary: '#f5f5f5',

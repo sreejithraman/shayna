@@ -25,6 +25,9 @@ const { items = placeholderItems } = Astro.props;
 ---
 
 <section class="feed-section">
+  <header class="feed-header">
+    <h2 class="feed-title">Feed</h2>
+  </header>
   <div class="feed-container" data-horizontal-scroll>
     <div class="feed-track">
       {
@@ -50,8 +53,23 @@ const { items = placeholderItems } = Astro.props;
     min-height: 100vh;
     min-height: 100dvh;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    justify-content: center;
     padding: 4rem 0;
+  }
+
+  .feed-header {
+    padding: 0 2rem 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .feed-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+    color: var(--text-primary);
   }
 
   .feed-container {
@@ -107,6 +125,10 @@ const { items = placeholderItems } = Astro.props;
 
   /* Larger cards on bigger screens */
   @media (min-width: 768px) {
+    .feed-header {
+      padding: 0 3rem 3rem;
+    }
+
     .feed-track {
       gap: 2rem;
       padding: 3rem;
