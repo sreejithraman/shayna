@@ -1,7 +1,7 @@
 ---
 name: lenis
 description: Use when implementing Lenis smooth scroll or integrating Lenis with GSAP ScrollTrigger. Applies Lenis best practices for setup and performance.
-version: "1.1.0"
+version: "1.2.0"
 ---
 
 # Lenis Smooth Scroll Best Practices
@@ -55,19 +55,38 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const lenis = new Lenis();
+let lenisInstance: Lenis | null = null;
+let tickerCallback: ((time: number) => void) | null = null;
 
-// Sync Lenis scroll position with ScrollTrigger
-lenis.on('scroll', ScrollTrigger.update);
+function init() {
+  lenisInstance = new Lenis();
 
-// Use GSAP's ticker for Lenis RAF
-gsap.ticker.add((time) => {
-  lenis.raf(time * 1000);
-});
+  // Sync Lenis scroll position with ScrollTrigger
+  lenisInstance.on('scroll', ScrollTrigger.update);
 
-// Disable GSAP lag smoothing for precise sync
-gsap.ticker.lagSmoothing(0);
+  // Store callback reference for cleanup
+  tickerCallback = (time) => lenisInstance?.raf(time * 1000);
+  gsap.ticker.add(tickerCallback);
+
+  // Disable GSAP lag smoothing for precise sync
+  gsap.ticker.lagSmoothing(0);
+}
+
+function destroy() {
+  // Remove ticker callback first (prevents memory leak!)
+  if (tickerCallback) {
+    gsap.ticker.remove(tickerCallback);
+    tickerCallback = null;
+  }
+
+  if (lenisInstance) {
+    lenisInstance.destroy();
+    lenisInstance = null;
+  }
+}
 ```
+
+**Critical:** Store the ticker callback reference. Without `gsap.ticker.remove()`, callbacks accumulate on each init, causing memory leaks and performance issues.
 
 ## Configuration Options
 

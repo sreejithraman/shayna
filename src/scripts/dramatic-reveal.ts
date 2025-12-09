@@ -11,10 +11,9 @@
  * - data-reveal-intensity: Override intensity ("gentle" | "subtle" | default)
  */
 
-import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-gsap.registerPlugin(ScrollTrigger);
+// Note: ScrollTrigger is registered in smooth-scroll.ts (loaded first)
 
 // Config defaults (can be overridden via site.ts)
 const config = {

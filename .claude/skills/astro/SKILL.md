@@ -1,7 +1,7 @@
 ---
 name: astro
 description: Use when working with Astro framework projects, .astro files, or Astro configuration. Applies Astro best practices for components, islands architecture, and performance.
-version: "1.2.0"
+version: "1.3.0"
 ---
 
 # Astro Framework Best Practices
@@ -64,6 +64,51 @@ Choose the right directive for the use case:
 ### Prefetching
 - Enable view transitions for smooth navigation
 - Use `prefetch` for intelligent link prefetching
+
+## View Transitions (Client Router)
+
+### Setup
+```astro
+---
+import { ClientRouter } from 'astro:transitions';
+---
+<head>
+  <ClientRouter />
+</head>
+```
+
+### Lifecycle Events (Critical!)
+Scripts need to handle navigation events when using ClientRouter:
+
+```javascript
+// Initialize on first load AND subsequent navigations
+document.addEventListener('astro:page-load', () => {
+  initAnimations();
+  initScrollEffects();
+});
+
+// Cleanup before page swap (prevents memory leaks!)
+document.addEventListener('astro:before-swap', () => {
+  destroyAnimations();
+  destroyScrollEffects();
+});
+```
+
+### Event Order
+1. `astro:before-swap` — Old page visible, cleanup here
+2. `astro:after-swap` — New DOM ready, restore state
+3. `astro:page-load` — Page fully ready, init here
+
+### Common Mistake
+```javascript
+// BAD: Only runs on initial page load
+initAnimations();
+
+// GOOD: Runs on every navigation
+document.addEventListener('astro:page-load', initAnimations);
+```
+
+Without lifecycle handlers, scripts only run once. Navigating to another page and back will have broken animations/effects.
 
 ## File Structure
 
@@ -168,3 +213,5 @@ const data = await response.json();
 - Default exports in components (use named exports)
 - Heavy framework components when Astro suffices
 - `is:inline` unless you need unbundled scripts
+- Running init code outside `astro:page-load` when using ClientRouter
+- Forgetting cleanup in `astro:before-swap` (causes memory leaks)

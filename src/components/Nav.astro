@@ -43,7 +43,8 @@ const navItems = [
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    padding: 1.5rem 2rem;
+    /* Safe area padding for notched devices (Dynamic Island, etc.) */
+    padding: max(1.5rem, env(safe-area-inset-top)) max(2rem, env(safe-area-inset-right)) 1.5rem max(2rem, env(safe-area-inset-left));
     pointer-events: none;
     view-transition-name: nav;
   }
@@ -66,8 +67,8 @@ const navItems = [
     z-index: 1;
     background: linear-gradient(
       to bottom,
-      rgba(10, 10, 10, 0.85) 0%,
-      rgba(10, 10, 10, 0.5) 50%,
+      color-mix(in srgb, var(--bg-void) 85%, transparent) 0%,
+      color-mix(in srgb, var(--bg-void) 50%, transparent) 50%,
       transparent 100%
     );
     backdrop-filter: blur(12px);
@@ -85,7 +86,7 @@ const navItems = [
       bottom: auto;
       width: 50vw;
       height: 120px;
-      background: rgba(10, 10, 10, 0.7);
+      background: color-mix(in srgb, var(--bg-void) 70%, transparent);
       mask-image: radial-gradient(
         ellipse 120% 150% at 100% 0%,
         black 0%,
@@ -163,7 +164,7 @@ const navItems = [
 
   @media (max-width: 640px) {
     .nav {
-      padding: 1rem;
+      padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) 1rem max(1rem, env(safe-area-inset-left));
     }
 
     .nav-links {

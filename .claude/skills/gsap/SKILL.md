@@ -1,7 +1,7 @@
 ---
 name: gsap
 description: Use when implementing GSAP animations, ScrollTrigger, or scroll-linked animations. Applies GSAP best practices for performance and cleanup.
-version: "1.1.0"
+version: "1.2.0"
 ---
 
 # GSAP & ScrollTrigger Best Practices
@@ -147,8 +147,8 @@ Remove before production.
 
 ## Cleanup (Critical for SPAs/Frameworks)
 
+### React/Vue Pattern
 ```javascript
-// In component unmount/cleanup:
 useEffect(() => {
   const ctx = gsap.context(() => {
     // All animations here
@@ -156,10 +156,45 @@ useEffect(() => {
 
   return () => ctx.revert();  // Cleanup
 }, []);
+```
 
-// Or manual cleanup:
-ScrollTrigger.getAll().forEach(t => t.kill());
-gsap.killTweensOf('.animated-elements');
+### Array Pattern (Recommended for Multi-File Projects)
+Store triggers in an array for reliable cleanup:
+```javascript
+let triggers: ScrollTrigger[] = [];
+
+function init() {
+  const tween = gsap.to('.element', {
+    scrollTrigger: { trigger: '.container', scrub: 1 },
+    y: 100,
+  });
+
+  // Store for cleanup
+  if (tween.scrollTrigger) {
+    triggers.push(tween.scrollTrigger);
+  }
+}
+
+function destroy() {
+  triggers.forEach(t => t.kill());
+  triggers = [];
+}
+```
+
+**Why arrays over `ScrollTrigger.getAll()`:**
+- `getAll()` returns ALL triggers, including ones from other modules
+- Array pattern gives precise control over what to clean up
+- Prevents accidentally killing triggers from other features
+
+### Avoid
+```javascript
+// BAD: Fragile string matching
+ScrollTrigger.getAll().forEach(t => {
+  if (t.vars.trigger?.includes('hero')) t.kill();  // Unreliable!
+});
+
+// GOOD: Store references
+triggers.forEach(t => t.kill());
 ```
 
 ## Common Patterns

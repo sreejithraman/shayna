@@ -260,7 +260,7 @@ function getVideoEmbedUrl(item: WorkItem): string {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 0, 0, 0.2);
+    background: color-mix(in srgb, var(--bg-void) 20%, transparent);
     opacity: 0;
     transition: opacity 0.3s ease;
   }
@@ -269,7 +269,7 @@ function getVideoEmbedUrl(item: WorkItem): string {
     width: 56px;
     height: 56px;
     color: white;
-    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.4));
+    filter: drop-shadow(0 2px 8px color-mix(in srgb, var(--bg-void) 40%, transparent));
     transition: transform 0.2s ease;
   }
 
@@ -323,7 +323,7 @@ function getVideoEmbedUrl(item: WorkItem): string {
   .video-lightbox__backdrop {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.92);
+    background: color-mix(in srgb, var(--bg-void) 92%, transparent);
     cursor: pointer;
   }
 
@@ -433,8 +433,21 @@ function getVideoEmbedUrl(item: WorkItem): string {
   const triggers = document.querySelectorAll('[data-video-trigger]');
   const closeButtons = document.querySelectorAll('[data-lightbox-close]');
 
+  // Allowed video embed domains for security
+  const ALLOWED_DOMAINS = ['youtube.com', 'player.vimeo.com'];
+
+  function isAllowedUrl(url: string): boolean {
+    try {
+      const parsed = new URL(url);
+      return ALLOWED_DOMAINS.some(domain => parsed.hostname.includes(domain));
+    } catch {
+      return false;
+    }
+  }
+
   function openLightbox(embedUrl: string) {
     if (!lightbox || !player) return;
+    if (!isAllowedUrl(embedUrl)) return;
     player.innerHTML = `<iframe src="${embedUrl}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
     lightbox.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';

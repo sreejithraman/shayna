@@ -11,7 +11,10 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-gsap.registerPlugin(ScrollTrigger);
+// Note: ScrollTrigger is registered in smooth-scroll.ts (loaded first)
+
+// Store triggers for proper cleanup
+let parallaxTriggers: ScrollTrigger[] = [];
 
 export function initParallax(): void {
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -30,7 +33,7 @@ export function initParallax(): void {
     // Lower speed = slower movement = appears further back
     const distance = (1 - speed) * 100;
 
-    gsap.to(element, {
+    const tween = gsap.to(element, {
       scrollTrigger: {
         trigger: element.closest('section') || element,
         start: 'top bottom',
@@ -40,6 +43,10 @@ export function initParallax(): void {
       y: `${distance}%`,
       ease: 'none',
     });
+
+    if (tween.scrollTrigger) {
+      parallaxTriggers.push(tween.scrollTrigger);
+    }
   });
 
   // Hero-specific parallax
@@ -47,7 +54,7 @@ export function initParallax(): void {
   const heroName = document.querySelector<HTMLElement>('.hero-name');
 
   if (heroPhoto) {
-    gsap.to(heroPhoto, {
+    const photoTween = gsap.to(heroPhoto, {
       scrollTrigger: {
         trigger: '.hero',
         start: 'top top',
@@ -57,10 +64,14 @@ export function initParallax(): void {
       y: '15%', // Photo moves slower (creates depth)
       ease: 'none',
     });
+
+    if (photoTween.scrollTrigger) {
+      parallaxTriggers.push(photoTween.scrollTrigger);
+    }
   }
 
   if (heroName) {
-    gsap.to(heroName, {
+    const nameTween = gsap.to(heroName, {
       scrollTrigger: {
         trigger: '.hero',
         start: 'top top',
@@ -70,10 +81,11 @@ export function initParallax(): void {
       y: '8%', // Name moves a bit, less than photo
       ease: 'none',
     });
-  }
 
-  // Note: Featured Art now uses the dramatic-reveal system (data-reveal attributes)
-  // No specific parallax needed here
+    if (nameTween.scrollTrigger) {
+      parallaxTriggers.push(nameTween.scrollTrigger);
+    }
+  }
 
   // Refresh ScrollTrigger after all animations are set up
   ScrollTrigger.refresh();
@@ -81,10 +93,6 @@ export function initParallax(): void {
 
 // Cleanup function for SPA navigation
 export function destroyParallax(): void {
-  ScrollTrigger.getAll().forEach((trigger) => {
-    if (trigger.vars.trigger?.toString().includes('parallax') ||
-        trigger.vars.trigger?.toString().includes('hero')) {
-      trigger.kill();
-    }
-  });
+  parallaxTriggers.forEach((trigger) => trigger.kill());
+  parallaxTriggers = [];
 }

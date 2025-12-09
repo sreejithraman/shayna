@@ -1,7 +1,7 @@
 ---
 name: typescript
-description: Use when writing TypeScript code. Applies TypeScript best practices for type safety, generics, and maintainable typed code.
-version: "1.2.0"
+description: Use when writing TypeScript code. Applies TypeScript best practices for type safety, generics, JSDoc patterns, and maintainable typed code.
+version: "1.3.0"
 ---
 
 # TypeScript Best Practices
@@ -314,6 +314,178 @@ import type { User } from './types';
 
 // Mixed imports when needed
 import { validateUser, type UserInput } from './user';
+```
+
+## JSDoc for JavaScript Files
+
+Type-check JavaScript files without converting to TypeScript.
+
+### Enable in JS Files
+
+```javascript
+// @ts-check  ← Add this at the top of any .js file
+
+/** @type {string} */
+let name = 'Alice';
+
+name = 42;  // Error: Type 'number' is not assignable to type 'string'
+```
+
+### Function Annotations
+
+```javascript
+// @ts-check
+
+/**
+ * Calculate total price with tax
+ * @param {number} price - Base price
+ * @param {number} [taxRate=0.1] - Tax rate (optional, defaults to 0.1)
+ * @returns {number} Total price including tax
+ */
+function calculateTotal(price, taxRate = 0.1) {
+  return price * (1 + taxRate);
+}
+
+/**
+ * @param {string} id
+ * @returns {Promise<User|null>}
+ */
+async function getUser(id) {
+  const response = await fetch(`/api/users/${id}`);
+  if (!response.ok) return null;
+  return response.json();
+}
+```
+
+### Import Types from TypeScript
+
+```javascript
+// @ts-check
+
+/** @typedef {import('./types.js').User} User */
+/** @typedef {import('./types.js').Track} Track */
+
+/**
+ * @param {User} user
+ * @returns {Track[]}
+ */
+function getUserTracks(user) {
+  return user.tracks || [];
+}
+```
+
+### Inline Type Definitions
+
+```javascript
+// @ts-check
+
+/**
+ * @typedef {Object} GrainConfig
+ * @property {number} opacity - Grain opacity (0-1)
+ * @property {number} density - Grain density
+ * @property {boolean} animated - Whether grain animates
+ * @property {number} fps - Animation frame rate
+ */
+
+/**
+ * @typedef {'idle' | 'playing' | 'paused' | 'loading'} PlaybackState
+ */
+
+/** @type {GrainConfig} */
+const config = {
+  opacity: 0.5,
+  density: 1,
+  animated: true,
+  fps: 24
+};
+
+/** @type {PlaybackState} */
+let state = 'idle';
+```
+
+### Generic Functions
+
+```javascript
+// @ts-check
+
+/**
+ * @template T
+ * @param {T[]} array
+ * @param {(item: T) => boolean} predicate
+ * @returns {T | undefined}
+ */
+function find(array, predicate) {
+  for (const item of array) {
+    if (predicate(item)) return item;
+  }
+  return undefined;
+}
+
+/**
+ * @template T
+ * @template {keyof T} K
+ * @param {T} obj
+ * @param {K} key
+ * @returns {T[K]}
+ */
+function get(obj, key) {
+  return obj[key];
+}
+```
+
+### Class Annotations
+
+```javascript
+// @ts-check
+
+/**
+ * @class
+ * @template T
+ */
+class Store {
+  /** @type {T} */
+  #state;
+
+  /** @type {Set<(state: T) => void>} */
+  #listeners = new Set();
+
+  /**
+   * @param {T} initialState
+   */
+  constructor(initialState) {
+    this.#state = initialState;
+  }
+
+  /** @returns {T} */
+  getState() {
+    return this.#state;
+  }
+
+  /**
+   * @param {Partial<T>} updates
+   */
+  setState(updates) {
+    this.#state = { ...this.#state, ...updates };
+    this.#listeners.forEach(fn => fn(this.#state));
+  }
+}
+```
+
+### IDE Configuration
+
+Enable in `jsconfig.json` for project-wide JS type checking:
+
+```json
+{
+  "compilerOptions": {
+    "checkJs": true,
+    "strict": true,
+    "moduleResolution": "node",
+    "target": "ES2020"
+  },
+  "include": ["src/**/*.js"],
+  "exclude": ["node_modules"]
+}
 ```
 
 ## Avoid

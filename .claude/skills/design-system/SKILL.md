@@ -1,7 +1,7 @@
 ---
 name: design-system
-description: Use when implementing designs, building component libraries, or working with design tokens. Applies design system architecture and design-to-code translation patterns.
-version: "1.1.0"
+description: Use when implementing designs, building component libraries, or working with design tokens. Applies design system architecture, import order, and design-to-code translation patterns.
+version: "1.2.0"
 ---
 
 # Design System Best Practices
@@ -48,6 +48,64 @@ Examples:
 --font-size-heading-lg
 --button-bg-hover
 ```
+
+### CSS Import Order
+
+Always import stylesheets in this order:
+
+```html
+<!-- 1. External fonts (Google Fonts, etc.) -->
+<link href="https://fonts.googleapis.com/css2?family=..." rel="stylesheet" />
+
+<!-- 2. Icon fonts -->
+<link href="https://fonts.googleapis.com/.../Material+Symbols..." rel="stylesheet" />
+
+<!-- 3. Design system tokens (MUST be first CSS) -->
+<link rel="stylesheet" href="design-system.css" />
+
+<!-- 4. Page-specific styles -->
+<link rel="stylesheet" href="page.css" />
+```
+
+**Why order matters:**
+- Design system defines CSS variables used by page styles
+- Page CSS can override semantic aliases
+- Later files can reference earlier variables
+
+### Gray Scale Pattern
+
+Define a comprehensive gray scale for subtle UI variations:
+
+```css
+:root {
+  /* Full gray scale (dark → light) */
+  --color-gray-950: #0d0e15;  /* Near black */
+  --color-gray-900: #121212;
+  --color-gray-850: #161616;
+  --color-gray-800: #1a1a1a;
+  --color-gray-750: #1e1e1e;
+  --color-gray-700: #222222;
+  --color-gray-650: #2a2a2a;
+  --color-gray-600: #333333;
+  --color-gray-550: #3d3d3d;
+  --color-gray-500: #444444;  /* Mid gray */
+  --color-gray-450: #555555;
+  --color-gray-400: #666666;
+  --color-gray-350: #777777;
+  --color-gray-300: #888888;
+  --color-gray-250: #999999;
+  --color-gray-200: #aaaaaa;
+  --color-gray-150: #cccccc;
+  --color-gray-100: #e5e5e5;
+  --color-gray-50: #f5f5f5;   /* Near white */
+}
+```
+
+**Usage:**
+- Backgrounds: 950-850 (dark themes)
+- Borders: 700-500
+- Muted text: 400-250
+- Disabled states: 500-400
 
 ## Spacing System
 
