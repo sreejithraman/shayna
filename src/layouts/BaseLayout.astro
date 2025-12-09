@@ -51,6 +51,7 @@ const effectConfig = {
       import { initPageGrain, destroyPageGrain } from '@/scripts/page-grain';
       import { initParallax, destroyParallax } from '@/scripts/parallax';
       import { initDramaticReveal, destroyDramaticReveal } from '@/scripts/dramatic-reveal';
+      import { initCoverflow, destroyCoverflow } from '@/scripts/coverflow';
 
       function initAllEffects() {
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -98,9 +99,13 @@ const effectConfig = {
             scrub: revealConfig.scrub,
           });
         }
+
+        // Initialize coverflow carousel
+        initCoverflow();
       }
 
       function destroyAllEffects() {
+        destroyCoverflow();
         destroyDramaticReveal();
         destroyParallax();
         destroyPageGrain();

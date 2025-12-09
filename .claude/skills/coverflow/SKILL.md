@@ -1,215 +1,248 @@
 ---
 name: coverflow
-description: Use when implementing coverflow/carousel effects with 3D perspective. Applies CSS scroll-driven animations with graceful fallbacks for unsupported browsers.
-version: "1.0.0"
+description: Use when implementing coverflow carousels with 3D rotation. Applies Swiper configuration patterns with rotation limits to prevent flipping.
+version: "2.0.0"
 ---
 
-# Coverflow Effect
+# Coverflow Effect (Swiper)
 
-Pure CSS coverflow pattern using scroll-driven animations. No JavaScript required.
+Swiper-based coverflow carousel with 3D rotation, click-to-center, and info overlays.
 
 **References:**
-- [Addy Osmani: Coverflow](https://addyosmani.com/blog/coverflow/)
-- [MDN: Scroll-driven Animations](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Scroll-driven_animations)
-- [Chrome Developers: Scroll-driven Animations](https://developer.chrome.com/docs/css-ui/scroll-driven-animations)
+- [Swiper Coverflow Demo](https://swiperjs.com/demos#effect-coverflow)
+- [Swiper API Docs](https://swiperjs.com/swiper-api)
 
-## Browser Support
+## Installation
 
-| Browser | Status |
-|---------|--------|
-| Chrome/Edge 115+ | Full support |
-| Safari 26+ | Full support |
-| Firefox | Behind flag |
+```bash
+npm install swiper
+```
 
-Always use `@supports` for progressive enhancement.
+```typescript
+import Swiper from 'swiper';
+import { EffectCoverflow, FreeMode, Keyboard, Mousewheel } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/effect-coverflow';
+```
 
-## Core Concept
+## The Rotation Formula (CRITICAL)
 
-Coverflow links CSS animations to an element's scroll position using view timelines:
-1. Container scrolls horizontally with snap points
-2. Each item gets a view timeline tracking its position in the viewport
-3. Animation progress maps to how far the item is from center
+Swiper calculates rotation as: `rotate × distance_from_center`
 
-## Key Properties
+**Problem**: With `rotate: 50` and a slide 4 positions away, rotation = 200°, causing the slide to flip backwards.
+
+**Solution**: Limit `slidesPerView` and calculate safe rotation:
+
+```
+max_rotation = rotate × (slidesPerView - 1) / 2
+```
+
+| slidesPerView | rotate | Max Rotation | Safe? |
+|---------------|--------|--------------|-------|
+| 5 | 20 | 40° | ✓ |
+| 7 | 15 | 45° | ✓ |
+| 5 | 45 | 90° | ⚠️ Edge |
+| 'auto' | 50 | ∞ | ✗ FLIPS |
+
+**Rule**: Keep `max_rotation < 90°` to prevent flipping.
+
+## Configuration
+
+### Core Options
+
+```typescript
+new Swiper('.coverflow-swiper', {
+  modules: [EffectCoverflow, FreeMode, Keyboard, Mousewheel],
+  effect: 'coverflow',
+  grabCursor: true,
+  centeredSlides: true,
+  slidesPerView: 5,  // Limit to control rotation
+  slideToClickedSlide: true,
+
+  coverflowEffect: {
+    rotate: 20,      // Keep low with slidesPerView limit
+    stretch: 0,      // px offset between slides
+    depth: 100,      // z-axis depth
+    modifier: 1,     // effect multiplier
+    slideShadows: false,
+  },
+});
+```
+
+### Official Swiper Defaults (Reference)
+
+```javascript
+coverflowEffect: {
+  rotate: 50,      // degrees per slide position
+  stretch: 0,      // px offset between slides
+  depth: 100,      // z-axis depth
+  modifier: 1,     // effect multiplier
+  slideShadows: true,
+}
+```
+
+## Scroll Handling
+
+### Smooth Scrolling with Snapping
+
+```typescript
+freeMode: {
+  enabled: true,
+  sticky: true,  // Snap to slides after momentum
+  momentumRatio: 0.5,
+  momentumVelocityRatio: 0.5,
+}
+```
+
+### Detect Horizontal vs Vertical Intent
+
+```typescript
+touchAngle: 30,  // Stricter than default 45
+touchReleaseOnEdges: true,
+passiveListeners: false,  // Allow preventDefault
+mousewheel: {
+  forceToAxis: true,
+  releaseOnEdges: true,
+}
+```
+
+### Prevent Page Scroll While in Coverflow
+
+The mousewheel/trackpad can trigger both coverflow scroll AND page scroll simultaneously. Add a custom handler:
+
+```typescript
+let wheelHandler: ((e: WheelEvent) => void) | null = null;
+
+function initCoverflow() {
+  const container = document.querySelector<HTMLElement>('.coverflow-swiper');
+  if (!container) return;
+
+  const swiper = new Swiper('.coverflow-swiper', { /* config */ });
+
+  // Prevent page scroll when scrolling within coverflow
+  wheelHandler = (e: WheelEvent) => {
+    const scrollingRight = e.deltaY > 0 || e.deltaX > 0;
+    const scrollingLeft = e.deltaY < 0 || e.deltaX < 0;
+
+    // Allow page scroll only at edges
+    const allowPageScroll =
+      (swiper.isBeginning && scrollingLeft) ||
+      (swiper.isEnd && scrollingRight);
+
+    if (!allowPageScroll) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  };
+
+  container.addEventListener('wheel', wheelHandler, { passive: false });
+}
+
+function destroyCoverflow() {
+  if (wheelHandler) {
+    const container = document.querySelector<HTMLElement>('.coverflow-swiper');
+    container?.removeEventListener('wheel', wheelHandler);
+    wheelHandler = null;
+  }
+  // ... destroy swiper
+}
+```
+
+## Complete Example
+
+```typescript
+import Swiper from 'swiper';
+import { EffectCoverflow, FreeMode, Keyboard, Mousewheel } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/effect-coverflow';
+
+let swiperInstance: Swiper | null = null;
+let wheelHandler: ((e: WheelEvent) => void) | null = null;
+
+export function initCoverflow(): void {
+  const container = document.querySelector<HTMLElement>('.coverflow-swiper');
+  if (!container || swiperInstance) return;
+
+  swiperInstance = new Swiper('.coverflow-swiper', {
+    modules: [EffectCoverflow, FreeMode, Keyboard, Mousewheel],
+    effect: 'coverflow',
+    grabCursor: true,
+    centeredSlides: true,
+    slidesPerView: 5,
+    slideToClickedSlide: true,
+    touchAngle: 30,
+    touchReleaseOnEdges: true,
+    passiveListeners: false,
+    keyboard: { enabled: true },
+    mousewheel: {
+      forceToAxis: true,
+      releaseOnEdges: true,
+    },
+    freeMode: {
+      enabled: true,
+      sticky: true,
+      momentumRatio: 0.5,
+      momentumVelocityRatio: 0.5,
+    },
+    coverflowEffect: {
+      rotate: 20,
+      stretch: 0,
+      depth: 100,
+      modifier: 1,
+      slideShadows: false,
+    },
+  });
+
+  // Prevent page scroll
+  wheelHandler = (e: WheelEvent) => {
+    if (!swiperInstance) return;
+    const scrollingRight = e.deltaY > 0 || e.deltaX > 0;
+    const scrollingLeft = e.deltaY < 0 || e.deltaX < 0;
+    const allowPageScroll =
+      (swiperInstance.isBeginning && scrollingLeft) ||
+      (swiperInstance.isEnd && scrollingRight);
+    if (!allowPageScroll) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  };
+  container.addEventListener('wheel', wheelHandler, { passive: false });
+}
+
+export function destroyCoverflow(): void {
+  if (wheelHandler) {
+    const container = document.querySelector<HTMLElement>('.coverflow-swiper');
+    container?.removeEventListener('wheel', wheelHandler);
+    wheelHandler = null;
+  }
+  if (swiperInstance) {
+    swiperInstance.destroy(true, true);
+    swiperInstance = null;
+  }
+}
+```
+
+## CSS: Active Slide Styling
+
+Use `.swiper-slide-active` to style only the centered slide:
 
 ```css
-/* Container */
-scroll-snap-type: x mandatory;    /* Snap to items */
-perspective: 40em;                /* 3D depth */
+/* Info overlay - hidden by default */
+.coverflow-item__info {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
 
-/* Items */
-scroll-snap-align: center;        /* Center when snapped */
-view-timeline-name: --item;       /* Name the timeline */
-view-timeline-axis: inline;       /* Track horizontal position */
-animation-timeline: --item;       /* Bind animation to timeline */
-```
-
-## Animation Keyframes
-
-### Coverflow Rotation
-```css
-@keyframes coverflow {
-  /* Far left: rotated, offset */
-  0% {
-    transform: translateX(-100%) rotateY(-45deg);
-  }
-  /* Approaching center: still rotated */
-  35% {
-    transform: translateX(0) rotateY(-45deg);
-  }
-  /* Center: face forward, pop out, scale up */
-  50% {
-    transform: rotateY(0deg) translateZ(1em) scale(1.5);
-  }
-  /* Leaving center: rotate opposite */
-  65% {
-    transform: translateX(0) rotateY(45deg);
-  }
-  /* Far right: rotated, offset */
-  100% {
-    transform: translateX(100%) rotateY(45deg);
-  }
+/* Only show on active/centered slide */
+.swiper-slide-active .coverflow-item__info {
+  opacity: 1;
+  pointer-events: auto;
 }
 ```
 
-### Z-Index Layering
-```css
-@keyframes coverflow-z {
-  0%, 100% {
-    z-index: 1;
-  }
-  50% {
-    z-index: 100;
-  }
-}
-```
+## CSS: Reflection Effect
 
-## Complete Pattern
-
-```css
-/* === Container === */
-.coverflow {
-  display: flex;
-  gap: 1rem;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  perspective: 40em;
-
-  /* Hide scrollbar (optional) */
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.coverflow::-webkit-scrollbar {
-  display: none;
-}
-
-/* === Items === */
-.coverflow-item {
-  flex: 0 0 auto;
-  scroll-snap-align: center;
-  position: relative;
-}
-
-/* === Fallback: Simple scroll (all browsers) === */
-.coverflow-item img {
-  display: block;
-  width: 200px;
-  aspect-ratio: 1;
-  object-fit: cover;
-  border-radius: 0.5rem;
-}
-
-/* === Enhanced: Coverflow (supported browsers) === */
-@supports (animation-timeline: view()) {
-  .coverflow-item {
-    view-timeline-name: --item-in-view;
-    view-timeline-axis: inline;
-  }
-
-  .coverflow-item img {
-    animation:
-      coverflow linear both,
-      coverflow-z linear both;
-    animation-timeline: --item-in-view;
-  }
-}
-```
-
-## HTML Structure
-
-```html
-<div class="coverflow">
-  <div class="coverflow-item">
-    <img src="album1.jpg" alt="Album 1" />
-  </div>
-  <div class="coverflow-item">
-    <img src="album2.jpg" alt="Album 2" />
-  </div>
-  <!-- More items... -->
-</div>
-```
-
-## Performance Rules
-
-### Transform Inner Elements
-```css
-/* BAD: Animating the scroll container or list item */
-.coverflow-item {
-  animation: coverflow ...;  /* Breaks scroll metrics! */
-}
-
-/* GOOD: Animate the image inside */
-.coverflow-item img {
-  animation: coverflow ...;
-}
-```
-
-Animating the scroll container or list items affects layout and breaks scroll calculations. Always transform a child element.
-
-### GPU Acceleration
-Stick to transform-only animations:
-- `transform` (translate, rotate, scale)
-- `opacity`
-
-Avoid animating:
-- `width`, `height`
-- `margin`, `padding`
-- `top`, `left`
-
-### will-change
-Use sparingly:
-```css
-.coverflow-item img {
-  will-change: transform;
-}
-```
-
-## Variations
-
-### Subtler Rotation (30deg)
-```css
-@keyframes coverflow-subtle {
-  0%   { transform: translateX(-100%) rotateY(-30deg); }
-  35%  { transform: translateX(0) rotateY(-30deg); }
-  50%  { transform: rotateY(0deg) translateZ(0.5em) scale(1.2); }
-  65%  { transform: translateX(0) rotateY(30deg); }
-  100% { transform: translateX(100%) rotateY(30deg); }
-}
-```
-
-### With Opacity Fade
-```css
-@keyframes coverflow-fade {
-  0%   { transform: translateX(-100%) rotateY(-45deg); opacity: 0.5; }
-  35%  { transform: translateX(0) rotateY(-45deg); opacity: 0.7; }
-  50%  { transform: rotateY(0deg) translateZ(1em) scale(1.5); opacity: 1; }
-  65%  { transform: translateX(0) rotateY(45deg); opacity: 0.7; }
-  100% { transform: translateX(100%) rotateY(45deg); opacity: 0.5; }
-}
-```
-
-### Reflection Effect
 ```css
 .coverflow-item img {
   -webkit-box-reflect: below 0.5em linear-gradient(
@@ -219,56 +252,26 @@ Use sparingly:
 }
 ```
 
-## Fallback Strategies
-
-### Feature Detection
-```css
-/* Base styles work everywhere */
-.coverflow { /* horizontal scroll */ }
-
-/* Enhanced only when supported */
-@supports (animation-timeline: view()) {
-  /* coverflow animations */
-}
-```
-
-### JavaScript Polyfill (Optional)
-For broader support, consider [scroll-timeline-polyfill](https://github.com/nicoffee/scroll-timeline-polyfill).
-
-### Alternative: GSAP Fallback
-If you need Firefox support now:
-```javascript
-// Check for native support
-if (!CSS.supports('animation-timeline', 'view()')) {
-  // Use GSAP ScrollTrigger instead
-}
-```
-
 ## Accessibility
 
 ### Reduced Motion
+
 ```css
 @media (prefers-reduced-motion: reduce) {
-  .coverflow-item img {
-    animation: none;
-    transform: none;
+  .swiper-slide {
+    transition: none !important;
   }
 }
 ```
 
 ### Keyboard Navigation
-Ensure items are focusable:
-```css
-.coverflow-item:focus-within {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 4px;
-}
-```
+
+Enabled via `keyboard: { enabled: true }` - arrow keys navigate slides.
 
 ## Avoid
 
-- Animating scroll containers (breaks scroll metrics)
-- Forgetting `@supports` fallback
-- Over-animating (keep rotation ≤45deg)
-- Missing `prefers-reduced-motion` check
-- Using JS when CSS suffices
+- **`slidesPerView: 'auto'` with high rotate** - causes flipping on edge slides
+- **`rotate > 45` without limiting slidesPerView** - same flipping issue
+- **Forgetting wheel handler cleanup** - causes memory leaks
+- **Missing `passiveListeners: false`** - prevents `preventDefault()` from working
+- **Using `scale` in coverflowEffect** - can cause weird sizing on distant slides

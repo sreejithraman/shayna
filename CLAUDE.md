@@ -19,6 +19,15 @@ Multi-page portfolio for Shayna Dunkelman, percussionist with electronic influen
 - `npm run dev` — Start development server
 - `npm run build` — Production build
 
+## Documentation Lookups
+
+When working with libraries in this stack (Astro, GSAP, Tailwind, Lenis, etc.), use the **Context7 MCP server** to fetch up-to-date documentation:
+
+1. First resolve the library ID: `mcp__context7__resolve-library-id`
+2. Then fetch docs: `mcp__context7__get-library-docs`
+
+This ensures you're using current APIs rather than outdated patterns from training data.
+
 ## Skills
 
 Invoke these skills when entering their domains:

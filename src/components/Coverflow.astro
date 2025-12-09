@@ -1,0 +1,181 @@
+---
+interface Album {
+  artist: string;
+  album: string;
+  url: string;
+  date: string;
+  cover_image_url: string | null;
+}
+
+interface Props {
+  albums: Album[];
+}
+
+const { albums } = Astro.props;
+const PLACEHOLDER = '/images/feed-placeholder-1.svg';
+---
+
+<div class="coverflow-wrapper">
+  <div class="swiper coverflow-swiper">
+    <div class="swiper-wrapper">
+      {albums.map((album, i) => (
+        <div class="swiper-slide coverflow-item">
+          <img
+            src={album.cover_image_url || PLACEHOLDER}
+            alt={`${album.album} by ${album.artist}`}
+            loading={i < 5 ? 'eager' : 'lazy'}
+          />
+          <div class="coverflow-item__info">
+            <div class="coverflow-item__text">
+              <h4>{album.album}</h4>
+              <p>{album.artist}</p>
+              <span>{new Date(album.date).getFullYear()}</span>
+            </div>
+            <a
+              href={album.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="coverflow-item__link"
+              aria-label={`Listen to ${album.album}`}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                <polyline points="15 3 21 3 21 9" />
+                <line x1="10" y1="14" x2="21" y2="3" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</div>
+
+<style>
+  .coverflow-wrapper {
+    padding: 2rem 0 4rem;
+  }
+
+  .coverflow-swiper {
+    width: 100%;
+    padding: 2rem 0 4rem;
+    overflow: visible;
+  }
+
+  .coverflow-item {
+    width: 280px;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+
+  .coverflow-item img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    /* Reflection effect */
+    -webkit-box-reflect: below 0.5em linear-gradient(
+      transparent 60%,
+      rgba(0, 0, 0, 0.3)
+    );
+  }
+
+  /* Info overlay - hidden by default */
+  .coverflow-item__info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1rem;
+    padding-right: 3.5rem;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+    border-radius: 0 0 0.5rem 0.5rem;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+  }
+
+  /* Only show info on active/centered slide */
+  .swiper-slide-active .coverflow-item__info {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .coverflow-item__text h4 {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 0.25rem;
+    line-height: 1.3;
+  }
+
+  .coverflow-item__text p {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin: 0 0 0.125rem;
+  }
+
+  .coverflow-item__text span {
+    font-family: var(--font-body);
+    font-size: 0.6875rem;
+    color: var(--text-muted);
+  }
+
+  /* Link icon */
+  .coverflow-item__link {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: var(--accent-indigo);
+    border-radius: 50%;
+    color: white;
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .coverflow-item__link:hover {
+    background: var(--accent-purple);
+    transform: scale(1.1);
+  }
+
+  .coverflow-item__link:focus-visible {
+    outline: 2px solid var(--accent-indigo);
+    outline-offset: 2px;
+  }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .coverflow-item {
+      width: 200px;
+    }
+
+    .coverflow-item__link {
+      width: 28px;
+      height: 28px;
+    }
+
+    .coverflow-item__link svg {
+      width: 14px;
+      height: 14px;
+    }
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .coverflow-item,
+    .coverflow-item__info,
+    .coverflow-item__link {
+      transition: none;
+    }
+  }
+</style>
