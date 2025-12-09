@@ -14,15 +14,17 @@ const { quotes, class: className } = Astro.props;
 ---
 
 <div class:list={['press-quotes', className]}>
-  {quotes.map((quote) => (
-    <blockquote class="press-quote">
-      <p class="press-quote__text">"{quote.text}"</p>
-      <footer class="press-quote__source">
-        <cite>{quote.source}</cite>
-        {quote.year && <span class="press-quote__year">{quote.year}</span>}
-      </footer>
-    </blockquote>
-  ))}
+  {
+    quotes.map((quote) => (
+      <blockquote class="press-quote">
+        <p class="press-quote__text">"{quote.text}"</p>
+        <footer class="press-quote__source">
+          <cite>{quote.source}</cite>
+          {quote.year && <span class="press-quote__year">{quote.year}</span>}
+        </footer>
+      </blockquote>
+    ))
+  }
 </div>
 
 <style>

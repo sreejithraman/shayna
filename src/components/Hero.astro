@@ -71,18 +71,8 @@ const { photoSrc = '/images/shayna-hero.jpg' } = Astro.props;
     height: 100%;
     object-fit: cover;
     /* Fade only at bottom edge on mobile */
-    mask-image: linear-gradient(
-      to bottom,
-      black 0%,
-      black 85%,
-      transparent 100%
-    );
-    -webkit-mask-image: linear-gradient(
-      to bottom,
-      black 0%,
-      black 85%,
-      transparent 100%
-    );
+    mask-image: linear-gradient(to bottom, black 0%, black 85%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 0%, black 85%, transparent 100%);
   }
 
   /* Name */
@@ -133,18 +123,8 @@ const { photoSrc = '/images/shayna-hero.jpg' } = Astro.props;
 
     .photo-image {
       /* Fade only at right edge on desktop (toward name) */
-      mask-image: linear-gradient(
-        to right,
-        black 0%,
-        black 80%,
-        transparent 100%
-      );
-      -webkit-mask-image: linear-gradient(
-        to right,
-        black 0%,
-        black 80%,
-        transparent 100%
-      );
+      mask-image: linear-gradient(to right, black 0%, black 80%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to right, black 0%, black 80%, transparent 100%);
     }
 
     .hero-name {

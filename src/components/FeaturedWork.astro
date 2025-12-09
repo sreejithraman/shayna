@@ -36,7 +36,6 @@ function getVideoEmbedUrl(item: WorkItem): string {
   }
   return '';
 }
-
 ---
 
 <section class:list={['featured-work', className]}>
@@ -45,70 +44,81 @@ function getVideoEmbedUrl(item: WorkItem): string {
       <h2 class="featured-work__title">Featured Work</h2>
       <a href="/work" class="featured-work__view-all">
         View All
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M5 12h14" />
-          <path d="m12 5 7 7-7 7" />
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M5 12h14"></path>
+          <path d="m12 5 7 7-7 7"></path>
         </svg>
       </a>
     </header>
 
     <div class="featured-work__grid">
-      {items.map((item) => (
-        <article
-          class="work-card"
-          data-type={item.type}
-          data-reveal
-          data-reveal-intensity="gentle"
-        >
-          {item.type === 'video' ? (
-            <button
-              class="work-card__trigger"
-              data-video-trigger
-              data-platform={item.platform}
-              data-video-id={item.videoId}
-              data-embed-url={getVideoEmbedUrl(item)}
-              aria-label={`Play ${item.title}`}
-            >
-              <div class="work-card__media">
-                <img
-                  src={getThumbnail(item)}
-                  alt={`${item.title} thumbnail`}
-                  class="work-card__image"
-                  loading="lazy"
-                  data-reveal-blur
-                  data-vimeo-id={item.platform === 'vimeo' ? item.videoId : undefined}
-                />
-                <div class="work-card__play">
-                  <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
+      {
+        items.map((item) => (
+          <article
+            class="work-card"
+            data-type={item.type}
+            data-reveal
+            data-reveal-intensity="gentle"
+          >
+            {item.type === 'video' ? (
+              <button
+                class="work-card__trigger"
+                data-video-trigger
+                data-platform={item.platform}
+                data-video-id={item.videoId}
+                data-embed-url={getVideoEmbedUrl(item)}
+                aria-label={`Play ${item.title}`}
+              >
+                <div class="work-card__media">
+                  <img
+                    src={getThumbnail(item)}
+                    alt={`${item.title} thumbnail`}
+                    class="work-card__image"
+                    loading="lazy"
+                    data-reveal-blur
+                    data-vimeo-id={item.platform === 'vimeo' ? item.videoId : undefined}
+                  />
+                  <div class="work-card__play">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </div>
                 </div>
-              </div>
-            </button>
-          ) : (
-            <a
-              href={item.url || '#'}
-              target={item.url ? '_blank' : undefined}
-              rel={item.url ? 'noopener noreferrer' : undefined}
-              class="work-card__link"
-            >
-              <div class="work-card__media">
-                <img
-                  src={getThumbnail(item)}
-                  alt={`${item.title} by ${item.artist}`}
-                  class="work-card__image"
-                  loading="lazy"
-                  data-reveal-blur
-                />
-              </div>
-            </a>
-          )}
-          <div class="work-card__info">
-            <h3 class="work-card__name">{item.title}</h3>
-            {item.artist && <p class="work-card__artist">{item.artist}</p>}
-          </div>
-        </article>
-      ))}
+              </button>
+            ) : (
+              <a
+                href={item.url || '#'}
+                target={item.url ? '_blank' : undefined}
+                rel={item.url ? 'noopener noreferrer' : undefined}
+                class="work-card__link"
+              >
+                <div class="work-card__media">
+                  <img
+                    src={getThumbnail(item)}
+                    alt={`${item.title} by ${item.artist}`}
+                    class="work-card__image"
+                    loading="lazy"
+                    data-reveal-blur
+                  />
+                </div>
+              </a>
+            )}
+            <div class="work-card__info">
+              <h3 class="work-card__name">{item.title}</h3>
+              {item.artist && <p class="work-card__artist">{item.artist}</p>}
+            </div>
+          </article>
+        ))
+      }
     </div>
   </div>
 </section>
@@ -119,7 +129,7 @@ function getVideoEmbedUrl(item: WorkItem): string {
   <div class="video-lightbox__content">
     <button class="video-lightbox__close" data-lightbox-close aria-label="Close video">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M18 6L6 18M6 6l12 12" />
+        <path d="M18 6L6 18M6 6l12 12"></path>
       </svg>
     </button>
     <div class="video-lightbox__player" id="videoPlayer"></div>
@@ -196,7 +206,7 @@ function getVideoEmbedUrl(item: WorkItem): string {
   }
 
   /* Rows 2+ overlap with previous row (top/bottom 20% overlap = ~8rem pull-up) */
-  .work-card:nth-child(n+3) {
+  .work-card:nth-child(n + 3) {
     --overlap: -8rem;
   }
 
@@ -207,17 +217,29 @@ function getVideoEmbedUrl(item: WorkItem): string {
 
   /* Z-index layering - later rows on top for proper stacking */
   .work-card:nth-child(1),
-  .work-card:nth-child(2) { z-index: 1; }
+  .work-card:nth-child(2) {
+    z-index: 1;
+  }
   .work-card:nth-child(3),
-  .work-card:nth-child(4) { z-index: 2; }
+  .work-card:nth-child(4) {
+    z-index: 2;
+  }
   .work-card:nth-child(5),
-  .work-card:nth-child(6) { z-index: 3; }
+  .work-card:nth-child(6) {
+    z-index: 3;
+  }
   .work-card:nth-child(7),
-  .work-card:nth-child(8) { z-index: 4; }
+  .work-card:nth-child(8) {
+    z-index: 4;
+  }
   .work-card:nth-child(9),
-  .work-card:nth-child(10) { z-index: 5; }
+  .work-card:nth-child(10) {
+    z-index: 5;
+  }
   .work-card:nth-child(11),
-  .work-card:nth-child(12) { z-index: 6; }
+  .work-card:nth-child(12) {
+    z-index: 6;
+  }
 
   /* Card trigger/link */
   .work-card__trigger,
@@ -312,10 +334,12 @@ function getVideoEmbedUrl(item: WorkItem): string {
     justify-content: center;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+    transition:
+      opacity 0.3s ease,
+      visibility 0.3s ease;
   }
 
-  .video-lightbox[aria-hidden="false"] {
+  .video-lightbox[aria-hidden='false'] {
     opacity: 1;
     visibility: visible;
   }
@@ -395,7 +419,7 @@ function getVideoEmbedUrl(item: WorkItem): string {
       max-width: none;
     }
 
-    .work-card:nth-child(n+3) {
+    .work-card:nth-child(n + 3) {
       --overlap: 0rem;
     }
 
@@ -439,7 +463,7 @@ function getVideoEmbedUrl(item: WorkItem): string {
   function isAllowedUrl(url: string): boolean {
     try {
       const parsed = new URL(url);
-      return ALLOWED_DOMAINS.some(domain => parsed.hostname.includes(domain));
+      return ALLOWED_DOMAINS.some((domain) => parsed.hostname.includes(domain));
     } catch {
       return false;
     }
@@ -485,7 +509,9 @@ function getVideoEmbedUrl(item: WorkItem): string {
       const vimeoId = img.dataset.vimeoId;
       if (!vimeoId) continue;
       try {
-        const res = await fetch(`https://vimeo.com/api/oembed.json?url=https://vimeo.com/${vimeoId}`);
+        const res = await fetch(
+          `https://vimeo.com/api/oembed.json?url=https://vimeo.com/${vimeoId}`
+        );
         if (res.ok) {
           const data = await res.json();
           if (data.thumbnail_url) {

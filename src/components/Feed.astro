@@ -13,13 +13,11 @@ interface Props {
 
 // For now, use placeholder items
 // Will be replaced with Instagram API data
-const placeholderItems: FeedItem[] = siteConfig.instagram.fallbackImages.map(
-  (src, index) => ({
-    id: `placeholder-${index}`,
-    src,
-    alt: `Feed image ${index + 1}`,
-  })
-);
+const placeholderItems: FeedItem[] = siteConfig.instagram.fallbackImages.map((src, index) => ({
+  id: `placeholder-${index}`,
+  src,
+  alt: `Feed image ${index + 1}`,
+}));
 
 const { items = placeholderItems } = Astro.props;
 ---
@@ -34,12 +32,7 @@ const { items = placeholderItems } = Astro.props;
         items.map((item) => (
           <article class="feed-card">
             <div class="feed-image-wrapper">
-              <img
-                src={item.src}
-                alt={item.alt}
-                class="feed-image"
-                loading="lazy"
-              />
+              <img src={item.src} alt={item.alt} class="feed-image" loading="lazy" />
             </div>
           </article>
         ))

@@ -8,14 +8,7 @@ interface Props {
   class?: string;
 }
 
-const {
-  title,
-  artist,
-  albumArt,
-  description,
-  listenUrl,
-  class: className,
-} = Astro.props;
+const { title, artist, albumArt, description, listenUrl, class: className } = Astro.props;
 ---
 
 <section class:list={['featured-art', className]}>
@@ -35,29 +28,26 @@ const {
       <h2 class="featured-art__title">{title}</h2>
       <p class="featured-art__artist">{artist}</p>
       {description && <p class="featured-art__description">{description}</p>}
-      {listenUrl && (
-        <a
-          href={listenUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="featured-art__cta"
-        >
-          Listen Now
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M7 17L17 7" />
-            <path d="M7 7h10v10" />
-          </svg>
-        </a>
-      )}
+      {
+        listenUrl && (
+          <a href={listenUrl} target="_blank" rel="noopener noreferrer" class="featured-art__cta">
+            Listen Now
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M7 17L17 7" />
+              <path d="M7 7h10v10" />
+            </svg>
+          </a>
+        )
+      }
     </div>
   </div>
 </section>

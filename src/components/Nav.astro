@@ -18,16 +18,20 @@ const navItems = [
   <div class="nav-group">
     <div class="nav-blur" aria-hidden="true"></div>
     <div class="nav-links">
-      {navItems.map((item) => (
-        <a
-          href={item.href}
-          class:list={['nav-link', { 'is-active': currentPath === item.href }]}
-        >
-          {item.label}
-        </a>
-      ))}
+      {
+        navItems.map((item) => (
+          <a href={item.href} class:list={['nav-link', { 'is-active': currentPath === item.href }]}>
+            {item.label}
+          </a>
+        ))
+      }
     </div>
-    <a href="https://ko-fi.com/shaynadunkelman" target="_blank" rel="noopener noreferrer" class="donate-btn">
+    <a
+      href="https://ko-fi.com/shaynadunkelman"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="donate-btn"
+    >
       Donate
     </a>
   </div>
@@ -44,7 +48,8 @@ const navItems = [
     align-items: center;
     justify-content: flex-end;
     /* Safe area padding for notched devices (Dynamic Island, etc.) */
-    padding: max(1.5rem, env(safe-area-inset-top)) max(2rem, env(safe-area-inset-right)) 1.5rem max(2rem, env(safe-area-inset-left));
+    padding: max(1.5rem, env(safe-area-inset-top)) max(2rem, env(safe-area-inset-right)) 1.5rem
+      max(2rem, env(safe-area-inset-left));
     pointer-events: none;
     view-transition-name: nav;
   }
@@ -154,7 +159,9 @@ const navItems = [
     padding: 0.5rem 1rem;
     border-radius: 4px;
     text-decoration: none;
-    transition: background 0.2s ease, transform 0.2s ease;
+    transition:
+      background 0.2s ease,
+      transform 0.2s ease;
   }
 
   .donate-btn:hover {
@@ -164,7 +171,8 @@ const navItems = [
 
   @media (max-width: 640px) {
     .nav {
-      padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) 1rem max(1rem, env(safe-area-inset-left));
+      padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) 1rem
+        max(1rem, env(safe-area-inset-left));
     }
 
     .nav-links {

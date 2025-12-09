@@ -1,0 +1,8 @@
+dist/
+node_modules/
+.astro/
+.claude/
+.plans/
+.docs/
+package-lock.json
+*.md

@@ -18,35 +18,46 @@ const PLACEHOLDER = '/images/feed-placeholder-1.svg';
 <div class="coverflow-wrapper">
   <div class="swiper coverflow-swiper">
     <div class="swiper-wrapper">
-      {albums.map((album, i) => (
-        <div class="swiper-slide coverflow-item">
-          <img
-            src={album.cover_image_url || PLACEHOLDER}
-            alt={`${album.album} by ${album.artist}`}
-            loading={i < 5 ? 'eager' : 'lazy'}
-          />
-          <div class="coverflow-item__info">
-            <div class="coverflow-item__text">
-              <h4>{album.album}</h4>
-              <p>{album.artist}</p>
-              <span>{new Date(album.date).getFullYear()}</span>
+      {
+        albums.map((album, i) => (
+          <div class="swiper-slide coverflow-item">
+            <img
+              src={album.cover_image_url || PLACEHOLDER}
+              alt={`${album.album} by ${album.artist}`}
+              loading={i < 5 ? 'eager' : 'lazy'}
+            />
+            <div class="coverflow-item__info">
+              <div class="coverflow-item__text">
+                <h4>{album.album}</h4>
+                <p>{album.artist}</p>
+                <span>{new Date(album.date).getFullYear()}</span>
+              </div>
+              <a
+                href={album.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="coverflow-item__link"
+                aria-label={`Listen to ${album.album}`}
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg>
+              </a>
             </div>
-            <a
-              href={album.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="coverflow-item__link"
-              aria-label={`Listen to ${album.album}`}
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                <polyline points="15 3 21 3 21 9" />
-                <line x1="10" y1="14" x2="21" y2="3" />
-              </svg>
-            </a>
           </div>
-        </div>
-      ))}
+        ))
+      }
     </div>
   </div>
 </div>
@@ -75,10 +86,7 @@ const PLACEHOLDER = '/images/feed-placeholder-1.svg';
     object-fit: cover;
     border-radius: 0.5rem;
     /* Reflection effect */
-    -webkit-box-reflect: below 0.5em linear-gradient(
-      transparent 60%,
-      rgba(0, 0, 0, 0.3)
-    );
+    -webkit-box-reflect: below 0.5em linear-gradient(transparent 60%, rgba(0, 0, 0, 0.3));
   }
 
   /* Info overlay - hidden by default */
@@ -93,7 +101,9 @@ const PLACEHOLDER = '/images/feed-placeholder-1.svg';
     border-radius: 0 0 0.5rem 0.5rem;
     opacity: 0;
     transform: translateY(10px);
-    transition: opacity 0.3s ease, transform 0.3s ease;
+    transition:
+      opacity 0.3s ease,
+      transform 0.3s ease;
     pointer-events: none;
   }
 
@@ -140,7 +150,9 @@ const PLACEHOLDER = '/images/feed-placeholder-1.svg';
     border-radius: 50%;
     color: white;
     text-decoration: none;
-    transition: background 0.2s ease, transform 0.2s ease;
+    transition:
+      background 0.2s ease,
+      transform 0.2s ease;
   }
 
   .coverflow-item__link:hover {

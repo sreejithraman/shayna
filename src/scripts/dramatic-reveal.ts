@@ -54,9 +54,8 @@ function getIntensityConfig(
   config: Required<DramaticRevealOptions>
 ): { rise: number; scale: number; blur: number } {
   const intensity = element.dataset.revealIntensity as IntensityLevel | undefined;
-  const multiplier = intensity && intensity in intensityMultipliers
-    ? intensityMultipliers[intensity]
-    : 1;
+  const multiplier =
+    intensity && intensity in intensityMultipliers ? intensityMultipliers[intensity] : 1;
 
   return {
     rise: config.rise * multiplier,
@@ -72,17 +71,13 @@ export function initDramaticReveal(options: DramaticRevealOptions = {}): void {
 
   if (prefersReducedMotion()) {
     // Show all elements immediately
-    document
-      .querySelectorAll<HTMLElement>('[data-reveal]')
-      .forEach((el) => {
-        el.style.opacity = '1';
-        el.style.transform = 'none';
-      });
-    document
-      .querySelectorAll<HTMLElement>('[data-reveal-blur]')
-      .forEach((el) => {
-        el.style.filter = 'none';
-      });
+    document.querySelectorAll<HTMLElement>('[data-reveal]').forEach((el) => {
+      el.style.opacity = '1';
+      el.style.transform = 'none';
+    });
+    document.querySelectorAll<HTMLElement>('[data-reveal-blur]').forEach((el) => {
+      el.style.filter = 'none';
+    });
     return;
   }
 

@@ -110,7 +110,8 @@ export const siteConfig: SiteConfig = {
     title: 'Echoes of Breakage',
     artist: 'Nomon',
     albumArt: '/images/NOMON - Cover Artwork by Kris Chau.jpg',
-    description: 'The latest album from Nomon, a percussion duo featuring Shayna and Nava Dunkelman. Exploring the boundaries between acoustic and electronic soundscapes.',
+    description:
+      'The latest album from Nomon, a percussion duo featuring Shayna and Nava Dunkelman. Exploring the boundaries between acoustic and electronic soundscapes.',
     listenUrl: '#', // TODO: Add actual streaming link
   },
 

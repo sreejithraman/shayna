@@ -16,23 +16,25 @@ const { videos, class: className } = Astro.props;
 
 <div class:list={['video-gallery', className]}>
   <div class="video-gallery__grid">
-    {videos.map((video) => (
-      <div class="video-card" data-reveal>
-        <div class="video-card__embed">
-          <iframe
-            src={video.embedUrl}
-            title={video.title}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-            loading="lazy"
-          />
+    {
+      videos.map((video) => (
+        <div class="video-card" data-reveal>
+          <div class="video-card__embed">
+            <iframe
+              src={video.embedUrl}
+              title={video.title}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+              loading="lazy"
+            />
+          </div>
+          <div class="video-card__info">
+            <h4 class="video-card__title">{video.title}</h4>
+            {video.description && <p class="video-card__description">{video.description}</p>}
+          </div>
         </div>
-        <div class="video-card__info">
-          <h4 class="video-card__title">{video.title}</h4>
-          {video.description && <p class="video-card__description">{video.description}</p>}
-        </div>
-      </div>
-    ))}
+      ))
+    }
   </div>
 </div>
 

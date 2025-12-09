@@ -63,8 +63,7 @@ export function initCoverflow(): void {
     const scrollingLeft = e.deltaY < 0 || e.deltaX < 0;
 
     // Allow page scroll only when at edge AND scrolling in that direction
-    const allowPageScroll =
-      (isAtBeginning && scrollingLeft) || (isAtEnd && scrollingRight);
+    const allowPageScroll = (isAtBeginning && scrollingLeft) || (isAtEnd && scrollingRight);
 
     if (!allowPageScroll) {
       e.preventDefault();

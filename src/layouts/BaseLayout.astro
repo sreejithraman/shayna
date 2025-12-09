@@ -8,10 +8,8 @@ interface Props {
   description?: string;
 }
 
-const {
-  title = `${siteConfig.name} — Percussionist`,
-  description = siteConfig.description,
-} = Astro.props;
+const { title = `${siteConfig.name} — Percussionist`, description = siteConfig.description } =
+  Astro.props;
 
 const configStyles = getConfigCSSProperties();
 const styleString = Object.entries(configStyles)
@@ -35,7 +33,7 @@ const effectConfig = {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <ClientRouter />
   </head>
-  <body class="bg-void text-primary font-sans antialiased">
+  <body class="bg-void font-sans text-primary antialiased">
     <Nav />
     <main>
       <slot />
