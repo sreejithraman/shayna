@@ -28,7 +28,7 @@ export default {
       },
       fontFamily: {
         sans: ['Space Grotesk', 'system-ui', 'sans-serif'],
-        display: ['Unbounded', 'system-ui', 'sans-serif'],
+        display: ['Space Grotesk', 'system-ui', 'sans-serif'],
       },
       fontWeight: {
         light: '300',

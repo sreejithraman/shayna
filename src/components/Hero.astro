@@ -25,7 +25,7 @@ const { photoSrc = '/images/shayna-hero.jpg' } = Astro.props;
 
     <!-- Name -->
     <div class="hero-name">
-      <h1 class="name-text" data-text-reveal>
+      <h1 class="name-text">
         <span class="name-first">{siteConfig.firstName}</span>
         <span class="name-last">{siteConfig.lastName}</span>
       </h1>
@@ -58,6 +58,7 @@ const { photoSrc = '/images/shayna-hero.jpg' } = Astro.props;
     flex: 1;
     min-height: 0; /* allow shrinking */
     width: 100%;
+    padding-top: 3.5rem; /* space for nav on mobile */
   }
 
   .photo-frame {
@@ -70,9 +71,9 @@ const { photoSrc = '/images/shayna-hero.jpg' } = Astro.props;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    /* Fade only at bottom edge on mobile */
-    mask-image: linear-gradient(to bottom, black 0%, black 85%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to bottom, black 0%, black 85%, transparent 100%);
+    /* Fade at top and bottom edges on mobile */
+    mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
   }
 
   /* Name */
@@ -83,7 +84,7 @@ const { photoSrc = '/images/shayna-hero.jpg' } = Astro.props;
   }
 
   .name-text {
-    font-family: 'Unbounded', system-ui, sans-serif;
+    font-family: 'Space Grotesk', system-ui, sans-serif;
     font-weight: 700;
     font-size: clamp(3rem, 11vw, 8rem); /* larger now that we have full width */
     line-height: 1;
@@ -115,6 +116,7 @@ const { photoSrc = '/images/shayna-hero.jpg' } = Astro.props;
     .hero-photo {
       flex: 0 0 45%;
       height: 100%;
+      padding-top: 0; /* reset mobile nav spacing */
     }
 
     .photo-frame {

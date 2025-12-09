@@ -5,6 +5,7 @@ interface Props {
 
 const { class: className } = Astro.props;
 const currentPath = Astro.url.pathname;
+const isHomePage = currentPath === '/';
 
 const navItems = [
   { label: 'Work', href: '/work' },
@@ -15,6 +16,11 @@ const navItems = [
 ---
 
 <nav class:list={['nav', className]} aria-label="Main navigation">
+  {!isHomePage && (
+    <a href="/" class="home-link" aria-label="Go to homepage">
+      SD
+    </a>
+  )}
   <div class="nav-group">
     <div class="nav-blur" aria-hidden="true"></div>
     <div class="nav-links">
@@ -52,6 +58,26 @@ const navItems = [
       max(2rem, env(safe-area-inset-left));
     pointer-events: none;
     view-transition-name: nav;
+  }
+
+  .home-link {
+    position: absolute;
+    left: max(2rem, env(safe-area-inset-left));
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    font-family: var(--font-body);
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: var(--text-primary);
+    text-decoration: none;
+    pointer-events: auto;
+    transition: color 0.2s ease;
+  }
+
+  .home-link:hover {
+    color: var(--accent-indigo);
   }
 
   .nav-group {
@@ -173,6 +199,11 @@ const navItems = [
     .nav {
       padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) 1rem
         max(1rem, env(safe-area-inset-left));
+    }
+
+    .home-link {
+      left: max(1rem, env(safe-area-inset-left));
+      font-size: 1rem;
     }
 
     .nav-links {

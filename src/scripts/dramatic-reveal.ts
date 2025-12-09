@@ -9,8 +9,10 @@
  * - data-reveal-blur: Image blur-to-clarity effect
  * - data-reveal-parallax: Image parallax (moves slower than container)
  * - data-reveal-intensity: Override intensity ("gentle" | "subtle" | default)
+ * - data-load-reveal: Load-triggered reveal (same animation, fires on page load)
  */
 
+import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { prefersReducedMotion } from '../lib/accessibility';
 
@@ -71,7 +73,7 @@ export function initDramaticReveal(options: DramaticRevealOptions = {}): void {
 
   if (prefersReducedMotion()) {
     // Show all elements immediately
-    document.querySelectorAll<HTMLElement>('[data-reveal]').forEach((el) => {
+    document.querySelectorAll<HTMLElement>('[data-reveal], [data-load-reveal]').forEach((el) => {
       el.style.opacity = '1';
       el.style.transform = 'none';
     });
@@ -153,6 +155,30 @@ export function initDramaticReveal(options: DramaticRevealOptions = {}): void {
     });
 
     triggers.push(trigger);
+  });
+
+  // Load-triggered reveal (for above-fold content like hero)
+  const loadRevealElements = document.querySelectorAll<HTMLElement>('[data-load-reveal]');
+
+  loadRevealElements.forEach((element) => {
+    const elementConfig = getIntensityConfig(element, config);
+
+    // Set initial state
+    gsap.set(element, {
+      opacity: 0,
+      y: elementConfig.rise,
+      scale: elementConfig.scale,
+    });
+
+    // Animate on load
+    gsap.to(element, {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      duration: 0.8,
+      delay: 0.2,
+      ease: 'power2.out',
+    });
   });
 
   // Refresh after setup
