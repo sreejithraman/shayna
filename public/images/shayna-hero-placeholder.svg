@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 550" fill="none">
-  <rect width="400" height="550" fill="#1a1a1a"/>
-  <circle cx="200" cy="180" r="80" fill="#2a2a2a"/>
-  <ellipse cx="200" cy="420" rx="120" ry="150" fill="#2a2a2a"/>
-  <text x="200" y="540" text-anchor="middle" fill="#444" font-family="monospace" font-size="10">PLACEHOLDER</text>
-</svg>

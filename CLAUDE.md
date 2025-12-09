@@ -2,7 +2,7 @@
 
 ## Overview
 
-Single-page portfolio for Shayna Dunkelman, percussionist with electronic influence. Dark, atmospheric, indigo/purple palette. Subtle interactive accents.
+Multi-page portfolio for Shayna Dunkelman, percussionist with electronic influence. Dark, atmospheric, indigo/purple palette. Subtle interactive accents.
 
 ## Stack
 
@@ -39,15 +39,29 @@ Invoke these skills when entering their domains:
 ## Structure
 
 ```
-Hero (viewport 1)
-├── Photo (left on desktop, top on mobile)
-└── Name: SHAYNA DUNKELMAN (grain + vibration effect)
+/pages
+├── index.astro      — Hero + FeaturedArt + Feed + FeaturedWork
+├── work.astro       — Full work gallery
+├── feed.astro       — Instagram feed
+├── about.astro      — About page
+└── contact.astro    — Contact page
 
-Feed (viewport 2)
-└── Horizontal scrolling Instagram feed
+/components
+├── Hero.astro           — Name reveal, parallax photo, ken-burns
+├── Nav.astro            — Navigation, donate button
+├── FeaturedArt.astro    — Album reveal with scroll effects
+├── FeaturedWork.astro   — Work grid + video lightbox
+├── Feed.astro           — Horizontal scroll gallery
+└── Discography.astro    — Album grid
 
-Bio (viewport 3)
-└── Text section (clean, no effects)
+/scripts (effect modules)
+├── smooth-scroll.ts     — Lenis + ScrollTrigger sync
+├── page-grain.ts        — Canvas noise overlay
+├── parallax.ts          — Scroll-based parallax
+├── dramatic-reveal.ts   — Scroll reveal animations
+├── text-reveal.ts       — Character-level animation
+├── ken-burns.ts         — Slow zoom effect
+└── horizontal-scroll.ts — Drag scroll for feed
 ```
 
 ## Design Tokens
@@ -90,6 +104,29 @@ Bio (viewport 3)
 ### Horizontal Feed
 - Instagram feed scrolls horizontally
 - Touch/swipe on mobile, drag/scroll on desktop
+
+## Data Attributes
+
+Effects are applied via data attributes:
+
+| Attribute | Effect |
+|-----------|--------|
+| `data-parallax="0.5"` | Parallax at 50% speed |
+| `data-reveal` | Scroll reveal animation |
+| `data-reveal-blur` | Add blur to reveal |
+| `data-reveal-parallax` | Add parallax to reveal |
+| `data-reveal-intensity="gentle"` | Softer animation (gentle/subtle) |
+| `data-ken-burns` | Slow zoom effect |
+| `data-text-reveal` | Character animation |
+
+See `.docs/effects.md` for full documentation.
+
+## Documentation
+
+Detailed documentation in `.docs/`:
+- `effects.md` — Effect scripts and data attributes
+- `components.md` — Component inventory and props
+- `config.md` — site.ts configuration reference
 
 ## Configuration
 

@@ -1,12 +1,12 @@
 ---
 name: javascript
-description: Use when writing JavaScript code. Applies modern ES6+ patterns, async handling, functional methods, and common anti-patterns to avoid.
-version: "1.1.0"
+description: Use when writing vanilla JavaScript. Applies ES6+ syntax, async patterns, state management, module lifecycle, and architectural patterns for building applications.
+version: "2.0.0"
 ---
 
 # JavaScript Best Practices
 
-Apply when writing JavaScript code. Complements TypeScript skill with runtime patterns.
+Apply when writing JavaScript code. Covers both syntax patterns and application architecture.
 
 **Documentation:** https://developer.mozilla.org/en-US/docs/Web/JavaScript
 
@@ -262,6 +262,271 @@ function processUser(user) {
   return doSomething(user);
 }
 ```
+
+## Architecture Patterns
+
+### State Management (Observer Pattern)
+
+Centralized state with subscriptions for reactive updates:
+
+```javascript
+// Simple store with observer pattern
+function createStore(initialState) {
+  let state = initialState;
+  const listeners = new Set();
+
+  return {
+    getState: () => state,
+    setState: (updates) => {
+      state = { ...state, ...updates };
+      listeners.forEach(fn => fn(state));
+    },
+    subscribe: (fn) => {
+      listeners.add(fn);
+      return () => listeners.delete(fn);  // Unsubscribe function
+    }
+  };
+}
+
+// Usage
+const store = createStore({ count: 0, user: null });
+
+const unsubscribe = store.subscribe((state) => {
+  console.log('State changed:', state);
+});
+
+store.setState({ count: 1 });
+unsubscribe();  // Cleanup
+```
+
+For high-frequency updates (e.g., currentTime), use key-specific subscriptions:
+
+```javascript
+// Key-specific subscription for performance
+function createStore(initialState) {
+  let state = initialState;
+  const globalListeners = new Set();
+  const keyListeners = new Map();  // key -> Set of listeners
+
+  return {
+    getState: () => state,
+    setState: (updates) => {
+      const changedKeys = Object.keys(updates);
+      state = { ...state, ...updates };
+
+      // Notify global listeners
+      globalListeners.forEach(fn => fn(state));
+
+      // Notify key-specific listeners
+      changedKeys.forEach(key => {
+        keyListeners.get(key)?.forEach(fn => fn(state[key], key, state));
+      });
+    },
+    subscribe: (fn) => { /* ... */ },
+    subscribeToKeys: (keys, fn) => {
+      const keyArray = Array.isArray(keys) ? keys : [keys];
+      keyArray.forEach(key => {
+        if (!keyListeners.has(key)) keyListeners.set(key, new Set());
+        keyListeners.get(key).add(fn);
+      });
+      return () => keyArray.forEach(key => keyListeners.get(key)?.delete(fn));
+    }
+  };
+}
+
+// Usage: Only fires when currentTime changes
+store.subscribeToKeys('currentTime', (time) => updateDisplay(time));
+```
+
+### Dependency Injection
+
+Pass dependencies via constructor for testability:
+
+```javascript
+// BAD: Hard-coded dependency
+class Player {
+  constructor(audioElement) {
+    this.audio = audioElement;
+  }
+
+  async loadTrack(id) {
+    const url = await fetch(`/api/tracks/${id}`);  // Hard to test
+    this.audio.src = url;
+  }
+}
+
+// GOOD: Inject dependencies
+class Player {
+  constructor(audioElement, options = {}) {
+    this.audio = audioElement;
+    this._getStreamUrl = options.getStreamUrl || this._defaultGetStreamUrl;
+  }
+
+  async loadTrack(id) {
+    const url = await this._getStreamUrl(id);
+    this.audio.src = url;
+  }
+
+  _defaultGetStreamUrl(id) {
+    return fetch(`/api/tracks/${id}`).then(r => r.json());
+  }
+}
+
+// Easy to test with mock
+const player = new Player(audioEl, {
+  getStreamUrl: async (id) => `mock://track/${id}`
+});
+```
+
+### Module Lifecycle Pattern
+
+Init/destroy pattern for SPA navigation and cleanup:
+
+```javascript
+// effect.js - Module with lifecycle
+let state = null;
+
+export function init(container) {
+  if (state) return;  // Guard: already initialized
+
+  const canvas = container.querySelector('canvas');
+  const ctx = canvas.getContext('2d');
+
+  state = {
+    canvas,
+    ctx,
+    animationId: null
+  };
+
+  startAnimation();
+}
+
+export function destroy() {
+  if (!state) return;  // Guard: not initialized
+
+  if (state.animationId) {
+    cancelAnimationFrame(state.animationId);
+  }
+
+  state = null;
+}
+
+function startAnimation() {
+  function loop() {
+    // ... render
+    state.animationId = requestAnimationFrame(loop);
+  }
+  loop();
+}
+```
+
+Usage with Astro view transitions:
+
+```javascript
+// In layout or page
+import { init, destroy } from './effect.js';
+
+document.addEventListener('astro:page-load', () => {
+  const container = document.querySelector('.effect-container');
+  if (container) init(container);
+});
+
+document.addEventListener('astro:before-swap', () => {
+  destroy();
+});
+```
+
+### Event-Driven Communication
+
+Use callbacks for component-specific events:
+
+```javascript
+// Component with event callbacks
+class Scrubber {
+  constructor(element, options = {}) {
+    this.el = element;
+    this.onSeek = options.onSeek || (() => {});
+    this.onScrubStart = options.onScrubStart || (() => {});
+    this.onScrubEnd = options.onScrubEnd || (() => {});
+
+    this._bindEvents();
+  }
+
+  _bindEvents() {
+    this.el.addEventListener('mousedown', (e) => {
+      this.onScrubStart();
+      this._startScrub(e);
+    });
+  }
+
+  _startScrub(e) {
+    const position = this._calculatePosition(e);
+    this.onSeek(position);
+  }
+}
+
+// Usage
+const scrubber = new Scrubber(element, {
+  onSeek: (pos) => audio.currentTime = pos * audio.duration,
+  onScrubStart: () => state.setState({ isScrubbing: true }),
+  onScrubEnd: () => state.setState({ isScrubbing: false })
+});
+```
+
+## Advanced: Web Workers
+
+Offload CPU-intensive work to background threads:
+
+```javascript
+// main.js - Create and communicate with worker
+const worker = new Worker('encoder-worker.js');
+
+// Send data to worker
+worker.postMessage({
+  command: 'encode',
+  data: audioBuffer,
+  bitrate: 192
+});
+
+// Receive results
+worker.onmessage = (e) => {
+  if (e.data.type === 'complete') {
+    const blob = new Blob([e.data.buffer], { type: 'audio/mp3' });
+    downloadBlob(blob, 'recording.mp3');
+  } else if (e.data.type === 'progress') {
+    updateProgress(e.data.percent);
+  }
+};
+
+// Handle errors
+worker.onerror = (e) => {
+  console.error('Worker error:', e.message);
+};
+
+// Cleanup when done
+worker.terminate();
+```
+
+```javascript
+// encoder-worker.js - Worker script
+self.onmessage = (e) => {
+  const { command, data, bitrate } = e.data;
+
+  if (command === 'encode') {
+    const result = encode(data, bitrate, (percent) => {
+      self.postMessage({ type: 'progress', percent });
+    });
+
+    self.postMessage({ type: 'complete', buffer: result }, [result]);
+  }
+};
+```
+
+### Worker Best Practices
+- **Lazy initialization**: Create workers only when needed
+- **Transferable objects**: Use second argument to `postMessage` for zero-copy transfer
+- **Single responsibility**: One worker per task type
+- **Cleanup**: Always call `terminate()` when done
 
 ## Common Anti-patterns
 

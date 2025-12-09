@@ -1,5 +1,7 @@
 ---
 import { siteConfig, getConfigCSSProperties } from '@/config/site';
+import { ClientRouter } from 'astro:transitions';
+import Nav from '@/components/Nav.astro';
 
 interface Props {
   title?: string;
@@ -15,44 +17,104 @@ const configStyles = getConfigCSSProperties();
 const styleString = Object.entries(configStyles)
   .map(([key, value]) => `${key}: ${value}`)
   .join('; ');
+
+// Effect configs to pass to client scripts
+const effectConfig = {
+  pageGrain: siteConfig.pageGrain,
+  dramaticReveal: siteConfig.dramaticReveal,
+};
 ---
 
 <!doctype html>
 <html lang="en" style={styleString}>
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="description" content={description} />
     <title>{title}</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <ClientRouter />
   </head>
   <body class="bg-void text-primary font-sans antialiased">
+    <Nav />
     <main>
       <slot />
     </main>
+    <script is:inline define:vars={{ effectConfig }}>
+      window.__EFFECT_CONFIG__ = effectConfig;
+    </script>
     <script>
-      import { initSmoothScroll } from '@/scripts/smooth-scroll';
-      import { initHorizontalScroll } from '@/scripts/horizontal-scroll';
-      import { initParallax } from '@/scripts/parallax';
-      import { initGrainEffect } from '@/scripts/grain-effect';
+      import { initSmoothScroll, destroySmoothScroll } from '@/scripts/smooth-scroll';
+      import { initHorizontalScroll, destroyHorizontalScroll } from '@/scripts/horizontal-scroll';
+      import { initKenBurns, destroyKenBurns } from '@/scripts/ken-burns';
+      import { initTextReveal, destroyTextReveal } from '@/scripts/text-reveal';
+      import { initPageGrain, destroyPageGrain } from '@/scripts/page-grain';
+      import { initParallax, destroyParallax } from '@/scripts/parallax';
+      import { initDramaticReveal, destroyDramaticReveal } from '@/scripts/dramatic-reveal';
 
-      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      function initAllEffects() {
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      // Initialize smooth scroll
-      if (!prefersReducedMotion) {
-        initSmoothScroll();
+        // Initialize smooth scroll
+        if (!prefersReducedMotion) {
+          initSmoothScroll();
+        }
+
+        // Initialize horizontal drag scroll
+        initHorizontalScroll();
+
+        // Initialize Ken Burns effect on photos
+        if (!prefersReducedMotion) {
+          initKenBurns();
+        }
+
+        // Initialize text reveal animation
+        if (!prefersReducedMotion) {
+          initTextReveal();
+        }
+
+        // Initialize full-page grain overlay
+        const grainConfig = window.__EFFECT_CONFIG__?.pageGrain;
+        if (grainConfig?.enabled) {
+          initPageGrain({
+            density: grainConfig.density,
+            animated: grainConfig.animated,
+          });
+        }
+
+        // Initialize parallax effects
+        if (!prefersReducedMotion) {
+          initParallax();
+        }
+
+        // Initialize dramatic reveal animations
+        const revealConfig = window.__EFFECT_CONFIG__?.dramaticReveal;
+        if (!prefersReducedMotion && revealConfig?.enabled) {
+          initDramaticReveal({
+            rise: revealConfig.rise,
+            scale: revealConfig.scale,
+            blur: revealConfig.blur,
+            parallaxOffset: revealConfig.parallaxOffset,
+            scrub: revealConfig.scrub,
+          });
+        }
       }
 
-      // Initialize horizontal drag scroll
-      initHorizontalScroll();
-
-      // Initialize parallax effects
-      if (!prefersReducedMotion) {
-        initParallax();
+      function destroyAllEffects() {
+        destroyDramaticReveal();
+        destroyParallax();
+        destroyPageGrain();
+        destroyTextReveal();
+        destroyKenBurns();
+        destroyHorizontalScroll();
+        destroySmoothScroll();
       }
 
-      // Initialize grain effect on name
-      initGrainEffect();
+      // Initialize on first load and subsequent navigations
+      document.addEventListener('astro:page-load', initAllEffects);
+
+      // Cleanup before page swap to prevent memory leaks
+      document.addEventListener('astro:before-swap', destroyAllEffects);
     </script>
   </body>
 </html>

@@ -1,0 +1,92 @@
+{
+  "work": [
+    {
+      "type": "image",
+      "title": "Echoes of Breakage",
+      "artist": "Nomon",
+      "year": "2024",
+      "src": "/images/NOMON - Cover Artwork by Kris Chau.jpg"
+    },
+    {
+      "type": "video",
+      "title": "NPR Tiny Desk",
+      "artist": "Balún",
+      "year": "2019",
+      "platform": "youtube",
+      "videoId": "YZ2iWUyT_DI"
+    },
+    {
+      "type": "image",
+      "title": "Prisma Tropical",
+      "artist": "Balún",
+      "year": "2018",
+      "src": "/images/album-placeholder.svg",
+      "url": "#"
+    },
+    {
+      "type": "video",
+      "title": "Audiotree Live",
+      "artist": "Balún",
+      "platform": "youtube",
+      "videoId": "6HSfMaVDekQ"
+    },
+    {
+      "type": "image",
+      "title": "Islet",
+      "artist": "Peptalk",
+      "year": "2015",
+      "src": "/images/album-placeholder.svg",
+      "url": "#"
+    },
+    {
+      "type": "video",
+      "title": "SD SOLO excerpt 1",
+      "artist": "Shayna Dunkelman",
+      "platform": "vimeo",
+      "videoId": "364858410"
+    },
+    {
+      "type": "video",
+      "title": "KEXP Session",
+      "artist": "Glasser feat. Shayna Dunkelman",
+      "platform": "youtube",
+      "videoId": "O7HPtWhc9hY"
+    },
+    {
+      "type": "image",
+      "title": "Femina",
+      "artist": "John Zorn",
+      "src": "/images/album-placeholder.svg",
+      "url": "#"
+    },
+    {
+      "type": "video",
+      "title": "Dance & Resistance - Endangered Human Movements Vol.2",
+      "artist": "Amanda Piña",
+      "platform": "vimeo",
+      "videoId": "157045326"
+    },
+    {
+      "type": "image",
+      "title": "Album Title",
+      "artist": "Artist Name",
+      "year": "2023",
+      "src": "/images/album-placeholder.svg",
+      "url": "#"
+    },
+    {
+      "type": "video",
+      "title": "What's The Problem",
+      "artist": "Object Collection",
+      "platform": "vimeo",
+      "videoId": "226121593"
+    },
+    {
+      "type": "video",
+      "title": "Nilbog",
+      "artist": "Peptalk",
+      "platform": "vimeo",
+      "videoId": "146881569"
+    }
+  ]
+}

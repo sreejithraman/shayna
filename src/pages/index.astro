@@ -1,12 +1,23 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Hero from '@/components/Hero.astro';
+import FeaturedArt from '@/components/FeaturedArt.astro';
 import Feed from '@/components/Feed.astro';
-import Bio from '@/components/Bio.astro';
+import FeaturedWork from '@/components/FeaturedWork.astro';
+import { siteConfig } from '@/config/site';
+
+const { featuredRelease, featuredWork } = siteConfig;
 ---
 
 <BaseLayout>
-  <Hero />
+  <Hero photoSrc="/images/shayna-hero.jpg" />
+  <FeaturedArt
+    title={featuredRelease.title}
+    artist={featuredRelease.artist}
+    albumArt={featuredRelease.albumArt}
+    description={featuredRelease.description}
+    listenUrl={featuredRelease.listenUrl}
+  />
   <Feed />
-  <Bio />
+  <FeaturedWork items={featuredWork} />
 </BaseLayout>

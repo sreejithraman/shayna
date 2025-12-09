@@ -1,63 +1,98 @@
 /**
  * Parallax Effects
  *
- * Subtle depth on scroll using GSAP ScrollTrigger.
- * Photo and name move at different rates for depth perception.
+ * Applies scroll-based parallax to elements with data-parallax attribute.
+ * The attribute value determines the scroll speed multiplier:
+ * - 0.5 = moves at 50% of scroll speed (slower, appears further away)
+ * - 1.0 = moves at 100% of scroll speed (normal)
+ * - 1.5 = moves faster than scroll (appears closer)
  */
 
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { prefersReducedMotion } from '../lib/accessibility';
 
-// Note: ScrollTrigger is registered in smooth-scroll.ts which loads first
+// Note: ScrollTrigger is registered in smooth-scroll.ts (loaded first)
+
+// Store triggers for proper cleanup
+let parallaxTriggers: ScrollTrigger[] = [];
 
 export function initParallax(): void {
-  const container = document.querySelector('[data-parallax-container]');
-  if (!container) return;
+  if (prefersReducedMotion()) {
+    return;
+  }
 
-  const photoElement = container.querySelector('[data-parallax="photo"]');
-  const nameElement = container.querySelector('[data-parallax="name"]');
+  // Find all elements with data-parallax attribute
+  const parallaxElements = document.querySelectorAll<HTMLElement>('[data-parallax]');
 
-  // Get rates from CSS custom properties
-  const computedStyle = getComputedStyle(document.documentElement);
-  const photoRate = parseFloat(computedStyle.getPropertyValue('--parallax-photo-rate')) || 0.05;
-  const nameRate = parseFloat(computedStyle.getPropertyValue('--parallax-name-rate')) || 0.1;
+  parallaxElements.forEach((element) => {
+    const parsedSpeed = parseFloat(element.dataset.parallax || '0.5');
+    const speed = isNaN(parsedSpeed) ? 0.5 : parsedSpeed;
 
-  // Photo parallax - moves slower (appears further back)
-  if (photoElement) {
-    gsap.to(photoElement, {
-      y: () => window.innerHeight * photoRate,
-      ease: 'none',
+    // Calculate parallax distance based on speed
+    // Lower speed = slower movement = appears further back
+    const distance = (1 - speed) * 100;
+
+    const tween = gsap.to(element, {
       scrollTrigger: {
-        trigger: container,
+        trigger: element.closest('section') || element,
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: 1, // Smooth 1-second catch-up
+      },
+      y: `${distance}%`,
+      ease: 'none',
+    });
+
+    if (tween.scrollTrigger) {
+      parallaxTriggers.push(tween.scrollTrigger);
+    }
+  });
+
+  // Hero-specific parallax
+  const heroPhoto = document.querySelector<HTMLElement>('.hero-photo');
+  const heroName = document.querySelector<HTMLElement>('.hero-name');
+
+  if (heroPhoto) {
+    const photoTween = gsap.to(heroPhoto, {
+      scrollTrigger: {
+        trigger: '.hero',
         start: 'top top',
         end: 'bottom top',
         scrub: 1,
       },
+      y: '15%', // Photo moves slower (creates depth)
+      ease: 'none',
     });
+
+    if (photoTween.scrollTrigger) {
+      parallaxTriggers.push(photoTween.scrollTrigger);
+    }
   }
 
-  // Name parallax - moves slightly faster (appears closer)
-  if (nameElement) {
-    gsap.to(nameElement, {
-      y: () => -window.innerHeight * nameRate,
-      ease: 'none',
+  if (heroName) {
+    const nameTween = gsap.to(heroName, {
       scrollTrigger: {
-        trigger: container,
+        trigger: '.hero',
         start: 'top top',
         end: 'bottom top',
         scrub: 1,
       },
+      y: '8%', // Name moves a bit, less than photo
+      ease: 'none',
     });
+
+    if (nameTween.scrollTrigger) {
+      parallaxTriggers.push(nameTween.scrollTrigger);
+    }
   }
 
-  // Refresh ScrollTrigger after setup
+  // Refresh ScrollTrigger after all animations are set up
   ScrollTrigger.refresh();
 }
 
+// Cleanup function for SPA navigation
 export function destroyParallax(): void {
-  ScrollTrigger.getAll().forEach((trigger) => {
-    if (trigger.vars.trigger === document.querySelector('[data-parallax-container]')) {
-      trigger.kill();
-    }
-  });
+  parallaxTriggers.forEach((trigger) => trigger.kill());
+  parallaxTriggers = [];
 }

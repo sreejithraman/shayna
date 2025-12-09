@@ -4,10 +4,10 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Backgrounds
-        void: '#0a0a0a',
-        subtle: '#0f0f0f',
-        elevated: '#161616',
+        // Backgrounds (dark blue-black to harmonize with photo)
+        void: '#0a0c14',
+        subtle: '#0e101a',
+        elevated: '#131520',
 
         // Text
         primary: '#f5f5f5',
@@ -41,6 +41,14 @@ export default {
       transitionDuration: {
         400: '400ms',
         600: '600ms',
+      },
+      // Shadow tokens
+      boxShadow: {
+        'glow-sm': '0 0 10px var(--glow-color)',
+        glow: '0 0 20px var(--glow-color)',
+        'glow-lg': '0 0 40px var(--glow-color)',
+        elevated: '0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3)',
+        'elevated-lg': '0 25px 50px -12px rgb(0 0 0 / 0.5)',
       },
     },
   },

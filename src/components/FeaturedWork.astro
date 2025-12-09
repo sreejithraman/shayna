@@ -1,0 +1,503 @@
+---
+import type { WorkItem } from '@/config/site';
+
+interface Props {
+  items: WorkItem[];
+  class?: string;
+}
+
+const { items, class: className } = Astro.props;
+
+// Helper to get thumbnail URL
+function getThumbnail(item: WorkItem): string {
+  if (item.type === 'image' && item.src) {
+    return item.src;
+  }
+  if (item.type === 'video') {
+    if (item.thumbnail) return item.thumbnail;
+    if (item.platform === 'youtube' && item.videoId) {
+      return `https://img.youtube.com/vi/${item.videoId}/maxresdefault.jpg`;
+    }
+    return '/images/video-placeholder.svg';
+  }
+  return '/images/placeholder.svg';
+}
+
+// Helper to get video URL for lightbox
+function getVideoEmbedUrl(item: WorkItem): string {
+  if (item.type !== 'video') return '';
+  const start = item.startTime ? `&start=${item.startTime}` : '';
+  if (item.platform === 'youtube') {
+    return `https://www.youtube.com/embed/${item.videoId}?autoplay=1${start}`;
+  }
+  if (item.platform === 'vimeo') {
+    const vimeoStart = item.startTime ? `#t=${item.startTime}s` : '';
+    return `https://player.vimeo.com/video/${item.videoId}?autoplay=1${vimeoStart}`;
+  }
+  return '';
+}
+
+---
+
+<section class:list={['featured-work', className]}>
+  <div class="featured-work__container">
+    <header class="featured-work__header">
+      <h2 class="featured-work__title">Featured Work</h2>
+      <a href="/work" class="featured-work__view-all">
+        View All
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14" />
+          <path d="m12 5 7 7-7 7" />
+        </svg>
+      </a>
+    </header>
+
+    <div class="featured-work__grid">
+      {items.map((item) => (
+        <article
+          class="work-card"
+          data-type={item.type}
+          data-reveal
+          data-reveal-intensity="gentle"
+        >
+          {item.type === 'video' ? (
+            <button
+              class="work-card__trigger"
+              data-video-trigger
+              data-platform={item.platform}
+              data-video-id={item.videoId}
+              data-embed-url={getVideoEmbedUrl(item)}
+              aria-label={`Play ${item.title}`}
+            >
+              <div class="work-card__media">
+                <img
+                  src={getThumbnail(item)}
+                  alt={`${item.title} thumbnail`}
+                  class="work-card__image"
+                  loading="lazy"
+                  data-reveal-blur
+                  data-vimeo-id={item.platform === 'vimeo' ? item.videoId : undefined}
+                />
+                <div class="work-card__play">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </div>
+              </div>
+            </button>
+          ) : (
+            <a
+              href={item.url || '#'}
+              target={item.url ? '_blank' : undefined}
+              rel={item.url ? 'noopener noreferrer' : undefined}
+              class="work-card__link"
+            >
+              <div class="work-card__media">
+                <img
+                  src={getThumbnail(item)}
+                  alt={`${item.title} by ${item.artist}`}
+                  class="work-card__image"
+                  loading="lazy"
+                  data-reveal-blur
+                />
+              </div>
+            </a>
+          )}
+          <div class="work-card__info">
+            <h3 class="work-card__name">{item.title}</h3>
+            {item.artist && <p class="work-card__artist">{item.artist}</p>}
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- Video Lightbox -->
+<div class="video-lightbox" id="videoLightbox" aria-hidden="true">
+  <div class="video-lightbox__backdrop" data-lightbox-close></div>
+  <div class="video-lightbox__content">
+    <button class="video-lightbox__close" data-lightbox-close aria-label="Close video">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M18 6L6 18M6 6l12 12" />
+      </svg>
+    </button>
+    <div class="video-lightbox__player" id="videoPlayer"></div>
+  </div>
+</div>
+
+<style>
+  /* Featured Work Section */
+  .featured-work {
+    padding: 8rem 2rem 12rem;
+  }
+
+  .featured-work__container {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  /* Header */
+  .featured-work__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6rem;
+  }
+
+  .featured-work__title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .featured-work__view-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .featured-work__view-all:hover {
+    color: var(--text-primary);
+  }
+
+  .featured-work__view-all svg {
+    transition: transform 0.2s ease;
+  }
+
+  .featured-work__view-all:hover svg {
+    transform: translateX(4px);
+  }
+
+  /* Grid Layout - Clean 2-column grid with overlap */
+  .featured-work__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0 6rem; /* No row gap - overlap controlled via margins */
+    align-items: start;
+  }
+
+  /* Work Card Base */
+  .work-card {
+    --overlap: 0rem;
+    --stagger: 0rem;
+    width: 100%;
+    max-width: 520px;
+    justify-self: center;
+    margin-top: calc(var(--overlap) + var(--stagger));
+    will-change: transform, opacity, filter;
+    position: relative;
+  }
+
+  /* Rows 2+ overlap with previous row (top/bottom 20% overlap = ~8rem pull-up) */
+  .work-card:nth-child(n+3) {
+    --overlap: -8rem;
+  }
+
+  /* Staggered vertical rhythm - even items (right column) offset down */
+  .work-card:nth-child(2n) {
+    --stagger: 10rem;
+  }
+
+  /* Z-index layering - later rows on top for proper stacking */
+  .work-card:nth-child(1),
+  .work-card:nth-child(2) { z-index: 1; }
+  .work-card:nth-child(3),
+  .work-card:nth-child(4) { z-index: 2; }
+  .work-card:nth-child(5),
+  .work-card:nth-child(6) { z-index: 3; }
+  .work-card:nth-child(7),
+  .work-card:nth-child(8) { z-index: 4; }
+  .work-card:nth-child(9),
+  .work-card:nth-child(10) { z-index: 5; }
+  .work-card:nth-child(11),
+  .work-card:nth-child(12) { z-index: 6; }
+
+  /* Card trigger/link */
+  .work-card__trigger,
+  .work-card__link {
+    display: block;
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    text-align: left;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  /* Media container - forced 1:1 for uniform grid */
+  .work-card__media {
+    position: relative;
+    aspect-ratio: 1;
+    overflow: hidden;
+    background: var(--bg-subtle);
+  }
+
+  .work-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+
+  .work-card__trigger:hover .work-card__image,
+  .work-card__link:hover .work-card__image {
+    transform: scale(1.03);
+  }
+
+  /* Play Button Overlay */
+  .work-card__play {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(in srgb, var(--bg-void) 20%, transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .work-card__play svg {
+    width: 56px;
+    height: 56px;
+    color: white;
+    filter: drop-shadow(0 2px 8px color-mix(in srgb, var(--bg-void) 40%, transparent));
+    transition: transform 0.2s ease;
+  }
+
+  .work-card__trigger:hover .work-card__play {
+    opacity: 1;
+  }
+
+  .work-card__trigger:hover .work-card__play svg {
+    transform: scale(1.1);
+  }
+
+  /* Card Info */
+  .work-card__info {
+    padding: 1rem 0;
+  }
+
+  .work-card__name {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  .work-card__artist {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin: 0.25rem 0 0;
+  }
+
+  /* Video Lightbox */
+  .video-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+  .video-lightbox[aria-hidden="false"] {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .video-lightbox__backdrop {
+    position: absolute;
+    inset: 0;
+    background: color-mix(in srgb, var(--bg-void) 92%, transparent);
+    cursor: pointer;
+  }
+
+  .video-lightbox__content {
+    position: relative;
+    width: 90vw;
+    max-width: 1200px;
+    aspect-ratio: 16/9;
+    z-index: 1;
+  }
+
+  .video-lightbox__close {
+    position: absolute;
+    top: -48px;
+    right: 0;
+    width: 40px;
+    height: 40px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+  }
+
+  .video-lightbox__close:hover {
+    opacity: 1;
+  }
+
+  .video-lightbox__close svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .video-lightbox__player {
+    width: 100%;
+    height: 100%;
+    background: black;
+  }
+
+  .video-lightbox__player iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .featured-work {
+      padding: 4rem 1rem 8rem;
+    }
+
+    .featured-work__header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 4rem;
+    }
+
+    .featured-work__grid {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+
+    /* Reset overlap and stagger on mobile - single column */
+    .work-card {
+      --overlap: 0rem;
+      --stagger: 0rem;
+      max-width: none;
+    }
+
+    .work-card:nth-child(n+3) {
+      --overlap: 0rem;
+    }
+
+    .work-card:nth-child(2n) {
+      --stagger: 0rem;
+    }
+
+    .work-card__play svg {
+      width: 40px;
+      height: 40px;
+    }
+
+    .work-card__name {
+      font-size: 0.875rem;
+    }
+
+    .work-card__artist {
+      font-size: 0.75rem;
+    }
+
+    .video-lightbox__content {
+      width: 95vw;
+    }
+
+    .video-lightbox__close {
+      top: -40px;
+    }
+  }
+</style>
+
+<script>
+  // Lightbox functionality
+  const lightbox = document.getElementById('videoLightbox');
+  const player = document.getElementById('videoPlayer');
+  const triggers = document.querySelectorAll('[data-video-trigger]');
+  const closeButtons = document.querySelectorAll('[data-lightbox-close]');
+
+  // Allowed video embed domains for security
+  const ALLOWED_DOMAINS = ['youtube.com', 'player.vimeo.com'];
+
+  function isAllowedUrl(url: string): boolean {
+    try {
+      const parsed = new URL(url);
+      return ALLOWED_DOMAINS.some(domain => parsed.hostname.includes(domain));
+    } catch {
+      return false;
+    }
+  }
+
+  function openLightbox(embedUrl: string) {
+    if (!lightbox || !player) return;
+    if (!isAllowedUrl(embedUrl)) return;
+    player.innerHTML = `<iframe src="${embedUrl}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+    lightbox.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    if (!lightbox || !player) return;
+    lightbox.setAttribute('aria-hidden', 'true');
+    player.innerHTML = '';
+    document.body.style.overflow = '';
+  }
+
+  // Trigger clicks
+  triggers.forEach((trigger) => {
+    trigger.addEventListener('click', () => {
+      const embedUrl = trigger.getAttribute('data-embed-url');
+      if (embedUrl) openLightbox(embedUrl);
+    });
+  });
+
+  // Close buttons
+  closeButtons.forEach((btn) => {
+    btn.addEventListener('click', closeLightbox);
+  });
+
+  // ESC key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeLightbox();
+  });
+
+  // Fetch Vimeo thumbnails
+  async function fetchVimeoThumbnails() {
+    const vimeoImages = document.querySelectorAll<HTMLImageElement>('[data-vimeo-id]');
+    for (const img of vimeoImages) {
+      const vimeoId = img.dataset.vimeoId;
+      if (!vimeoId) continue;
+      try {
+        const res = await fetch(`https://vimeo.com/api/oembed.json?url=https://vimeo.com/${vimeoId}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.thumbnail_url) {
+            img.src = data.thumbnail_url.replace(/_\d+x\d+/, '_640x360');
+          }
+        }
+      } catch {
+        // Keep placeholder
+      }
+    }
+  }
+
+  // Initialize
+  fetchVimeoThumbnails();
+</script>

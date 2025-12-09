@@ -5,26 +5,27 @@ interface Props {
   photoSrc?: string;
 }
 
-const { photoSrc = '/images/hero-placeholder.svg' } = Astro.props;
+const { photoSrc = '/images/shayna-hero.jpg' } = Astro.props;
 ---
 
-<section class="hero" data-parallax-container>
+<section class="hero">
   <div class="hero-content">
-    <!-- Photo side -->
-    <div class="hero-photo" data-parallax="photo">
+    <!-- Photo -->
+    <div class="hero-photo">
       <div class="photo-frame">
         <img
           src={photoSrc}
           alt={`Portrait of ${siteConfig.name}`}
           class="photo-image"
           loading="eager"
+          data-ken-burns
         />
       </div>
     </div>
 
-    <!-- Name side -->
-    <div class="hero-name" data-parallax="name">
-      <h1 class="name-text" data-grain-target>
+    <!-- Name -->
+    <div class="hero-name">
+      <h1 class="name-text" data-text-reveal>
         <span class="name-first">{siteConfig.firstName}</span>
         <span class="name-last">{siteConfig.lastName}</span>
       </h1>
@@ -34,101 +35,145 @@ const { photoSrc = '/images/hero-placeholder.svg' } = Astro.props;
 
 <style>
   .hero {
-    min-height: 100vh;
-    min-height: 100dvh;
+    position: relative;
+    height: 100vh;
+    height: 100dvh;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
+    flex-direction: column;
+    padding: 0;
+    overflow: visible; /* allow name to extend if needed on mobile */
   }
 
   .hero-content {
+    position: relative;
+    z-index: 1;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 3rem;
     width: 100%;
-    max-width: 1400px;
+    height: 100%;
   }
 
   /* Photo */
   .hero-photo {
+    flex: 1;
+    min-height: 0; /* allow shrinking */
     width: 100%;
-    max-width: 300px;
   }
 
   .photo-frame {
-    aspect-ratio: 3 / 4;
     overflow: hidden;
-    background-color: var(--bg-elevated);
+    width: 100%;
+    height: 100%;
   }
 
   .photo-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    /* Fade only at bottom edge on mobile */
+    mask-image: linear-gradient(
+      to bottom,
+      black 0%,
+      black 85%,
+      transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      black 0%,
+      black 85%,
+      transparent 100%
+    );
   }
 
   /* Name */
   .hero-name {
+    flex-shrink: 0; /* don't shrink the name */
     text-align: center;
+    padding: 1rem 0 2rem; /* no horizontal padding - edge to edge */
   }
 
   .name-text {
     font-family: 'Unbounded', system-ui, sans-serif;
-    font-weight: 600;
-    font-size: clamp(2.5rem, 10vw, 6rem);
-    line-height: 1.1;
-    letter-spacing: -0.02em;
+    font-weight: 700;
+    font-size: clamp(3rem, 11vw, 8rem); /* larger now that we have full width */
+    line-height: 1;
+    letter-spacing: -0.03em;
     display: flex;
     flex-direction: column;
-    /* Glow effect - configurable via CSS custom properties */
-    text-shadow: 0 0 calc(var(--glow-intensity) * 60px) var(--glow-color),
-                 0 0 calc(var(--glow-intensity) * 120px) color-mix(in srgb, var(--glow-color) 50%, transparent);
-    transition: text-shadow 0.4s ease-out;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
   }
 
   .name-first,
   .name-last {
     display: block;
-  }
-
-  /* Subtle hover enhancement */
-  .name-text:hover {
-    text-shadow: 0 0 calc(var(--glow-intensity) * 80px) var(--glow-color),
-                 0 0 calc(var(--glow-intensity) * 160px) color-mix(in srgb, var(--glow-color) 60%, transparent);
+    white-space: nowrap;
   }
 
   /* Desktop: side by side */
   @media (min-width: 768px) {
+    .hero {
+      flex-direction: row;
+      overflow: hidden; /* contain photo on desktop */
+    }
+
     .hero-content {
       flex-direction: row;
       align-items: center;
-      gap: 4rem;
     }
 
     .hero-photo {
-      flex: 0 0 var(--hero-ratio);
-      max-width: none;
+      flex: 0 0 45%;
+      height: 100%;
+    }
+
+    .photo-frame {
+      height: 100%;
+    }
+
+    .photo-image {
+      /* Fade only at right edge on desktop (toward name) */
+      mask-image: linear-gradient(
+        to right,
+        black 0%,
+        black 80%,
+        transparent 100%
+      );
+      -webkit-mask-image: linear-gradient(
+        to right,
+        black 0%,
+        black 80%,
+        transparent 100%
+      );
     }
 
     .hero-name {
       flex: 1;
+      flex-shrink: 1;
       text-align: left;
+      padding: 0 0 10vh 4rem;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      height: 100%;
     }
 
     .name-text {
-      font-size: clamp(3rem, 8vw, 8rem);
+      /* Scale based on container width (55% of viewport) */
+      font-size: clamp(3.5rem, 7vw, 8rem);
     }
   }
 
   @media (min-width: 1024px) {
-    .hero-content {
-      gap: 6rem;
-    }
-
     .name-text {
-      font-size: clamp(4rem, 7vw, 10rem);
+      font-size: clamp(4rem, 7vw, 9rem);
+    }
+  }
+
+  @media (min-width: 1400px) {
+    .name-text {
+      font-size: clamp(5rem, 6.5vw, 10rem);
     }
   }
 </style>
