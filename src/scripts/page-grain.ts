@@ -6,6 +6,8 @@
  * Adds organic texture without competing with content.
  */
 
+import { prefersReducedMotion } from '../lib/accessibility';
+
 interface GrainConfig {
   opacity: number; // Overall opacity (0.03-0.08 recommended)
   density: number; // Grain density (0.3-0.5 recommended)
@@ -29,6 +31,10 @@ const defaults: GrainConfig = {
   fps: 8, // Low FPS for subtle grain movement
 };
 
+/**
+ * Create the grain canvas element.
+ * @returns Configured canvas element for grain rendering
+ */
 function createCanvas(): HTMLCanvasElement {
   const canvas = document.createElement('canvas');
   canvas.id = 'page-grain';
@@ -40,7 +46,7 @@ function createCanvas(): HTMLCanvasElement {
     width: 100vw;
     height: 100vh;
     pointer-events: none;
-    z-index: 9999;
+    z-index: var(--z-overlay, 9999);
     opacity: var(--grain-opacity, ${defaults.opacity});
   `;
   return canvas;
@@ -94,10 +100,11 @@ function animate(state: GrainState, timestamp: number): void {
 }
 
 let grainState: GrainState | null = null;
+let resizeHandler: (() => void) | null = null;
 
 export function initPageGrain(options: Partial<GrainConfig> = {}): void {
   // Check for reduced motion preference
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  if (prefersReducedMotion()) {
     return;
   }
 
@@ -130,13 +137,14 @@ export function initPageGrain(options: Partial<GrainConfig> = {}): void {
     grainState.animationId = requestAnimationFrame((t) => animate(grainState!, t));
   }
 
-  // Handle resize
-  window.addEventListener('resize', () => {
+  // Handle resize - store reference for cleanup
+  resizeHandler = () => {
     if (grainState) {
       resizeCanvas(grainState);
       renderGrain(grainState);
     }
-  });
+  };
+  window.addEventListener('resize', resizeHandler);
 }
 
 export function destroyPageGrain(): void {
@@ -144,6 +152,12 @@ export function destroyPageGrain(): void {
 
   if (grainState.animationId) {
     cancelAnimationFrame(grainState.animationId);
+  }
+
+  // Remove resize listener to prevent memory leaks
+  if (resizeHandler) {
+    window.removeEventListener('resize', resizeHandler);
+    resizeHandler = null;
   }
 
   grainState.canvas.remove();

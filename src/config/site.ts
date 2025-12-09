@@ -186,7 +186,7 @@ export const siteConfig: SiteConfig = {
 
   ambientGlow: {
     enabled: true,
-    color: 'rgba(30, 58, 95, 0.12)', // Blue pulled from photo
+    color: 'color-mix(in srgb, #1e3a5f 12%, transparent)', // Blue pulled from photo
   },
 
   dramaticReveal: {
@@ -201,9 +201,14 @@ export const siteConfig: SiteConfig = {
 
 // CSS custom property values derived from config
 export function getConfigCSSProperties(): Record<string, string> {
-  return {
+  const props: Record<string, string> = {
     '--hero-ratio': `${siteConfig.hero.ratio}%`,
     '--grain-opacity': String(siteConfig.pageGrain.opacity),
-    '--ambient-glow-color': siteConfig.ambientGlow.color,
   };
+
+  if (siteConfig.ambientGlow.enabled) {
+    props['--ambient-glow-color'] = siteConfig.ambientGlow.color;
+  }
+
+  return props;
 }

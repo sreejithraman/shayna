@@ -1,3 +1,12 @@
+/*
+ * DESIGN TOKENS
+ *
+ * Token locations:
+ * - Colors, z-index, CSS vars: this file (global.css)
+ * - Tailwind utilities, shadows, fonts: tailwind.config.mjs
+ * - Effect parameters, content: src/config/site.ts
+ */
+
 /* Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500&family=Unbounded:wght@400;500;600;700&display=swap');
 
@@ -16,6 +25,17 @@
   --accent-indigo: #6366f1;
   --accent-purple: #8b5cf6;
   --glow-color: var(--accent-purple);
+
+  /* Z-index scale */
+  --z-base: 0;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-fixed: 300;
+  --z-modal-backdrop: 400;
+  --z-modal: 500;
+  --z-popover: 600;
+  --z-tooltip: 700;
+  --z-overlay: 9999;
 
   /* Effect defaults (overridden by config) */
   --hero-ratio: 40%;
@@ -131,3 +151,34 @@ html.lenis body {
   }
 }
 
+/* ============================================
+   Focus States - Accessibility
+   ============================================ */
+
+:focus-visible {
+  outline: 2px solid var(--accent-indigo);
+  outline-offset: 2px;
+}
+
+/* Nav links */
+.nav-link:focus-visible {
+  outline-offset: 4px;
+}
+
+/* Buttons and CTAs */
+.donate-btn:focus-visible,
+.contact-link:focus-visible,
+.social-link:focus-visible {
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* Work cards - inset focus for media */
+.work-card__trigger:focus-visible {
+  outline-offset: -2px;
+}
+
+/* Feed cards */
+.feed-card:focus-visible {
+  outline-offset: -2px;
+}

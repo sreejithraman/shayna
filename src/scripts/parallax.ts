@@ -10,6 +10,7 @@
 
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { prefersReducedMotion } from '../lib/accessibility';
 
 // Note: ScrollTrigger is registered in smooth-scroll.ts (loaded first)
 
@@ -17,9 +18,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 let parallaxTriggers: ScrollTrigger[] = [];
 
 export function initParallax(): void {
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  if (prefersReducedMotion) {
+  if (prefersReducedMotion()) {
     return;
   }
 
@@ -27,7 +26,8 @@ export function initParallax(): void {
   const parallaxElements = document.querySelectorAll<HTMLElement>('[data-parallax]');
 
   parallaxElements.forEach((element) => {
-    const speed = parseFloat(element.dataset.parallax || '0.5');
+    const parsedSpeed = parseFloat(element.dataset.parallax || '0.5');
+    const speed = isNaN(parsedSpeed) ? 0.5 : parsedSpeed;
 
     // Calculate parallax distance based on speed
     // Lower speed = slower movement = appears further back

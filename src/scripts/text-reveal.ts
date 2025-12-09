@@ -7,11 +7,18 @@
 
 import { gsap } from 'gsap';
 
+/**
+ * Configuration options for text reveal animation.
+ * @property stagger - Delay between character animations in seconds (default: 0.03)
+ * @property duration - Duration of each character animation in seconds (default: 0.6)
+ * @property y - Initial Y offset in pixels (default: 20)
+ * @property delay - Initial delay before animation starts in seconds (default: 0.2)
+ */
 interface TextRevealOptions {
-  stagger?: number; // Delay between characters (seconds)
-  duration?: number; // Duration of each character animation
-  y?: number; // Initial Y offset
-  delay?: number; // Initial delay before animation starts
+  stagger?: number;
+  duration?: number;
+  y?: number;
+  delay?: number;
 }
 
 const defaults: Required<TextRevealOptions> = {

@@ -7,9 +7,14 @@
 
 import { gsap } from 'gsap';
 
+/**
+ * Configuration options for Ken Burns zoom effect.
+ * @property scale - Target scale factor (1.05 = 5% zoom). Should be > 1.0. Default: 1.05
+ * @property duration - Duration of full zoom cycle in seconds. Default: 25
+ */
 interface KenBurnsOptions {
-  scale?: number; // Target scale (1.05 = 5% zoom)
-  duration?: number; // Seconds for full cycle
+  scale?: number;
+  duration?: number;
 }
 
 const defaults: Required<KenBurnsOptions> = {
