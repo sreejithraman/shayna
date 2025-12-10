@@ -222,6 +222,22 @@ export function destroyCoverflow(): void {
 }
 ```
 
+## CSS: Contain 3D Overflow
+
+The coverflow effect rotates slides in 3D space, which extends them beyond their container bounds. Without overflow containment, this creates page-level horizontal scrollbars.
+
+```css
+.coverflow-wrapper {
+  overflow-x: hidden;  /* Clip 3D rotated slides */
+}
+
+.coverflow-swiper {
+  overflow: visible;   /* Allow slides to render outside for 3D effect */
+}
+```
+
+**Key insight**: The inner `.coverflow-swiper` needs `overflow: visible` for the 3D transforms to render correctly, but the outer wrapper must clip them to prevent page scroll.
+
 ## CSS: Active Slide Styling
 
 Use `.swiper-slide-active` to style only the centered slide:
@@ -275,3 +291,4 @@ Enabled via `keyboard: { enabled: true }` - arrow keys navigate slides.
 - **Forgetting wheel handler cleanup** - causes memory leaks
 - **Missing `passiveListeners: false`** - prevents `preventDefault()` from working
 - **Using `scale` in coverflowEffect** - can cause weird sizing on distant slides
+- **Missing `overflow-x: hidden` on wrapper** - 3D rotated slides create page-level horizontal scrollbars
